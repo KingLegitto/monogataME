@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+::-webkit-scrollbar{
+    width: 0px;
+    /* background-color: rgba(0, 255, 180, 0.9); */
+}
+.colorCont span{
+    aspect-ratio: 1/1;
+    width: 20px;
+    display: inline-block;
+    border-radius: 20%;
+    border: 1px solid rgb(40, 40, 40);
+    transition: 0.1s;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+button{
+    transition: 0.1s;
+}
+button:hover{
+    transform: scale(1.1);
+}
+
