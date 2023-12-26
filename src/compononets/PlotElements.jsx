@@ -22,8 +22,8 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, plotDragConstraints, del
     return ( 
         <motion.div ref={point} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
         whileDrag={{scale: 1.1}} dragMomentum={false}
-        dragConstraints={plotDragConstraints} 
-        onContextMenu={(event)=>{event.preventDefault(); ; 
+        dragConstraints={plotDragConstraints} onClick={()=>{alert(innerWidth)}}
+        onContextMenu={(event)=>{event.preventDefault(); alert(innerHeight)
             setDrag(!dragctrl); updatePoint(); window.getSelection()?.removeAllRanges()}}
       
         className='point w-[auto] min-w-[100px] max-w-[200px] flex flex-wrap flex-col justify-between
