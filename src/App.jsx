@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import './App.css'
 import bgTexture from './assets/hardboard2.jpg'
-import PlotElements from './compononets/plotElements'
+import PlotElements from './compononets/PlotElements'
 import Commands from './compononets/Commands'
 import { sanityClient } from '../client'
 
