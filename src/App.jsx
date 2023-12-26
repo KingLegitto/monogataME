@@ -20,10 +20,18 @@ function App() {
 
   // ARRAY SIMULATING DATA STORED IN THE DATABASE FOR THE STORY TIMELINE
   useEffect(()=>{
-    if(innerWidth < 600){
+    if(innerWidth < 700){
       setJumboAlert(true)
     }
-    window.addEventListener('resize', handleScreenResize)
+    window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+      const portrait = e.matches;
+  
+      if (portrait) {
+          setJumboAlert(true)
+      } else {
+          setJumboAlert(false)
+      }
+  });
 
     sanityClient.fetch(`*[_type == "plotPoints"]`).then((data)=> {setPoints(data)})
     // console.log(import.meta.env.VITE_SANITY_AUTH_TOKEN)
