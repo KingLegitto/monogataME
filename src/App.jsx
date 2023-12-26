@@ -20,7 +20,7 @@ function App() {
 
   // ARRAY SIMULATING DATA STORED IN THE DATABASE FOR THE STORY TIMELINE
   useEffect(()=>{
-    if(innerWidth < 650){
+    if(innerWidth < 600){
       setJumboAlert(true)
     }
     window.addEventListener('resize', handleScreenResize)
