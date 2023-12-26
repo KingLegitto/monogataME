@@ -67,19 +67,19 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             </header>
 
             <aside className="w-[12vw] h-[100vh] bg-[#e7e7e7] fixed left-0 pt-[12vh] z-[45] flex flex-col justify-center items-center">
-                <button className="w-[95%] h-[30px] mb-[10px] rounded-[10px] bg-red-400">
+                <button className="w-[95%] mb-[10px] rounded-[10px] bg-red-400">
                     Characters
                 </button>
-                <button className="w-[95%] h-[30px] mb-[10px] rounded-[10px] bg-red-400">
+                <button className="w-[95%] mb-[10px] rounded-[10px] bg-red-400">
                     Progressions
                 </button>
-                <button className="w-[95%] h-[30px] mb-[10px] rounded-[10px] bg-red-400">
+                <button className="w-[95%] mb-[10px] rounded-[10px] bg-red-400">
                     Lists
                 </button>
-                <button className="w-[95%] h-[30px] mb-[10px] rounded-[10px] bg-red-400" onClick={handleNewPoint}>
+                <button className="w-[95%] mb-[10px] rounded-[10px] bg-red-400" onClick={handleNewPoint}>
                     Add new point
                 </button>
-                <button className="w-[95%] h-[30px] rounded-[10px] bg-red-400" onClick={handleNewSection}>
+                <button className="w-[95%] rounded-[10px] bg-red-400" onClick={handleNewSection}>
                     Add section point
                 </button>
             </aside>
