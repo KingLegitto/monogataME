@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 // import PlotElements from 'PlotElements.jsx'
-import PlotElements from './plotElements'
+import PlotElements from './PlotElements.jsx'
 
 const StoryTimeline = ({plotPointDetails, mouseTracking, entryCounter, setCounter, newPoints, setTracking, setMidPoint, track,
 deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
