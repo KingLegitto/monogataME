@@ -33,3 +33,7 @@ aside button{
     padding: 5px 5px;
 }
 
+*{
+    -webkit-tap-highlight-color: transparent;
+}
+
