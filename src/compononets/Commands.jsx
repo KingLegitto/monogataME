@@ -41,9 +41,9 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             case '50': transValue = 0; document.querySelector('.bgImage').style.borderRadius='0px'; break;
             case '45': transValue = 14; document.querySelector('.bgImage').style.borderRadius='20px'; break;
             case '40': transValue = 28; document.querySelector('.bgImage').style.borderRadius='20px';break;
-            case '35': transValue = 42; break;
-            case '30': transValue = 56; break;
-            case '25': transValue = 70; break;
+            case '35': transValue = 42; document.querySelector('.bgImage').style.borderRadius='20px'; break;
+            case '30': transValue = 56; document.querySelector('.bgImage').style.borderRadius='20px'; break;
+            case '25': transValue = 70; document.querySelector('.bgImage').style.borderRadius='20px'; break;
         }
         document.querySelector('.pointsParent').style.transform = `scale(${value*2}%) translateY(${transValue}px)`
         
@@ -68,7 +68,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
     return ( 
         <>
-            <header className="w-[100vw] h-[70px] grid bg-white fixed top-0 z-[50] justify-between items-center" 
+            <header className="w-[100vw] h-[70px] grid bg-white fixed top-0 z-[90] justify-between items-center" 
             style={{gridTemplateColumns: '1fr 5fr 1fr'}}>
                 <div className="w-[12vw] text-center justify-self-center">
                     

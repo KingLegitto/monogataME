@@ -106,10 +106,14 @@ function App() {
       newPoints={newPoints} setTracking={setTracking} setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>}
 
       {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
-      {!jumboAlert && <div className='zoom bgImage w-[1300px] lg:w-screen h-[1000px] absolute z-[1] top-[70px]' style={{backgroundImage: `url(${bgTexture})`, 
+      {!jumboAlert && 
+      <div className='w-[100vw] h-auto overflow-x-scroll absolute z-[1] top-[70px] left-0 bg-inherit'>
+        <div className='zoom bgImage w-[1300px] lg:w-screen h-[1000px] origin-center' style={{backgroundImage: `url(${bgTexture})`, 
         backgroundSize: '550px 643px', backgroundRepeat: 'repeat'}}>
         
-      </div>}
+        </div>
+      </div>
+      }
     </>
   )
 }
