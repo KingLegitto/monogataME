@@ -4,6 +4,7 @@ import { sanityClient } from '../../client'
 const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     const [userDetails, setUserDetails] = useState(false)
     const [checkUserEmail, setCheckUserEmail] = useState(false)
+    const [updater, setUpdater] = useState(true)
 
     const handleNewPoint = ()=>{
         document.querySelector('.bg').style.cursor = 'crosshair'
@@ -30,6 +31,25 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
         .then((data)=> {setUserDetails(data)})
     }
 
+    const handleZoom = (value)=>{
+    var transValue
+    let elements = document.querySelectorAll('.zoom')
+        elements.forEach((item)=>{
+            item.style.transform = `scale(${value*2}%)`
+        })
+        switch(value){
+            case '50': transValue = 0; document.querySelector('.bgImage').style.borderRadius='0px'; break;
+            case '45': transValue = 14; document.querySelector('.bgImage').style.borderRadius='20px'; break;
+            case '40': transValue = 28; document.querySelector('.bgImage').style.borderRadius='20px';break;
+            case '35': transValue = 42; break;
+            case '30': transValue = 56; break;
+            case '25': transValue = 70; break;
+        }
+        document.querySelector('.pointsParent').style.transform = `scale(${value*2}%) translateY(${transValue}px)`
+        
+    
+    }
+
     useEffect(()=>{
         // alert(userDetails)
             // alert(userDetails[0].username)
@@ -48,25 +68,26 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
     return ( 
         <>
-            <header className="w-[100vw] h-[12vh] bg-white fixed top-0 z-[50] flex justify-between items-center">
-                <div className="w-[12vw] text-center">
+            <header className="w-[100vw] h-[70px] grid bg-white fixed top-0 z-[50] justify-between items-center" 
+            style={{gridTemplateColumns: '1fr 5fr 1fr'}}>
+                <div className="w-[12vw] text-center justify-self-center">
                     
                     {!checkUserEmail && (<button onClick={handleLogin} className="bg-[#fb4ffb] px-[10px] py-[5px] rounded-[12px] ">
                         Log in
                     </button>)}
                     
-    {userDetails[0] && (userDetails[0].username)}
+                    {userDetails[0] && (userDetails[0].username)}
                 </div>
-                <div className=" flex-grow text-center">
-                    MONOGATAME
-                </div>
-                <div className="w-[12vw] absolute right-0 text-center">
+                <h1 className="text-center text-[25px]">
+                    MonogataME
+                </h1>
+                <div className="w-[12vw] text-center justify-self-center">
                     <button onClick={savePoints} className="bg-[#fb4ffb] px-[10px] py-[5px] rounded-[12px] ">Save changes!</button>
                 </div>
                 
             </header>
 
-            <aside className="w-[12vw] h-[100vh] bg-[#e7e7e7] fixed left-0 pt-[12vh] z-[45] flex flex-col justify-center items-center">
+            {/* <aside className="w-[200px] h-[100vh] bg-[#e7e7e7] fixed left-0 pt-[12vh] z-[45] flex flex-col justify-center items-center">
                 <button className="w-[95%] mb-[10px] rounded-[10px] bg-red-400">
                     Characters
                 </button>
@@ -82,7 +103,14 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 <button className="w-[95%] rounded-[10px] bg-red-400" onClick={handleNewSection}>
                     Add section point
                 </button>
-            </aside>
+            </aside> */}
+
+            <div className="fixed w-[100vw] h-[100px] bg-white z-[50] bottom-0">
+                
+            </div>
+
+            <input type="range" min={25} max={50} step={5} onInput={(e)=>{handleZoom(e.target.value)}}
+            className="fixed z-[51] bottom-[105px] left-[80vw]"/>
         </>
      );
 }

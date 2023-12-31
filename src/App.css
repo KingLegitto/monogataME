@@ -37,3 +37,8 @@ aside button{
     -webkit-tap-highlight-color: transparent;
 }
 
+.zoom , .pointsParent{
+    transition: 0.3s;
+}
+
+

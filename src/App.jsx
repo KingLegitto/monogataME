@@ -17,6 +17,7 @@ function App() {
   const [entryCounter, setCounter] = useState(0)
   const [newPoints, setNewPoints] = useState([])
   const [jumboAlert, setJumboAlert] = useState(false)
+  const [savePointCounter, setSavePointCounter] = useState(0)
 
   // ARRAY SIMULATING DATA STORED IN THE DATABASE FOR THE STORY TIMELINE
   useEffect(()=>{
@@ -70,23 +71,42 @@ function App() {
    }
 
    function savePoints(){
-    let point = newPoints[0]
-    sanityClient.create(point).then((res)=>{alert('Point uploaded')})
+    let control = savePointCounter
+    let point = newPoints[control]
+    console.log(savePointCounter)
+    sanityClient.create(point).then((res)=>{
+      if(res.ok){
+        if(control < newPoints.length){
+          savePoints()
+        }
+        setSavePointCounter(savePointCounter + 1)
+      }
+      if(!res.ok){
+        alert('Oops. Seems like something went wrong with the saving process. Try again.')
+        setSavePointCounter(0)
+      }
+    })
+
    }
+  //  useEffect(()=>{
+  //   if(savePointCounter >= 1 && savePointCounter < newPoints.length){
+  //     savePoints()
+  //   }
+  //  }, [savePointCounter])
 
   return (
     <>
       {jumboAlert && <JumboAlert />}
 
       {/* MODES AND COMMANDS  ///////////////////////////////////////////////// */}
-      {!jumboAlert && <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} setPoints={setPoints} savePoints={savePoints}/>}
+      {!jumboAlert && <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} setPoints={setPoints} plotPointDetails={plotPointDetails} savePoints={savePoints}/>}
 
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
       {!jumboAlert && <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint}
       newPoints={newPoints} setTracking={setTracking} setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>}
 
       {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
-      {!jumboAlert && <div className='w-[88vw] h-[150vh] absolute right-0 top-[12vh]' style={{backgroundImage: `url(${bgTexture})`, 
+      {!jumboAlert && <div className='zoom bgImage w-[1300px] lg:w-screen h-[1000px] absolute z-[1] top-[70px]' style={{backgroundImage: `url(${bgTexture})`, 
         backgroundSize: '550px 643px', backgroundRepeat: 'repeat'}}>
         
       </div>}

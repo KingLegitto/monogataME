@@ -17,8 +17,8 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
 
       plotPointDetails.push({_id: entryCounter, x: midPoint?midPoint-100:mouseX, y: mouseY, details: '[ Empty... ]',
       bg: midPoint?'#000000bb':'#eeeeeee5', type: midPoint?'section':'plot'})
-      console.log(plotPointDetails)
-      newPoints.push({_type: 'plotPoints', x: midPoint?midPoint-100:mouseX, y: mouseY, details: 'Hi there',
+      // console.log(plotPointDetails)
+      newPoints.push({_type: 'plotPoints', x: midPoint?midPoint-100:mouseX, y: mouseY, details: '[ Empty... ]',
       bg: midPoint?'#000000bb':'#eeeeeee5', type: midPoint?'section':'plot'})
 
       document.querySelector('.bg').removeEventListener('click', track)
@@ -31,20 +31,23 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
   return ( 
     <>
 
-    {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
-    <div ref={plotDragConstraints} className='w-[88vw] h-[150vh] bg absolute z-[5] right-0 top-[12vh]' onClick={handleBgClick}>
+    {/* CLICKABLE BACKGROUND  ///////////////////////////////////////////////////////// */}
+    <section ref={plotDragConstraints} className='bg w-screen h-[1000px] absolute top-[70px] z-[5]' onClick={handleBgClick}>
         
-      </div>
+      </section>
     
-    {/* PLOT POINTS  //////////////////////////////////////////////////////// */}
-    {plotPointDetails && plotPointDetails.map((entry)=>{
-      return(
-            <PlotElements plotDragConstraints={plotDragConstraints} key={entry._id}
-            bgColor={entry.bg} x={entry.x} y={entry.y} details={entry.details}
-            type={entry.type} deletePoint={deletePoint} updatePoint={updatePoint} keyID={entry._id}/>
-      )
-      })
-    }
+    <div className='pointsParent w-screen h-[1000px] p-0 m-0 absolute z-[6]'>
+      {/* PLOT POINTS  //////////////////////////////////////////////////////// */}
+      {plotPointDetails && plotPointDetails.map((entry)=>{
+        return(
+              <PlotElements plotDragConstraints={plotDragConstraints} key={entry._id}
+              bgColor={entry.bg} x={entry.x} y={entry.y} details={entry.details}
+              type={entry.type} deletePoint={deletePoint} updatePoint={updatePoint} keyID={entry._id}/>
+        )
+        })
+      }
+    </div>
+    
 
       
     </>
