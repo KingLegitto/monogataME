@@ -32,7 +32,6 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     }
 
     const handleZoom = (value)=>{
-    var transValue = document.querySelector('.bgImage').getBoundingClientRect().top
     let elements = document.querySelectorAll('.zoom')
         elements.forEach((item)=>{
             item.style.transform = `scale(${value*2}%)`
@@ -41,7 +40,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             case '50': document.querySelector('.bgImage').style.borderRadius='0px'; break;
             default: document.querySelector('.bgImage').style.borderRadius='30px'
         }
-        document.querySelector('.pointsParent').style.transform = `scale(${value*2}%) translateY(${transValue}px)`
+        document.querySelector('.pointsParent').style.transform = `scale(${value*2}%)`
         
     
     }
@@ -64,7 +63,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
     return ( 
         <>
-            <header className="w-[100vw] h-[70px] grid bg-white fixed top-0 z-[90] justify-between items-center" 
+            <header className="w-[100vw] h-[50px] grid bg-white fixed top-0 z-[90] justify-between items-center" 
             style={{gridTemplateColumns: '1fr 5fr 1fr'}}>
                 <div className="w-[12vw] text-center justify-self-center">
                     
@@ -78,7 +77,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                     MonogataME
                 </h1>
                 <div className="w-[12vw] text-center justify-self-center">
-                    <button onClick={savePoints} className="bg-[#fb4ffb] px-[10px] py-[5px] rounded-[12px] ">Save changes!</button>
+                    <button onClick={savePoints} className="bg-[#fb4ffb] px-[10px] py-[5px] rounded-[12px] ">Save</button>
                 </div>
                 
             </header>

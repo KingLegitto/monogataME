@@ -104,7 +104,8 @@ function App() {
       
       
       
-      <div className='w-[100vw] h-auto overflow-x-scroll absolute z-[1] top-[70px] left-0 bg-inherit'>
+      <div className='overallParent w-[100vw] overflow-scroll absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit' 
+      style={{height: innerHeight<500? innerHeight-50:innerHeight-70}}>
 
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
       {!jumboAlert && <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint}
