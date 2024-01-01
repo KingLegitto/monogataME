@@ -107,7 +107,7 @@ function App() {
 
       {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
       {!jumboAlert && 
-      <div className='w-[100vw] h-auto overflow-x-scroll absolute z-[1] top-[70px] left-0 bg-inherit'>
+      <div className='w-[100vw] h-auto overflow-scroll absolute z-[1] top-[70px] left-0 bg-inherit'>
         <div className='zoom bgImage w-[1300px] lg:w-screen h-[1000px] origin-center' style={{backgroundImage: `url(${bgTexture})`, 
         backgroundSize: '550px 643px', backgroundRepeat: 'repeat'}}>
         
