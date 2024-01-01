@@ -32,7 +32,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     }
 
     const handleZoom = (value)=>{
-    var transValue
+    var transValue = document.querySelector('.bgImage').getBoundingClientRect().top
     let elements = document.querySelectorAll('.zoom')
         elements.forEach((item)=>{
             item.style.transform = `scale(${value*2}%)`
@@ -41,7 +41,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             case '50': document.querySelector('.bgImage').style.borderRadius='0px'; break;
             default: document.querySelector('.bgImage').style.borderRadius='30px'
         }
-        document.querySelector('.pointsParent').style.transform = `scale(${value*2}%)`
+        document.querySelector('.pointsParent').style.transform = `scale(${value*2}%) translateY(${transValue}px)`
         
     
     }
