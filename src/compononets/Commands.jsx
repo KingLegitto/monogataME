@@ -39,13 +39,9 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
         })
         switch(value){
             case '50': transValue = 0; document.querySelector('.bgImage').style.borderRadius='0px'; break;
-            case '45': transValue = 14; document.querySelector('.bgImage').style.borderRadius='20px'; break;
-            case '40': transValue = 28; document.querySelector('.bgImage').style.borderRadius='20px';break;
-            case '35': transValue = 42; document.querySelector('.bgImage').style.borderRadius='20px'; break;
-            case '30': transValue = 56; document.querySelector('.bgImage').style.borderRadius='20px'; break;
-            case '25': transValue = 70; document.querySelector('.bgImage').style.borderRadius='20px'; break;
+            default: document.querySelector('.bgImage').style.borderRadius='30px'
         }
-        document.querySelector('.pointsParent').style.transform = `scale(${value*2}%) translateY(${transValue}px)`
+        document.querySelector('.pointsParent').style.transform = `scale(${value*2}%)`
         
     
     }
@@ -107,9 +103,9 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
             <div className="fixed w-[100vw] h-[2px] bg-white z-[50] bottom-0">
             <input type="range" min={25} max={50} step={5} onInput={(e)=>{handleZoom(e.target.value)}}
-            className="absolute z-[51] bottom-[110%] right-[50px]"/>
+            className="absolute z-[51] top-[-20px] right-[50px]"/>
             </div>
-
+            
             
         </>
      );

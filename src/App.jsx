@@ -21,18 +21,18 @@ function App() {
 
   // ARRAY SIMULATING DATA STORED IN THE DATABASE FOR THE STORY TIMELINE
   useEffect(()=>{
-    // if(innerWidth < 700){
-    //   setJumboAlert(true)
-    // }
-  //   window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
-  //     const portrait = e.matches;
+    if(innerWidth < 700){
+      setJumboAlert(true)
+    }
+    window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+      const portrait = e.matches;
   
-  //     if (portrait) {
-  //         setJumboAlert(true)
-  //     } else {
-  //         setJumboAlert(false)
-  //     }
-  // });
+      if (portrait) {
+          setJumboAlert(true)
+      } else {
+          setJumboAlert(false)
+      }
+  });
 
     sanityClient.fetch(`*[_type == "plotPoints"]`).then((data)=> {setPoints(data)})
     // console.log(import.meta.env.VITE_SANITY_AUTH_TOKEN)
@@ -101,19 +101,25 @@ function App() {
       {/* MODES AND COMMANDS  ///////////////////////////////////////////////// */}
       {!jumboAlert && <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} setPoints={setPoints} plotPointDetails={plotPointDetails} savePoints={savePoints}/>}
 
+      
+      
+      
+      <div className='w-[100vw] h-[700px] overflow-x-scroll absolute z-[1] top-[70px] left-0 bg-inherit'>
+
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
       {!jumboAlert && <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint}
       newPoints={newPoints} setTracking={setTracking} setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>}
 
       {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
       {!jumboAlert && 
-      <div className='w-[100vw] h-auto overflow-scroll absolute z-[1] top-[70px] left-0 bg-inherit'>
-        <div className='zoom bgImage w-[1300px] lg:w-screen h-[1000px] origin-center' style={{backgroundImage: `url(${bgTexture})`, 
+      
+        <div className='zoom bgImage w-[1200px] h-[1000px] mx-auto' style={{backgroundImage: `url(${bgTexture})`, 
         backgroundSize: '550px 643px', backgroundRepeat: 'repeat'}}>
         
         </div>
-      </div>
+      
       }
+      </div>
     </>
   )
 }
