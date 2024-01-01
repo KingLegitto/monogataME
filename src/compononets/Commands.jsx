@@ -38,7 +38,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             item.style.transform = `scale(${value*2}%)`
         })
         switch(value){
-            case '50': transValue = 0; document.querySelector('.bgImage').style.borderRadius='0px'; break;
+            case '50': document.querySelector('.bgImage').style.borderRadius='0px'; break;
             default: document.querySelector('.bgImage').style.borderRadius='30px'
         }
         document.querySelector('.pointsParent').style.transform = `scale(${value*2}%)`

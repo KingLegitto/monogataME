@@ -32,11 +32,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
     <>
 
     {/* CLICKABLE BACKGROUND  ///////////////////////////////////////////////////////// */}
-    <section ref={plotDragConstraints} className='w-[1200px] h-[1000px] absolute top-[0px] z-[5] left-0 right-0 mx-auto'>
-        
-    </section>
-    
-    <div className='bg pointsParent w-[1200px] h-[1000px] p-0 absolute z-[6] left-0 right-0 mx-auto' onClick={handleBgClick}>
+    <div ref={plotDragConstraints} className='bg pointsParent w-[1200px] h-[100%] absolute z-[6] left-0 right-0 mx-auto' onClick={handleBgClick}>
       {/* PLOT POINTS  //////////////////////////////////////////////////////// */}
       {plotPointDetails && plotPointDetails.map((entry)=>{
         return(
