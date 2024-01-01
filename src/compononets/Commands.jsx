@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { sanityClient } from '../../client'
+import { motion } from "framer-motion"
 
 const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     const [userDetails, setUserDetails] = useState(false)
@@ -36,9 +37,11 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
         elements.forEach((item)=>{
             item.style.transform = `scale(${value*2}%)`
         })
+
+        let el = document.querySelector('.bgImage')
         switch(value){
-            case '50': document.querySelector('.bgImage').style.borderRadius='0px'; break;
-            default: document.querySelector('.bgImage').style.borderRadius='30px'
+            case '50': el.style.borderRadius='0px'; break;
+            default: el.style.borderRadius='30px'
         }
         document.querySelector('.pointsParent').style.transform = `scale(${value*2}%)`
         
@@ -63,7 +66,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
     return ( 
         <>
-            <header className="w-[100vw] h-[50px] grid bg-white fixed top-0 z-[90] justify-between items-center" 
+            <header className="w-[100vw] h-[50px] lg:h-[70px] grid bg-[#eeeeee] fixed top-0 z-[90] justify-between items-center" 
             style={{gridTemplateColumns: '1fr 5fr 1fr'}}>
                 <div className="w-[12vw] text-center justify-self-center">
                     
@@ -82,26 +85,26 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 
             </header>
 
-            {/* <aside className="w-[200px] h-[100vh] bg-[#e7e7e7] fixed left-0 pt-[12vh] z-[45] flex flex-col justify-center items-center">
-                <button className="w-[95%] mb-[10px] rounded-[10px] bg-red-400">
+            <aside className="w-[100px] lg:w-[200px] h-[100vh] fixed left-0 pt-[12vh] z-[45] flex flex-col justify-center items-center">
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] mb-[10px] ">
                     Characters
-                </button>
-                <button className="w-[95%] mb-[10px] rounded-[10px] bg-red-400">
+                </motion.button>
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] mb-[10px]">
                     Progressions
-                </button>
-                <button className="w-[95%] mb-[10px] rounded-[10px] bg-red-400">
+                </motion.button>
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] mb-[10px]">
                     Lists
-                </button>
-                <button className="w-[95%] mb-[10px] rounded-[10px] bg-red-400" onClick={handleNewPoint}>
+                </motion.button>
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] mb-[10px] leading-[1]" onClick={handleNewPoint}>
                     Add new point
-                </button>
-                <button className="w-[95%] rounded-[10px] bg-red-400" onClick={handleNewSection}>
+                </motion.button>
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] leading-[1]" onClick={handleNewSection}>
                     Add section point
-                </button>
-            </aside> */}
+                </motion.button>
+            </aside>
 
             <div className="fixed w-[100vw] h-[2px] bg-white z-[50] bottom-0">
-            <input type="range" min={25} max={50} step={5} onInput={(e)=>{handleZoom(e.target.value)}}
+            <input type="range" min={innerHeight<500? 15: 25} max={50} step={5} onInput={(e)=>{handleZoom(e.target.value)}}
             className="absolute z-[51] top-[-20px] right-[50px]"/>
             </div>
             

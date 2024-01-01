@@ -14,11 +14,11 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
       // alert('hello')
       setCounter(entryCounter + 1)
       document.querySelector('.bg').style.cursor = 'default'
-
+  
       plotPointDetails.push({_id: entryCounter, x: midPoint?midPoint-100:mouseX, y: mouseY, details: '[ Empty... ]',
       bg: midPoint?'#000000bb':'#eeeeeee5', type: midPoint?'section':'plot'})
       // console.log(plotPointDetails)
-      newPoints.push({_type: 'plotPoints', x: midPoint?midPoint-100:mouseX, y: mouseY, details: '[ Empty... ]',
+      newPoints.push({_type: 'plotPoints', x: midPoint?midPoint-100:mouseX, y: mouseY, details: 'Okay',
       bg: midPoint?'#000000bb':'#eeeeeee5', type: midPoint?'section':'plot'})
 
       document.querySelector('.bg').removeEventListener('click', track)

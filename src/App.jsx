@@ -21,7 +21,7 @@ function App() {
 
   // ARRAY SIMULATING DATA STORED IN THE DATABASE FOR THE STORY TIMELINE
   useEffect(()=>{
-    if(innerWidth < 700){
+    if(innerWidth < 600){
       setJumboAlert(true)
     }
     window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
@@ -48,8 +48,8 @@ function App() {
 
   // FUNCTION TO KNOW THE POSITION OF THE MOUSE SO AS TO INSERT PLOT POINTS THERE
   const track = useCallback((e)=>{
-    setmouseX(e.pageX)
-    setmouseY(e.pageY)
+    setmouseX(e.offsetX)
+    setmouseY(e.offsetY)
   }, [])
 
    function updatePoint(keyID, bg){
@@ -71,21 +71,16 @@ function App() {
    }
 
    function savePoints(){
-    let control = savePointCounter
-    let point = newPoints[control]
-    console.log(savePointCounter)
-    sanityClient.create(point).then((res)=>{
-      if(res.ok){
-        if(control < newPoints.length){
-          savePoints()
+    newPoints.forEach((point)=>{
+      sanityClient.create(point).then((res, rej)=>{
+        if(res){
+          console.log('GREAT. One in the bag!!!')
+        }else if(rej){
+          alert('OOPS!!!')
         }
-        setSavePointCounter(savePointCounter + 1)
-      }
-      if(!res.ok){
-        alert('Oops. Seems like something went wrong with the saving process. Try again.')
-        setSavePointCounter(0)
-      }
+        })
     })
+    
 
    }
   //  useEffect(()=>{
