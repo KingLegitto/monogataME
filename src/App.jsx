@@ -38,7 +38,7 @@ function App() {
     sanityClient.fetch(`*[_type == "plotPoints"]`).then((data)=> {setPoints(data)});
 
 
-    document.querySelector('.overallParent').addEventListener('scroll', scroll)
+    window.addEventListener('scroll', scroll)
 
   }, [])
 
@@ -52,11 +52,9 @@ function App() {
 
   
   const scroll = useCallback(()=>{
-    if(!jumboAlert){
-      window.scrollTo(0, 50);
-      setTimeout(() => {
+    if(!jumboAlert && window.scrollY > 70){
+      console.log('Hurray!!!')
         document.querySelector('.dummy').style.height = '100vh'
-      }, 500);
     }
 
   }, [])
@@ -116,7 +114,7 @@ function App() {
       
       
       {!jumboAlert && (<motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
-      className='overallParent w-[100vw] h-[100vh] overflow-scroll fixed z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'>
+      className='overallParent w-[100vw] h-[auto] overflow-scroll fixed z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'>
 
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
         <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} 
@@ -132,7 +130,7 @@ function App() {
       </motion.div>)}
 
       {/* DUMMY CONTAINER TO TACKLE MOBILE BROWSER ADDRESS BAR ISSUE*/}
-      <div className='w-screen h-[150vh] bg-red-500 dummy'>
+      <div className='w-screen h-[150vh] dummy'>
 
       </div>
     </>
