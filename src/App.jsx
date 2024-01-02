@@ -58,7 +58,7 @@ function App() {
       document.querySelector('.overallParent').style.height = '100vh'
     }
 
-    if(!jumboAlert && window.scrollY < 49){
+    if(!jumboAlert && window.scrollY < 50){
       // document.querySelector('.dummy').style.height = '150vh'
       document.querySelector('.overallParent').style.height = 'auto'
     }
@@ -136,7 +136,7 @@ function App() {
       </motion.div>)}
 
       {/* DUMMY CONTAINER TO TACKLE MOBILE BROWSER ADDRESS BAR ISSUE*/}
-      <div className='w-screen h-[110vh] dummy'>
+      <div className='w-screen h-[150vh] dummy'>
 
       </div>
 
