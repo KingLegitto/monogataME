@@ -1,11 +1,15 @@
 import { RemoveRounded } from '@mui/icons-material';
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const PlotElements = ({keyID,y,x,details,bgColor, type, plotDragConstraints, deletePoint, updatePoint}) => {
     const point = useRef(null)
     const textbox = useRef(null)
     const [dragctrl, setDrag] = useState(true)
+    const [boundaryL, setBoundaryL] = useState(1)
+    const [boundaryR, setBoundaryR] = useState(1)
+    const [boundaryT, setBoundaryT] = useState(1)
+    const [boundaryB, setBoundaryB] = useState(1)
 
     const colorsCont = {
         hidden: {opacity: 0},
@@ -19,10 +23,22 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, plotDragConstraints, del
         visible: {opacity: 1, y: 0, transition:{duration: 0.07}},
     }
 
+    useEffect(()=>{
+        let limitL = point.current.getBoundingClientRect().left - document.querySelector('.bgImage').getBoundingClientRect().left
+        let limitR = document.querySelector('.bgImage').getBoundingClientRect().right - point.current.getBoundingClientRect().right
+        let limitT = point.current.getBoundingClientRect().top - document.querySelector('.bgImage').getBoundingClientRect().top
+        let limitB = document.querySelector('.bgImage').getBoundingClientRect().bottom - point.current.getBoundingClientRect().bottom
+
+        setBoundaryL(limitL)
+        setBoundaryR(limitR)
+        setBoundaryT(limitT)
+        setBoundaryB(limitB)
+    }, [])
+
     return ( 
         <motion.div ref={point} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
         whileDrag={{scale: 1.1}} dragMomentum={false}
-        dragConstraints={plotDragConstraints} 
+        dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
         onContextMenu={(event)=>{event.preventDefault(); 
             setDrag(!dragctrl); updatePoint(); window.getSelection()?.removeAllRanges()}}
       

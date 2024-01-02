@@ -11,6 +11,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
    const handleBgClick = ()=>{
     
     if(mouseTracking == true){
+      
       // alert('hello')
       setCounter(entryCounter + 1)
       document.querySelector('.bg').style.cursor = 'default'

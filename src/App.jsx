@@ -94,17 +94,19 @@ function App() {
       {jumboAlert && <JumboAlert />}
 
       {/* MODES AND COMMANDS  ///////////////////////////////////////////////// */}
-      {!jumboAlert && <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} setPoints={setPoints} plotPointDetails={plotPointDetails} savePoints={savePoints}/>}
+      {!jumboAlert && <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} 
+      setPoints={setPoints} plotPointDetails={plotPointDetails} savePoints={savePoints}/>}
 
       
       
       
       <div className='overallParent w-[100vw] overflow-scroll absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit' 
-      style={{height: innerHeight<500? innerHeight-50:innerHeight-70}}>
+      style={{height: 'auto' }}>
 
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
-      {!jumboAlert && <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint}
-      newPoints={newPoints} setTracking={setTracking} setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>}
+      {!jumboAlert && <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} 
+      entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint} newPoints={newPoints} setTracking={setTracking} 
+      setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>}
 
       {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
       {!jumboAlert && 

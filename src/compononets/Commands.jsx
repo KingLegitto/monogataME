@@ -66,7 +66,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
     return ( 
         <>
-            <header className="w-[100vw] h-[50px] lg:h-[70px] grid bg-[#eeeeee] fixed top-0 z-[90] justify-between items-center" 
+            <header className="w-[100vw] h-[50px] lg:h-[70px] grid bg-white fixed top-0 z-[90] justify-between items-center" 
             style={{gridTemplateColumns: '1fr 5fr 1fr'}}>
                 <div className="w-[12vw] text-center justify-self-center">
                     
@@ -85,20 +85,20 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 
             </header>
 
-            <aside className="w-[100px] lg:w-[200px] h-[100vh] fixed left-0 pt-[12vh] z-[45] flex flex-col justify-center items-center">
-                <motion.button whileTap={{scale: 0.8}} className="w-[95%] mb-[10px] ">
+            <aside className="w-[100px] lg:w-[200px] h-[100vh] fixed left-0 pt-[50px] lg:pt-[70px] pb-[8vh] z-[45] flex flex-col justify-center">
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] lg:hover:scale-[1.05] mb-[5vh]">
                     Characters
                 </motion.button>
-                <motion.button whileTap={{scale: 0.8}} className="w-[95%] mb-[10px]">
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] lg:hover:scale-[1.05] mb-[5vh]">
                     Progressions
                 </motion.button>
-                <motion.button whileTap={{scale: 0.8}} className="w-[95%] mb-[10px]">
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] lg:hover:scale-[1.05] mb-[5vh]">
                     Lists
                 </motion.button>
-                <motion.button whileTap={{scale: 0.8}} className="w-[95%] mb-[10px] leading-[1]" onClick={handleNewPoint}>
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] leading-[1] lg:hover:scale-[1.05] mb-[5vh]" onClick={handleNewPoint}>
                     Add new point
                 </motion.button>
-                <motion.button whileTap={{scale: 0.8}} className="w-[95%] leading-[1]" onClick={handleNewSection}>
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] leading-[1] lg:hover:scale-[1.05] " onClick={handleNewSection}>
                     Add section point
                 </motion.button>
             </aside>
