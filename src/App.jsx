@@ -54,7 +54,8 @@ function App() {
   const scroll = useCallback(()=>{
     if(!jumboAlert && window.scrollY > 70){
       console.log('Hurray!!!')
-        document.querySelector('.dummy').style.height = '100vh'
+      document.querySelector('.dummy').style.height = '100vh'
+      document.querySelector('.overallParent').style.height = '100vh'
     }
 
   }, [])
