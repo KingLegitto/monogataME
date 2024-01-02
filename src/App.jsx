@@ -58,7 +58,7 @@ function App() {
       document.querySelector('.overallParent').style.height = '100vh'
     }
 
-    if(!jumboAlert && document.querySelector('.overallParent').scrollY == 0){
+    if(!jumboAlert && window.scrollY == 0){
       document.querySelector('.dummy').style.height = '150vh'
       document.querySelector('.overallParent').style.height = 'auto'
     }
