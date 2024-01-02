@@ -6,7 +6,8 @@ const StoryTimeline = ({plotPointDetails, mouseTracking, entryCounter, setCounte
 deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
   
   const plotDragConstraints = useRef(null)
-
+  
+  
   // FUNCTION TO HANDLE ADDING POINTS ON THE BACKGROUND ACCORDING TO THE MOUSE POSITION
    const handleBgClick = ()=>{
     
@@ -37,7 +38,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
       {/* PLOT POINTS  //////////////////////////////////////////////////////// */}
       {plotPointDetails && plotPointDetails.map((entry)=>{
         return(
-              <PlotElements plotDragConstraints={plotDragConstraints} key={entry._id}
+              <PlotElements key={entry._id}
               bgColor={entry.bg} x={entry.x} y={entry.y} details={entry.details}
               type={entry.type} deletePoint={deletePoint} updatePoint={updatePoint} keyID={entry._id}/>
         )

@@ -5,6 +5,7 @@ import StoryTimeline from './compononets/StoryTimeline'
 import { sanityClient } from '../client'
 import { useState, useEffect, useCallback } from 'react'
 import JumboAlert from './compononets/jumboAlert'
+import { motion } from 'framer-motion'
 
 
 function App() {
@@ -34,8 +35,11 @@ function App() {
       }
   });
 
-    sanityClient.fetch(`*[_type == "plotPoints"]`).then((data)=> {setPoints(data)})
-    // console.log(import.meta.env.VITE_SANITY_AUTH_TOKEN)
+    sanityClient.fetch(`*[_type == "plotPoints"]`).then((data)=> {setPoints(data)});
+
+
+    document.querySelector('.overallParent').addEventListener('scroll', scroll)
+
   }, [])
 
   const handleScreenResize = useCallback(()=>{
@@ -44,6 +48,17 @@ function App() {
     }else{
       setJumboAlert(false)
     }
+  }, [])
+
+  
+  const scroll = useCallback(()=>{
+    if(!jumboAlert){
+      window.scrollTo(0, 50);
+      setTimeout(() => {
+        document.querySelector('.dummy').style.height = '100vh'
+      }, 500);
+    }
+
   }, [])
 
   // FUNCTION TO KNOW THE POSITION OF THE MOUSE SO AS TO INSERT PLOT POINTS THERE
@@ -100,23 +115,25 @@ function App() {
       
       
       
-      <div className='overallParent w-[100vw] overflow-scroll absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit' 
-      style={{height: 'auto' }}>
+      {!jumboAlert && (<motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
+      className='overallParent w-[100vw] h-[100vh] overflow-scroll fixed z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'>
 
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
-      {!jumboAlert && <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} 
-      entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint} newPoints={newPoints} setTracking={setTracking} 
-      setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>}
+        <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} 
+        entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint} newPoints={newPoints} setTracking={setTracking} 
+        setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>
 
       {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
-      {!jumboAlert && 
-      
         <div className='zoom bgImage w-[1200px] h-[1000px] mx-auto' style={{backgroundImage: `url(${bgTexture})`, 
         backgroundSize: '550px 643px', backgroundRepeat: 'repeat'}}>
         
         </div>
-      
-      }
+  
+      </motion.div>)}
+
+      {/* DUMMY CONTAINER TO TACKLE MOBILE BROWSER ADDRESS BAR ISSUE*/}
+      <div className='w-screen h-[150vh] bg-red-500 dummy'>
+
       </div>
     </>
   )

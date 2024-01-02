@@ -65,7 +65,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
       }, [userDetails])
 
     return ( 
-        <>
+        <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.3}} className="h-auto w-screen">
             <header className="w-[100vw] h-[50px] lg:h-[70px] grid bg-white fixed top-0 z-[90] justify-between items-center" 
             style={{gridTemplateColumns: '1fr 5fr 1fr'}}>
                 <div className="w-[12vw] text-center justify-self-center">
@@ -109,7 +109,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             </div>
             
             
-        </>
+        </motion.div>
      );
 }
  
