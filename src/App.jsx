@@ -53,9 +53,14 @@ function App() {
   
   const scroll = useCallback(()=>{
     if(!jumboAlert && window.scrollY > 70){
-      console.log('Hurray!!!')
+      // console.log('Hurray!!!')
       document.querySelector('.dummy').style.height = '100vh'
       document.querySelector('.overallParent').style.height = '100vh'
+    }
+
+    if(!jumboAlert && document.querySelector('.overallParent').scrollY == 0){
+      document.querySelector('.dummy').style.height = '150vh'
+      document.querySelector('.overallParent').style.height = 'auto'
     }
 
   }, [])
