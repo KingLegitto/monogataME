@@ -105,7 +105,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
             <div className="fixed w-[100vw] h-[2px] bg-white z-[50] bottom-0">
             <input type="range" min={innerHeight<500? 15: 25} max={50} step={5} onInput={(e)=>{handleZoom(e.target.value)}}
-            className="absolute z-[51] top-[-20px] right-[50px]"/>
+            className="absolute z-[51] top-[-30px] right-[50px]"/>
             </div>
             
             

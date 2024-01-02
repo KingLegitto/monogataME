@@ -52,13 +52,13 @@ function App() {
 
   
   const scroll = useCallback(()=>{
-    if(!jumboAlert && window.scrollY > 50){
+    if(!jumboAlert && window.scrollY > 20){
       // console.log('Hurray!!!')
       // document.querySelector('.dummy').style.height = '1vh'
       document.querySelector('.overallParent').style.height = '100vh'
     }
 
-    if(!jumboAlert && window.scrollY < 50){
+    if(!jumboAlert && window.scrollY < 20){
       // document.querySelector('.dummy').style.height = '150vh'
       document.querySelector('.overallParent').style.height = 'auto'
     }
