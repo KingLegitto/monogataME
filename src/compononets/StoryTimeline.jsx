@@ -6,6 +6,10 @@ const StoryTimeline = ({plotPointDetails, mouseTracking, entryCounter, setCounte
 deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
   
   const plotDragConstraints = useRef(null)
+
+  useEffect(()=>{
+    window.scrollTo(0, 500)
+  }, [])
   
   
   // FUNCTION TO HANDLE ADDING POINTS ON THE BACKGROUND ACCORDING TO THE MOUSE POSITION
