@@ -18,10 +18,11 @@ function App() {
   const [entryCounter, setCounter] = useState(0)
   const [newPoints, setNewPoints] = useState([])
   const [jumboAlert, setJumboAlert] = useState(false)
+  const [viewRestart, setViewRestart] = useState(false)
   const [savePointCounter, setSavePointCounter] = useState(0)
 
   const mobUrlBarChecker = useRef(null)
-  const isInView = useInView(mobUrlBarChecker)
+  const isInView = useInView(mobUrlBarChecker, {once: true})
 
   // ARRAY SIMULATING DATA STORED IN THE DATABASE FOR THE STORY TIMELINE
   useEffect(()=>{
@@ -41,7 +42,7 @@ function App() {
     sanityClient.fetch(`*[_type == "plotPoints"]`).then((data)=> {setPoints(data)});
 
 
-    // window.addEventListener('scroll', scroll)
+    window.addEventListener('scroll', scroll)
     // window.scrollTo(0, 10)
   }, [])
 
@@ -61,19 +62,9 @@ function App() {
 
   
   const scroll = useCallback(()=>{
-    if(!jumboAlert && window.scrollY > 10 && document.querySelector('.overallParent').style.height == 'auto'){
-      // console.log('Hurray!!!')
-      // document.querySelector('.dummy').style.height = '1vh'
-      window.scrollTo(0, 25)
-      document.querySelector('.overallParent').style.height = '100vh'
-      
-    }
-
-    if(!jumboAlert && window.scrollY == 0 && document.querySelector('.overallParent').style.height == '100vh'){
-      // document.querySelector('.dummy').style.height = '150vh'
-      document.querySelector('.overallParent').style.height = 'auto'
-      // window.scrollTo(0, 5)
-    }
+    if(isInView && window.scrollY == 0){
+      setViewRestart(true)
+    }else{setViewRestart(false)}
 
   }, [])
 
@@ -150,7 +141,8 @@ function App() {
       </motion.div>)}
 
       {/* MOBILE URL BAR CHECK /// */}
-      {!jumboAlert && (<motion.div ref={mobUrlBarChecker} className='w-[100vw] h-[1px] absolute top-0 bg-red-500 mt-[100vh] lg:mt-[99vh] z-[1]'>
+      {!jumboAlert && (!isInView || viewRestart) && (<motion.div ref={mobUrlBarChecker} className='w-[100vw] h-[1px] absolute top-0 mt-[100vh] z-[1]'
+      >
         
       </motion.div>)}
 
