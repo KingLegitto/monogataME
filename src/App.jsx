@@ -64,7 +64,7 @@ function App() {
       document.querySelector('.overallParent').style.height = '100vh'
       setInnerHeight(innerHeight)
     }
-    if(innerHeight < InnerHeight){
+    if(window.scrollY == 0){
       document.querySelector('.overallParent').style.position = 'absolute'
       document.querySelector('.overallParent').style.height = 'auto'
     }
