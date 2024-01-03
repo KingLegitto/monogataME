@@ -77,9 +77,10 @@ function App() {
       setChromeMobDetected(true)
       
     }
-    if(window.scrollY < 20 && chromeMobDetected){
+    if(window.scrollY < 100 && chromeMobDetected){
       document.querySelector('.overallParent').style.position = 'absolute'
       document.querySelector('.overallParent').style.height = 'auto'
+      setChromeMobDetected(false)
     }
 
   }, [])
