@@ -19,6 +19,7 @@ function App() {
   const [newPoints, setNewPoints] = useState([])
   const [jumboAlert, setJumboAlert] = useState(false)
   const [InnerHeight, setInnerHeight] = useState(0)
+  const [chromeMobDetected, setChromeMobDetected] = useState(false)
   const [savePointCounter, setSavePointCounter] = useState(0)
 
   // ARRAY SIMULATING DATA STORED IN THE DATABASE FOR THE STORY TIMELINE
@@ -63,14 +64,20 @@ function App() {
     
   }, [jumboAlert])
 
+  // MAKE SURE THE BROWSER ALWAYS STARTS FROM THE TOP ON LOAD
+  useEffect(()=>{
+    window.scrollTo(0, 0)
+  }, [])
+
   
   const scroll = useCallback(()=>{
     if(innerHeight > InnerHeight+10){
       document.querySelector('.overallParent').style.position = 'fixed'
       document.querySelector('.overallParent').style.height = '100vh'
+      setChromeMobDetected(true)
       
     }
-    if(window.scrollY < 20){
+    if(window.scrollY < 20 && chromeMobDetected){
       document.querySelector('.overallParent').style.position = 'absolute'
       document.querySelector('.overallParent').style.height = 'auto'
     }
