@@ -39,7 +39,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
 
     return ( 
         <motion.div ref={point} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
-        whileDrag={{scale: 1.1}} dragMomentum={false} onClick={()=>{alert(innerHeight)}}
+        whileDrag={{scale: 1.1}} dragMomentum={false}
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
         onContextMenu={(event)=>{event.preventDefault(); setCheck(!check)
             setDrag(!dragctrl); updatePoint(); window.getSelection()?.removeAllRanges()}}

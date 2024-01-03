@@ -52,9 +52,9 @@ function App() {
   }, [])
 
   useEffect(()=>{
-    if(!jumboAlert){
+    
       setInnerHeight(innerHeight)
-    }
+    
   }, [jumboAlert])
 
   
@@ -62,8 +62,9 @@ function App() {
     if(innerHeight > InnerHeight+10){
       document.querySelector('.overallParent').style.position = 'fixed'
       document.querySelector('.overallParent').style.height = '100vh'
+      setInnerHeight(innerHeight)
     }
-    if(innerHeight == InnerHeight){
+    if(innerHeight < InnerHeight){
       document.querySelector('.overallParent').style.position = 'absolute'
       document.querySelector('.overallParent').style.height = 'auto'
     }
