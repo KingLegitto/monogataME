@@ -76,9 +76,10 @@ function App() {
       document.querySelector('.overallParent').style.height = '100vh'
       
     }
-    if(window.scrollY < 20){
+    if(window.scrollY < 20 && document.querySelector('.overallParent').style.position == 'fixed'){
       document.querySelector('.overallParent').style.position = 'absolute'
       document.querySelector('.overallParent').style.height = 'auto'
+      window.scrollTo(0,0)
      
     }
 
