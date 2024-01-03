@@ -63,6 +63,10 @@ function App() {
       document.querySelector('.overallParent').style.position = 'fixed'
       document.querySelector('.overallParent').style.height = '100vh'
     }
+    if(innerHeight == InnerHeight){
+      document.querySelector('.overallParent').style.position = 'absolute'
+      document.querySelector('.overallParent').style.height = 'auto'
+    }
 
   }, [])
 
