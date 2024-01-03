@@ -71,7 +71,7 @@ function App() {
 
   
   const scroll = useCallback(()=>{
-    if(innerHeight > InnerHeight+50){
+    if(innerHeight >= InnerHeight+53){
       document.querySelector('.overallParent').style.position = 'fixed'
       document.querySelector('.overallParent').style.height = '100vh'
       
