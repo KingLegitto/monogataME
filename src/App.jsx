@@ -3,9 +3,9 @@ import bgTexture from './assets/hardboard2.jpg'
 import Commands from './compononets/Commands'
 import StoryTimeline from './compononets/StoryTimeline'
 import { sanityClient } from '../client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import JumboAlert from './compononets/jumboAlert'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 
 
 function App() {
@@ -19,6 +19,9 @@ function App() {
   const [newPoints, setNewPoints] = useState([])
   const [jumboAlert, setJumboAlert] = useState(false)
   const [savePointCounter, setSavePointCounter] = useState(0)
+
+  const mobUrlBarChecker = useRef(null)
+  const isInView = useInView(mobUrlBarChecker)
 
   // ARRAY SIMULATING DATA STORED IN THE DATABASE FOR THE STORY TIMELINE
   useEffect(()=>{
@@ -49,6 +52,12 @@ function App() {
       setJumboAlert(false)
     }
   }, [])
+
+  // useEffect(()=>{
+  //   if(isInView){
+  //     // alert('yep')
+  //   }
+  // }, [isInView])
 
   
   const scroll = useCallback(()=>{
@@ -123,7 +132,9 @@ function App() {
       
       
       {!jumboAlert && (<motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
-      className='overallParent w-[100vw] h-[100vh] overflow-scroll fixed z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'>
+      className='overallParent w-[100vw] h-[auto] overflow-scroll absolute z-[2] top-[50px] lg:top-[70px] left-0 bg-inherit'
+      style={{height: isInView?'100vh':'auto', position: isInView?'fixed':'absolute'}}>
+
 
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
         <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} 
@@ -138,10 +149,10 @@ function App() {
   
       </motion.div>)}
 
-      {/* DUMMY CONTAINER TO TACKLE MOBILE BROWSER ADDRESS BAR ISSUE*/}
-      <div className='w-screen h-[150vw] dummy'>
-
-      </div>
+      {/* MOBILE URL BAR CHECK /// */}
+      {!jumboAlert && (<motion.div ref={mobUrlBarChecker} className='w-[100vw] h-[1px] absolute top-0 bg-red-500 mt-[100vh] lg:mt-[99vh] z-[1]'>
+        
+      </motion.div>)}
 
       {/* <footer className='w-screen h-[]'>
 

@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 
-/* ::-webkit-scrollbar{
+::-webkit-scrollbar{
     width: 0px;
     height: 0px;
-} */
+}
 
 html {
-    scroll-behavior: smooth;
-  }
+  scroll-behavior: smooth;
+}
 .colorCont span{
     aspect-ratio: 1/1;
     width: 20px;
