@@ -45,16 +45,16 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
             setDrag(!dragctrl); updatePoint(); window.getSelection()?.removeAllRanges()}}
       
         className='point w-[auto] min-w-[100px] max-w-[200px] flex flex-wrap flex-col justify-between
-        h-[auto] min-h-[100px] absolute rounded-[10px] p-[10px]'
+        h-[auto] min-h-[100px] absolute rounded-[20px] p-[10px]'
 
         style={{top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
-        width:type=='section'?'200px':'auto', minHeight: type=='section'?'auto':'100px', zIndex: type=='section'?'5':'35',
-        boxShadow: type=='plot'?'0px 10px 33px -7px rgba(0,0,0,0.75)': '0', paddingBottom: type=='plot'? '30px':'10px',
+        width:type=='section'?'200px':'auto', minHeight: type=='section'?'auto':'100px', zIndex: type=='section'?'35': !dragctrl? '40': '5',
+        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0', paddingBottom: type=='plot'? '30px':'10px',
         border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black'}}>
 
             {/* BADGE  ///////////////////////////////////////////////////////////// */}
             <div className='w-[20px] h-[20px] bg-black absolute top-0 left-0
-             translate-x-[-40%] translate-y-[-40%] text-white flex justify-center items-center'
+             translate-x-[-35%] translate-y-[-40%] text-white flex justify-center items-center'
              style={{left: type=='section'?'50%':0, cursor: 'pointer', borderRadius: dragctrl? '50%': '25%'}}>
                     {type=='plot' && (<span></span>)}
             </div>
@@ -79,8 +79,8 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
 
             {/* DELETE BUTTON  ///////////////////////////////////////////////////////////// */}
             {!dragctrl && (<div onClick={()=>{deletePoint(keyID); }}
-            className='w-[20px] h-[20px] rounded-[50%] absolute top-0 left-[100%] hover:scale-[1.2] duration-[0.1s]
-             translate-x-[-50%] translate-y-[-40%] text-white flex justify-center items-center'
+            className='w-[22px] h-[22px] rounded-[50%] absolute top-0 left-[100%] hover:scale-[1.2] duration-[0.1s]
+             translate-x-[-60%] translate-y-[-40%] text-white flex justify-center items-center'
              style={{cursor: 'pointer', background: bgColor!='#ff3e5fe5'? '#ff3e5f': '#892132'}}>
                     <RemoveRounded style={{color: 'white'}} />
             </div>)}

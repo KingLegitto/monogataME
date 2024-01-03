@@ -16,9 +16,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
     const handleNewSection = ()=>{
         document.querySelector('.bg').style.cursor = 'crosshair'
-        let valueL = document.querySelector('.bg').getBoundingClientRect().left
-        let valueR = document.querySelector('.bg').getBoundingClientRect().right
-        let value = ((valueR - valueL)/2) + valueL
+        let value = (document.querySelector('.bg').offsetWidth)/2
         // alert(value)
         setMidPoint(value)
         document.querySelector('.bg').addEventListener('click', track)

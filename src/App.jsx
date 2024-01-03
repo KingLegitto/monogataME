@@ -70,7 +70,7 @@ function App() {
       document.querySelector('.overallParent').style.height = '100vh'
       
     }
-    if(window.scrollY < 2){
+    if(window.scrollY < 10){
       document.querySelector('.overallParent').style.position = 'absolute'
       document.querySelector('.overallParent').style.height = 'auto'
     }
