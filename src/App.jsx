@@ -68,9 +68,10 @@ function App() {
     if(innerHeight > InnerHeight+10){
       document.querySelector('.overallParent').style.position = 'fixed'
       document.querySelector('.overallParent').style.height = '100vh'
+      window.scrollTo(0,5)
       
     }
-    if(window.scrollY < 10){
+    if(window.scrollY < 5){
       document.querySelector('.overallParent').style.position = 'absolute'
       document.querySelector('.overallParent').style.height = 'auto'
     }
