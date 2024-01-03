@@ -65,14 +65,17 @@ function App() {
 
   
   const scroll = useCallback(()=>{
+    if(innerHeight == InnerHeight){
+      return;
+    }
     if(innerHeight > InnerHeight+10){
-      document.querySelector('.overallParent').style.position = 'fixed'
-      document.querySelector('.overallParent').style.height = '100vh'
+      document.querySelector('.overallParent').style.overflowY = 'scroll'
+      // document.querySelector('.overallParent').style.height = '100vh'
       
     }
     if(window.scrollY < 100){
-      document.querySelector('.overallParent').style.position = 'absolute'
-      document.querySelector('.overallParent').style.height = 'auto'
+      document.querySelector('.overallParent').style.overflowY = 'hidden'
+      // document.querySelector('.overallParent').style.height = 'auto'
     }
 
   }, [])
@@ -132,7 +135,7 @@ function App() {
       
       
       {!jumboAlert && (<motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
-      className='overallParent w-[100vw] h-[auto] overflow-scroll absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'>
+      className='overallParent w-[100vw] h-[100vh] overflow-y-hidden overflow-x-scroll fixed z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'>
 
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
         <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} 
