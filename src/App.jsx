@@ -26,20 +26,26 @@ function App() {
     if(innerWidth < 600){
       setJumboAlert(true)
     }
-    window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
-      const portrait = e.matches;
-  
-      if (portrait) {
-          setJumboAlert(true)
-      } else {
-          setJumboAlert(false)
-      }
-  });
+    if(innerWidth < 1024){
+      window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+        const portrait = e.matches;
+    
+        if (portrait) {
+            setJumboAlert(true)
+        } else {
+            setJumboAlert(false)
+        }
+    });
+    }
+    
 
     sanityClient.fetch(`*[_type == "plotPoints"]`).then((data)=> {setPoints(data)});
 
 
-    window.addEventListener('scroll', scroll)
+    if(innerWidth<1024){
+      window.addEventListener('scroll', scroll)
+    }
+    
     // window.scrollTo(0, 10)
   }, [])
 
@@ -62,9 +68,9 @@ function App() {
     if(innerHeight > InnerHeight+10){
       document.querySelector('.overallParent').style.position = 'fixed'
       document.querySelector('.overallParent').style.height = '100vh'
-      setInnerHeight(innerHeight)
+      
     }
-    if(window.scrollY == 0){
+    if(window.scrollY < 2){
       document.querySelector('.overallParent').style.position = 'absolute'
       document.querySelector('.overallParent').style.height = 'auto'
     }

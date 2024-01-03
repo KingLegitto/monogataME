@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     const [userDetails, setUserDetails] = useState(false)
     const [checkUserEmail, setCheckUserEmail] = useState(false)
+    const [slider, setSlider] = useState(50)
     const [updater, setUpdater] = useState(true)
 
     const handleNewPoint = ()=>{
@@ -47,6 +48,12 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
         
     
     }
+    useEffect(()=>{
+        if(innerWidth<1024){
+            setSlider(40)
+            handleZoom(40)
+        }
+    }, [])
 
     useEffect(()=>{
         // alert(userDetails)
@@ -85,7 +92,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 
             </header>
 
-            <aside className="w-[100px] lg:w-[200px] h-[100vh] fixed left-0 pt-[50px] lg:pt-[70px] pb-[8vh] z-[45] flex flex-col justify-center">
+            <aside className="w-[auto] min-w-[110px] lg:w-[200px] h-[100vh] fixed left-0 pt-[50px] lg:pt-[70px] pb-[8vh] z-[45] flex flex-col justify-center">
                 <motion.button whileTap={{scale: 0.8}} className="w-[95%] lg:hover:scale-[1.05] mb-[5vh]">
                     Characters
                 </motion.button>
@@ -95,16 +102,16 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 <motion.button whileTap={{scale: 0.8}} className="w-[95%] lg:hover:scale-[1.05] mb-[5vh]">
                     Lists
                 </motion.button>
-                <motion.button whileTap={{scale: 0.8}} className="w-[95%] leading-[1] lg:hover:scale-[1.05] mb-[5vh]" onClick={handleNewPoint}>
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] lg:hover:scale-[1.05] mb-[5vh]" onClick={handleNewPoint}>
                     Add new point
                 </motion.button>
-                <motion.button whileTap={{scale: 0.8}} className="w-[95%] leading-[1] lg:hover:scale-[1.05] " onClick={handleNewSection}>
+                <motion.button whileTap={{scale: 0.8}} className="w-[95%] lg:hover:scale-[1.05] " onClick={handleNewSection}>
                     Add section point
                 </motion.button>
             </aside>
 
             <div className="fixed w-[100vw] h-[2px] bg-white z-[50] bottom-0">
-            <input type="range" min={innerHeight<500? 15: 25} max={50} step={5} onInput={(e)=>{handleZoom(e.target.value)}}
+            <input type="range" min={innerHeight<500? 15: 25} max={50} value={slider} step={5} onInput={(e)=>{handleZoom(e.target.value); setSlider(e.target.value)}}
             className="absolute z-[51] top-[-30px] right-[50px]"/>
             </div>
             
