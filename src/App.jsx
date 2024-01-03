@@ -72,28 +72,18 @@ function App() {
   
   const scroll = useCallback(()=>{
     if(innerHeight > InnerHeight+10){
-      
-      setChromeMobDetected(true)
+      document.querySelector('.overallParent').style.position = 'fixed'
+      document.querySelector('.overallParent').style.height = '100vh'
       
     }
-    if(window.scrollY < 100 && chromeMobDetected){
-      
-      setChromeMobDetected(false)
+    if(window.scrollY < 20){
+      document.querySelector('.overallParent').style.position = 'absolute'
+      document.querySelector('.overallParent').style.height = 'auto'
+     
     }
 
   }, [])
 
-  useEffect(()=>{
-    if(!chromeMobDetected){
-      document.querySelector('.overallParent').style.position = 'fixed'
-      document.querySelector('.overallParent').style.height = '100vh'
-    }
-    if(chromeMobDetected){
-      document.querySelector('.overallParent').style.position = 'absolute'
-      document.querySelector('.overallParent').style.height = 'auto'
-    }
-
-  }, [chromeMobDetected])
 
   // FUNCTION TO KNOW THE POSITION OF THE MOUSE SO AS TO INSERT PLOT POINTS THERE
   const track = useCallback((e)=>{
