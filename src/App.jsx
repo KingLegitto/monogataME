@@ -3,9 +3,9 @@ import bgTexture from './assets/hardboard2.jpg'
 import Commands from './compononets/Commands'
 import StoryTimeline from './compononets/StoryTimeline'
 import { sanityClient } from '../client'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import JumboAlert from './compononets/jumboAlert'
-import { motion, useInView } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 
 function App() {
@@ -18,11 +18,8 @@ function App() {
   const [entryCounter, setCounter] = useState(0)
   const [newPoints, setNewPoints] = useState([])
   const [jumboAlert, setJumboAlert] = useState(false)
-  const [viewRestart, setViewRestart] = useState(false)
+  const [InnerHeight, setInnerHeight] = useState(0)
   const [savePointCounter, setSavePointCounter] = useState(0)
-
-  const mobUrlBarChecker = useRef(null)
-  const isInView = useInView(mobUrlBarChecker, {once: true})
 
   // ARRAY SIMULATING DATA STORED IN THE DATABASE FOR THE STORY TIMELINE
   useEffect(()=>{
@@ -54,17 +51,18 @@ function App() {
     }
   }, [])
 
-  // useEffect(()=>{
-  //   if(isInView){
-  //     // alert('yep')
-  //   }
-  // }, [isInView])
+  useEffect(()=>{
+    if(!jumboAlert){
+      setInnerHeight(innerHeight)
+    }
+  }, [jumboAlert])
 
   
   const scroll = useCallback(()=>{
-    if(isInView && window.scrollY == 0){
-      setViewRestart(true)
-    }else{setViewRestart(false)}
+    if(innerHeight < InnerHeight-10){
+      document.querySelector('.overallParent').style.position = 'fixed'
+      document.querySelector('.overallParent').style.height = '100vh'
+    }
 
   }, [])
 
@@ -123,9 +121,7 @@ function App() {
       
       
       {!jumboAlert && (<motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
-      className='overallParent w-[100vw] h-[auto] overflow-scroll absolute z-[2] top-[50px] lg:top-[70px] left-0 bg-inherit'
-      style={{height: isInView?'100vh':'auto', position: isInView?'fixed':'absolute'}}>
-
+      className='overallParent w-[100vw] h-[auto] overflow-scroll absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'>
 
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
         <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} 
@@ -140,11 +136,10 @@ function App() {
   
       </motion.div>)}
 
-      {/* MOBILE URL BAR CHECK /// */}
-      {!jumboAlert && (!isInView || viewRestart) && (<motion.div ref={mobUrlBarChecker} className='w-[100vw] h-[1px] absolute top-0 mt-[100vh] z-[1]'
-      >
-        
-      </motion.div>)}
+      {/* DUMMY CONTAINER TO TACKLE MOBILE BROWSER ADDRESS BAR ISSUE*/}
+      <div className='w-screen h-[200vh] dummy'>
+
+      </div>
 
       {/* <footer className='w-screen h-[]'>
 
