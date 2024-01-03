@@ -52,15 +52,18 @@ function App() {
 
   
   const scroll = useCallback(()=>{
-    if(!jumboAlert && window.scrollY > 20){
+    if(!jumboAlert && window.scrollY > 10 && document.querySelector('.overallParent').style.height == 'auto'){
       // console.log('Hurray!!!')
       // document.querySelector('.dummy').style.height = '1vh'
+      window.scrollTo(0, 25)
       document.querySelector('.overallParent').style.height = '100vh'
+      
     }
 
-    if(!jumboAlert && window.scrollY < 20){
+    if(!jumboAlert && window.scrollY == 0 && document.querySelector('.overallParent').style.height == '100vh'){
       // document.querySelector('.dummy').style.height = '150vh'
       document.querySelector('.overallParent').style.height = 'auto'
+      // window.scrollTo(0, 5)
     }
 
   }, [])
@@ -120,7 +123,7 @@ function App() {
       
       
       {!jumboAlert && (<motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
-      className='overallParent w-[100vw] h-[auto] overflow-scroll fixed z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'>
+      className='overallParent w-[100vw] overflow-scroll fixed z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit' style={{height: 'auto'}}>
 
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
         <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} 
@@ -136,7 +139,7 @@ function App() {
       </motion.div>)}
 
       {/* DUMMY CONTAINER TO TACKLE MOBILE BROWSER ADDRESS BAR ISSUE*/}
-      <div className='w-screen h-[150vh] dummy'>
+      <div className='w-screen h-[200vh] dummy'>
 
       </div>
 
