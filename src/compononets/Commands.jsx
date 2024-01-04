@@ -92,7 +92,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 
             </motion.header>
 
-            {aside || innerWidth>500 && (<motion.aside initial={{x: '-100%'}} animate={{x: 0}} className="w-[auto] min-w-[110px] max-w-[200px] lg:w-[200px] h-[100vh] ml-[10px] fixed left-0 pt-[50px] lg:pt-[70px] pb-[8vh] z-[45] flex flex-col justify-center">
+            {(aside || innerWidth>500) && (<motion.aside initial={{x: '-100%'}} animate={{x: 0}} className="w-[auto] min-w-[110px] max-w-[200px] lg:w-[200px] h-[100vh] ml-[10px] fixed left-0 pt-[50px] lg:pt-[70px] pb-[8vh] z-[45] flex flex-col justify-center">
                 <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05] mb-[5vh]">
                     Characters
                 </motion.button>
