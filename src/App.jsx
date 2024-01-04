@@ -27,20 +27,20 @@ function App() {
 
   // ARRAY SIMULATING DATA STORED IN THE DATABASE FOR THE STORY TIMELINE
   useEffect(()=>{
-    if(innerWidth < 600){
-      setJumboAlert(true)
-    }
-    if(innerWidth < 1024){
-      window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
-        const portrait = e.matches;
+    // if(innerWidth < 600){
+    //   setJumboAlert(true)
+    // }
+    // if(innerWidth < 1024){
+    //   window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+    //     const portrait = e.matches;
     
-        if (portrait) {
-            setJumboAlert(true)
-        } else {
-            setJumboAlert(false)
-        }
-    });
-    }
+    //     if (portrait) {
+    //         setJumboAlert(true)
+    //     } else {
+    //         setJumboAlert(false)
+    //     }
+    // });
+    // }
     
 
     sanityClient.fetch(`*[_type == "plotPoints"]`).then((data)=> {setPoints(data)});

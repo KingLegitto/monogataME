@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react"
 import { sanityClient } from '../../client'
 import { motion } from "framer-motion"
+import { MenuRounded } from "@mui/icons-material"
 
 const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     const [userDetails, setUserDetails] = useState(false)
     const [checkUserEmail, setCheckUserEmail] = useState(false)
     const [slider, setSlider] = useState(50)
+    const [aside, setAside] = useState(false)
     const [updater, setUpdater] = useState(true)
 
     const handleNewPoint = ()=>{
@@ -72,8 +74,8 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     return ( 
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.3}} className="h-auto w-screen">
             <motion.header className="header duration-[0.3s] w-[100vw] h-[50px] lg:h-[70px] grid bg-white fixed top-0 z-[90] justify-between items-center" 
-            style={{gridTemplateColumns: '1fr 5fr 1fr'}}>
-                <div className="w-[12vw] text-center justify-self-center">
+            style={{gridTemplateColumns: innerWidth<500? '1fr 1fr 1fr': '1fr 5fr 1fr'}}>
+                <div className="w-[100%] lg:w-[12vw] text-center justify-self-center">
                     
                     {!checkUserEmail && (<button onClick={handleLogin} className="bg-[#fb4ffb] px-[10px] py-[5px] rounded-[12px] ">
                         Log in
@@ -84,13 +86,13 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 <h1 className="text-center text-[25px]">
                     MonogataME
                 </h1>
-                <div className="w-[12vw] text-center justify-self-center">
+                <div className="w-[100%] lg:w-[12vw] text-center justify-self-center">
                     <button onClick={savePoints} className="bg-[#fb4ffb] px-[10px] py-[5px] rounded-[12px] ">Save</button>
                 </div>
                 
             </motion.header>
 
-            <aside className="w-[auto] min-w-[110px] max-w-[115px] lg:w-[200px] h-[100vh] fixed left-0 pt-[50px] lg:pt-[70px] pb-[8vh] z-[45] flex flex-col justify-center">
+            {aside || innerWidth>500 && (<motion.aside initial={{x: '-100%'}} animate={{x: 0}} className="w-[auto] min-w-[110px] max-w-[200px] lg:w-[200px] h-[100vh] ml-[10px] fixed left-0 pt-[50px] lg:pt-[70px] pb-[8vh] z-[45] flex flex-col justify-center">
                 <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05] mb-[5vh]">
                     Characters
                 </motion.button>
@@ -106,11 +108,18 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05] " onClick={handleNewSection}>
                     Add section point
                 </motion.button>
-            </aside>
+            </motion.aside>)}
+
+            {innerWidth<500 &&(<motion.div className="w-[40px] h-[40px] duration-[0.3s] rounded-[50%] bg-[#eeeeeee5] fixed z-[45] top-[50vh]
+            flex justify-center items-center"
+            style={{transform: !aside? 'translate(-50%, -50%)': 'translate(135px, -50%)'}}
+            onClick={()=>{setAside(!aside)}}>
+                <MenuRounded style={{fontSize: '30px'}}/>
+            </motion.div>)}
 
             <div className="fixed w-[100vw] h-[2px] bg-white z-[50] bottom-0">
-            <input type="range" min={innerHeight<500? 15: 25} max={50} value={slider} step={5} onInput={(e)=>{handleZoom(e.target.value); setSlider(e.target.value)}}
-            className="absolute z-[51] top-[-30px] right-[50px]"/>
+            <input type="range" min={innerHeight<500? 15: 25} max={50} value={slider} step={1} onInput={(e)=>{handleZoom(e.target.value); setSlider(e.target.value)}}
+            className="slider absolute z-[51] top-[-30px] left-[50%] translate-x-[-50%]"/>
             </div>
             
             
