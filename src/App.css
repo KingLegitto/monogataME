@@ -65,7 +65,7 @@ aside button{
     appearance: none;
     border-radius: 10px;
     height: 5px;
-    width: 90vw;
+    /* width: 90vw; */
     /* outline: white; */
     background: white;
 }

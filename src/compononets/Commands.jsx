@@ -92,17 +92,18 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 
             </motion.header>
 
-            {(aside || innerWidth>500) && (<motion.aside initial={{x: '-100%'}} animate={{x: 0}} className="w-[auto] min-w-[110px] max-w-[200px] lg:w-[200px] h-[100vh] ml-[10px] fixed left-0 pt-[50px] lg:pt-[70px] pb-[8vh] z-[45] flex flex-col justify-center">
-                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05] mb-[5vh]">
+            {(aside || innerWidth>500) && (<motion.aside initial={{x: '-100%', y: '-50%'}} animate={{x: 0, y: '-50%'}} className="w-[auto] min-w-[110px] max-w-[200px] lg:w-[200px] h-[35vh] lg:h-[50vh]
+            ml-[10px] fixed top-[50vh] left-0 z-[45] flex flex-col justify-between">
+                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]">
                     Characters
                 </motion.button>
-                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05] mb-[5vh]">
+                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]">
                     Progressions
                 </motion.button>
-                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05] mb-[5vh]">
+                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]">
                     Lists
                 </motion.button>
-                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05] mb-[5vh]" onClick={handleNewPoint}>
+                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]" onClick={handleNewPoint}>
                     Add new point
                 </motion.button>
                 <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05] " onClick={handleNewSection}>
@@ -112,14 +113,14 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
             {innerWidth<500 &&(<motion.div className="w-[40px] h-[40px] duration-[0.3s] rounded-[50%] bg-[#eeeeeee5] fixed z-[45] top-[50vh]
             flex justify-center items-center"
-            style={{transform: !aside? 'translate(-50%, -50%)': 'translate(135px, -50%)'}}
+            style={{transform: !aside? 'translate(-50%, -50%) scale(1.3)': 'translate(135px, -50%)',  boxShadow: '0px 10px 33px -7px rgba(0, 0, 0, 1)'}}
             onClick={()=>{setAside(!aside)}}>
                 <MenuRounded style={{fontSize: '30px'}}/>
             </motion.div>)}
 
             <div className="fixed w-[100vw] h-[2px] bg-white z-[50] bottom-0">
-            <input type="range" min={innerHeight<500? 15: 25} max={50} value={slider} step={1} onInput={(e)=>{handleZoom(e.target.value); setSlider(e.target.value)}}
-            className="slider absolute z-[51] top-[-30px] left-[50%] translate-x-[-50%]"/>
+            <input type="range" min={innerWidth<500? 15: 25} max={50} value={slider} step={1} onInput={(e)=>{handleZoom(e.target.value); setSlider(e.target.value)}}
+            className="slider w-[85vw] lg:w-[90vw] absolute z-[51] top-[-30px] left-[50%] translate-x-[-50%]"/>
             </div>
             
             
