@@ -75,17 +75,16 @@ function App() {
 
   useEffect(()=>{
     if(checkinview){
-      setTimeout(() => {
+      
         document.querySelector('.overallParent').style.position = 'fixed'
         document.querySelector('.overallParent').style.height = '100vh'
-      }, 200);
+      
       
     }
     if(!checkinview){
-      setTimeout(() => {
+      
         document.querySelector('.overallParent').style.position = 'absolute'
         document.querySelector('.overallParent').style.height = 'auto'
-      }, 200);
       
       
      
@@ -147,7 +146,7 @@ function App() {
       
       
       
-      {!jumboAlert && (<motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
+      {!jumboAlert && (<motion.div layoutScroll initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
       className='overallParent duration-[0.3s] w-[100vw] h-[auto] overflow-scroll absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'
       onClick={()=>{alert(InnerHeight)}}>
 
@@ -157,10 +156,10 @@ function App() {
         setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>
 
       {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
-        <div className='zoom bgImage w-[1200px] h-[1000px] mx-auto' style={{backgroundImage: `url(${bgTexture})`, 
+        <motion.div className='zoom bgImage w-[1200px] h-[1000px] mx-auto' style={{backgroundImage: `url(${bgTexture})`, 
         backgroundSize: '550px 643px', backgroundRepeat: 'repeat'}}>
         
-        </div>
+        </motion.div>
 
         <motion.div ref={fullscreenChecker} className='w-screen h-[2px] fixed top-[100vh] translate-y-[-100%] '>
 
