@@ -71,7 +71,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
     return ( 
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.3}} className="h-auto w-screen">
-            <header className="w-[100vw] h-[50px] lg:h-[70px] grid bg-white fixed top-0 z-[90] justify-between items-center" 
+            <motion.header className="header duration-[0.3s] w-[100vw] h-[50px] lg:h-[70px] grid bg-white fixed top-0 z-[90] justify-between items-center" 
             style={{gridTemplateColumns: '1fr 5fr 1fr'}}>
                 <div className="w-[12vw] text-center justify-self-center">
                     
@@ -88,7 +88,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                     <button onClick={savePoints} className="bg-[#fb4ffb] px-[10px] py-[5px] rounded-[12px] ">Save</button>
                 </div>
                 
-            </header>
+            </motion.header>
 
             <aside className="w-[auto] min-w-[110px] lg:w-[200px] h-[100vh] fixed left-0 pt-[50px] lg:pt-[70px] pb-[8vh] z-[45] flex flex-col justify-center">
                 <motion.button whileTap={{scale: 0.8}} className="w-[95%] lg:hover:scale-[1.05] mb-[5vh]">

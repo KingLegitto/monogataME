@@ -35,13 +35,23 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         setBoundaryR(limitR)
         setBoundaryT(limitT)
         setBoundaryB(limitB)
+
+        // if(check && innerWidth<900){
+        //     document.querySelector('.overallParent').style.top = '50px'
+        //     // document.querySelector('.header').style.transform = 'translateY(0)'
+        // }
+        // if(!check && innerWidth<900){
+        //     document.querySelector('.overallParent').style.top = '0px'
+        //     // document.querySelector('.header').style.transform = 'translateY(-100%)'
+        // }
     }, [check])
+
 
     return ( 
         <motion.div ref={point} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
-        whileDrag={{scale: 1.1}} dragMomentum={false}
+        whileDrag={{scale: 1.1}} dragMomentum={false} 
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
-        onContextMenu={(event)=>{event.preventDefault(); setCheck(!check)
+        onContextMenu={(event)=>{event.preventDefault(); setCheck(!check); 
             setDrag(!dragctrl); updatePoint(); window.getSelection()?.removeAllRanges()}}
       
         className='point w-[auto] min-w-[100px] max-w-[200px] flex flex-wrap flex-col justify-between
