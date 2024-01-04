@@ -48,8 +48,13 @@ function App() {
     if(innerWidth<1024){
       window.addEventListener('scroll', scroll)
     }
-    window.scrollTo(0,0)
   }, [])
+
+  useEffect(()=>{
+    if(!jumboAlert){
+      window.scrollTo(0,0)
+    }
+  }, [jumboAlert])
 
   const handleScreenResize = useCallback(()=>{
     if(innerWidth < 800){
@@ -147,8 +152,7 @@ function App() {
       
       
       {!jumboAlert && (<motion.div layoutScroll initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
-      className='overallParent duration-[0.3s] w-[100vw] h-[auto] overflow-scroll absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'
-      onClick={()=>{alert(InnerHeight)}}>
+      className='overallParent duration-[0.3s] w-[100vw] h-[auto] overflow-scroll absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'>
 
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
         <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} 
