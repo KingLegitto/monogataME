@@ -46,7 +46,7 @@ function App() {
     sanityClient.fetch(`*[_type == "plotPoints"]`).then((data)=> {setPoints(data)});
 
     if(innerWidth<1024){
-      window.addEventListener('scroll', scroll)
+      document.querySelector('.overallParent').addEventListener('scroll', scroll)
     }
   }, [])
 
@@ -67,34 +67,34 @@ function App() {
   
   const scroll = useCallback(()=>{
 
-    if(window.scrollY < 2){
+    if(document.querySelector('.overallParent').scrollY < 2){
       document.querySelector('.header').style.transform = 'translateY(0)'
       document.querySelector('.overallParent').style.top = '50px'
     }
-    if(window.scrollY > 2){
+    if(document.querySelector('.overallParent').scrollY > 2){
       document.querySelector('.header').style.transform = 'translateY(-100%)'
       document.querySelector('.overallParent').style.top = '0px'
     }
 
   }, [])
 
-  useEffect(()=>{
-    if(checkinview){
+  // useEffect(()=>{
+  //   if(checkinview){
       
-        document.querySelector('.overallParent').style.position = 'fixed'
-        document.querySelector('.overallParent').style.height = '100vh'
+  //       document.querySelector('.overallParent').style.position = 'fixed'
+  //       document.querySelector('.overallParent').style.height = '100vh'
       
       
-    }
-    if(!checkinview){
+  //   }
+  //   if(!checkinview){
       
-        document.querySelector('.overallParent').style.position = 'absolute'
-        document.querySelector('.overallParent').style.height = 'auto'
+  //       document.querySelector('.overallParent').style.position = 'absolute'
+  //       document.querySelector('.overallParent').style.height = 'auto'
       
       
      
-    }
-  }, [checkinview])
+  //   }
+  // }, [checkinview])
 
 
   // FUNCTION TO KNOW THE POSITION OF THE MOUSE SO AS TO INSERT PLOT POINTS THERE
@@ -151,8 +151,9 @@ function App() {
       
       
       
-      {!jumboAlert && (<motion.div layoutScroll initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
-      className='overallParent duration-[0.3s] w-[100vw] h-[auto] overflow-scroll absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'>
+      {!jumboAlert && (<motion.div layout initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
+      className='overallParent duration-[0.3s] w-[100vw] lg:h-[auto] overflow-scroll fixed lg:absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'
+      style={{height: innerHeight}}>
 
       {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
         <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} 
@@ -165,9 +166,9 @@ function App() {
         
         </motion.div>
 
-        <motion.div ref={fullscreenChecker} className='w-screen h-[2px] fixed top-[100vh] translate-y-[-100%] '>
+        {/* <motion.div ref={fullscreenChecker} className='w-screen h-[2px] fixed top-[100vh] translate-y-[-100%] '>
 
-        </motion.div>
+        </motion.div> */}
   
       </motion.div>)}
 
