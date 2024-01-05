@@ -7,7 +7,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     const [userDetails, setUserDetails] = useState(false)
     const [checkUserEmail, setCheckUserEmail] = useState(false)
     const [slider, setSlider] = useState(50)
-    const [aside, setAside] = useState(false)
+    const [aside, setAside] = useState(true)
     const [updater, setUpdater] = useState(true)
 
     const handleNewPoint = ()=>{
@@ -92,8 +92,8 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 
             </motion.header>
 
-            {(aside || innerWidth>500) && (<motion.aside initial={{x: '-100%', y: '-50%'}} animate={{x: 0, y: '-50%'}} className="w-[auto] min-w-[110px] max-w-[200px] lg:w-[200px] h-[35vh] lg:h-[50vh]
-            ml-[10px] fixed top-[50vh] left-0 z-[45] flex flex-col justify-between">
+            {(aside || innerWidth>500) && (<motion.aside className="aside translate-x-[-150%] lg:translate-x-[0] translate-y-[-50%] w-[auto] min-w-[110px] max-w-[200px] lg:w-[200px] h-[35vh] lg:h-[50vh]
+             fixed top-[50vh] left-0 z-[45] flex flex-col justify-between duration-[0.3s]">
                 <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]">
                     Characters
                 </motion.button>
@@ -111,11 +111,42 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 </motion.button>
             </motion.aside>)}
 
-            {innerWidth<500 &&(<motion.div className="w-[40px] h-[40px] duration-[0.3s] rounded-[50%] bg-[#eeeeeee5] fixed z-[45] top-[50vh]
-            flex justify-center items-center"
-            style={{transform: !aside? 'translate(-50%, -50%) scale(1.3)': 'translate(135px, -50%)',  boxShadow: '0px 10px 33px -7px rgba(0, 0, 0, 1)'}}
-            onClick={()=>{setAside(!aside)}}>
-                <MenuRounded style={{fontSize: '30px'}}/>
+            {innerWidth<500 &&(<motion.div onPan={(e, info)=>{
+            if(info.point.x < 180 && info.point.x > 0){
+                document.querySelector('.menuIcon').style.left = `${info.point.x}px`; 
+                document.querySelector('.aside').style.left = `${info.point.x}px`; 
+                document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(info.point.x/200)})`
+            }
+            }}
+            onPanStart={(e, info)=>{document.querySelector('.menuIcon').style.transition = '0s';
+                                    document.querySelector('.aside').style.transition = '0s'}}
+            onPanEnd={(e, info)=>{
+                document.querySelector('.menuIcon').style.transition = '0.3s'; 
+                document.querySelector('.aside').style.transition = '0.3s'; 
+                if(info.point.x > 90){
+                    document.querySelector('.menuIcon').style.left = `180px`; 
+                    document.querySelector('.aside').style.left = `180px`; 
+                }
+                else{
+                    document.querySelector('.menuIcon').style.left = `0px`; 
+                    document.querySelector('.aside').style.left = `0px`; 
+                }
+            }}
+            className="menuIcon duration-[0.3s] w-[40px] h-[40px] rounded-[50%] bg-[#eeeeeee5] fixed z-[45] top-[50vh] left-0 flex justify-center items-center"
+            style={{transform: 'translate(-50%, -50%) scale(2)',  boxShadow: '0px 10px 33px -7px rgba(0, 0, 0, 1)', touchAction: 'none'}}
+            onClick={()=>{
+                if(document.querySelector('.menuIcon').style.left == `0px`){
+
+                    document.querySelector('.menuIcon').style.left = `180px`;
+                    document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(180/200)})`
+                    document.querySelector('.aside').style.left = `180px`;
+                }else{
+                    document.querySelector('.menuIcon').style.left = `0px`;
+                    document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(0/200)})` 
+                    document.querySelector('.aside').style.left = `0px`;
+                }
+            }}>
+                <MenuRounded style={{fontSize: '20px', color: '#2c2c2c'}}/>
             </motion.div>)}
 
             <div className="fixed w-[100vw] h-[2px] bg-white z-[50] bottom-0">
