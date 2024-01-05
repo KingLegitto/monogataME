@@ -93,7 +93,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             </motion.header>
 
             {(aside || innerWidth>500) && (<motion.aside className="aside translate-x-[-150%] lg:translate-x-[0] translate-y-[-50%] w-[auto] min-w-[110px] max-w-[200px] lg:w-[200px] h-[35vh] lg:h-[50vh]
-             fixed top-[50vh] left-0 z-[45] flex flex-col justify-between duration-[0.3s]">
+             fixed top-[42vh] lg:top-[50vh] left-0 z-[45] flex flex-col justify-between duration-[0.3s]">
                 <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]">
                     Characters
                 </motion.button>
@@ -133,7 +133,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 }
             }}
             className="menuIcon duration-[0.3s] w-[40px] h-[40px] rounded-[50%] bg-[#eeeeeee5] fixed z-[45] top-[50vh] left-0 flex justify-center items-center"
-            style={{transform: 'translate(-50%, -50%) scale(2)',  boxShadow: '0px 0px 20px 5px rgba(0,0,0,0.3)', touchAction: 'none'}}
+            style={{transform: 'translate(-50%, -50%) scale(2)',  boxShadow: '0px 0px 20px 5px rgba(0,0,0,0.1)', touchAction: 'none'}}
             onClick={()=>{
                 if(document.querySelector('.menuIcon').style.left == `0px`){
 
