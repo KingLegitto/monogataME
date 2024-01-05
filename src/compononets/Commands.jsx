@@ -133,7 +133,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 }
             }}
             className="menuIcon duration-[0.3s] w-[40px] h-[40px] rounded-[50%] bg-[#eeeeeee5] fixed z-[45] top-[50vh] left-0 flex justify-center items-center"
-            style={{transform: 'translate(-50%, -50%) scale(2)',  boxShadow: '0px 0px 20px 5px rgba(0,0,0,0.5)', touchAction: 'none'}}
+            style={{transform: 'translate(-50%, -50%) scale(2)',  boxShadow: '0px 0px 20px 5px rgba(0,0,0,0.3)', touchAction: 'none'}}
             onClick={()=>{
                 if(document.querySelector('.menuIcon').style.left == `0px`){
 
