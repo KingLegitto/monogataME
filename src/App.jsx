@@ -47,10 +47,6 @@ function App() {
 
     if(innerWidth<1024){
       document.querySelector('.overallParent').addEventListener('scroll', scroll)
-      window.addEventListener('scroll', ()=>{
-        document.querySelector('.header').style.transform = 'translateY(0%)'
-        document.querySelector('.overallParent').style.top = '50px'
-      })
     }
   }, [])
 
@@ -71,13 +67,14 @@ function App() {
   
   const scroll = useCallback(()=>{
 
-    // if(document.querySelector('.overallParent').scrollTop < 2){
-    //   document.querySelector('.header').style.transform = 'translateY(0)'
-    //   document.querySelector('.overallParent').style.top = '50px'
-    // }
+    if(document.querySelector('.overallParent').scrollTop < 2){
+      document.querySelector('.header').style.transform = 'translateY(0)'
+      // document.querySelector('.overallParent').style.top = '50px'
+    }
     if(document.querySelector('.overallParent').scrollTop > 10){
       document.querySelector('.header').style.transform = 'translateY(-100%)'
       document.querySelector('.overallParent').style.top = '0px'
+      // document.querySelector('.overallParent').removeEventListener('scroll', scroll)
     }
 
   }, [])
@@ -171,9 +168,6 @@ function App() {
   
       </motion.div>
 
-      {/* <footer className='w-screen h-[]'>
-
-      </footer> */}
     </>
   )
 }
