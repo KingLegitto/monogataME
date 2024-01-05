@@ -47,6 +47,10 @@ function App() {
 
     if(innerWidth<1024){
       document.querySelector('.overallParent').addEventListener('scroll', scroll)
+      window.addEventListener('scroll', ()=>{
+        document.querySelector('.header').style.transform = 'translateY(0%)'
+        document.querySelector('.overallParent').style.top = '50px'
+      })
     }
   }, [])
 
