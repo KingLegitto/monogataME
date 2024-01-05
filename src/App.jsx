@@ -151,7 +151,7 @@ function App() {
       
       {/* OVERALL PARENT ////////////////////////////////////////////////////////// */}
       <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
-      className='overallParent duration-[0.3s] w-[100vw] h-[100vh] lg:h-[auto] overflow-scroll fixed lg:absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'
+      className='overallParent duration-[0.3s] w-[100vw] h-[92vh] lg:h-[auto] overflow-scroll fixed lg:absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'
       >
 
         {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
