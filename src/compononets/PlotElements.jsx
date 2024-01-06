@@ -69,12 +69,12 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
         onTapStart={(event)=>{dblclickCheck()}}
       
-        className='point w-[auto] min-w-[100px] max-w-[200px] flex flex-wrap flex-col justify-between
+        className='point w-[auto] min-w-[100px] max-w-[200px] flex justify-center
         h-[auto] min-h-[100px] absolute rounded-[20px] p-[10px]'
 
         style={{top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
-        width:type=='section'?'200px':'auto', minHeight: type=='section'?'auto':'100px', zIndex: type=='section'?'35': !dragctrl? '40': '5',
-        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0', paddingBottom: type=='plot'? '30px':'10px',
+        width:type=='section'?'200px': !dragctrl?'200px':'auto', minHeight: type=='section'?'auto':'100px', zIndex: type=='section'?'35': !dragctrl? '40': '5',
+        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0', paddingBottom: type=='plot'? '40px':'10px',
         border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black'}}>
 
             {/* BADGE  ///////////////////////////////////////////////////////////// */}
@@ -86,7 +86,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
 
             {/* TEXTBOX  //////////////////////////////////////////////////////////// */}
             <div ref={textbox} contentEditable suppressContentEditableWarning={true} spellCheck={false}
-            className='w-[auto] max-w-[100%] rounded-[10px] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
+            className='w-[auto] max-w-[100%] px-[5px] rounded-[10px] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
             style={{textAlign: type=='plot'?'left':'center', pointerEvents: dragctrl?'none':'all'}}>
                 {details}
             </div>
@@ -111,10 +111,10 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
             </div>)}
 
             {/* COLOUR CHANGE  /////////////////////////////////////////////////////// */}
-            <AnimatePresence>
+            
             {!dragctrl && type=='plot' && (
             
-                <motion.div variants={colorsCont} initial={'hidden'} animate={'visible'} exit={'leave'} className='colorCont w-[150px] h-[20px] flex justify-evenly mt-[10px]'>
+                <motion.div variants={colorsCont} initial={'hidden'} animate={'visible'} className='colorCont w-[150px] h-[20px] absolute bottom-[14px] flex justify-evenly mt-[10px]'>
                     <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#1bffbb]' onClick={()=>{updatePoint(keyID, '#1bffbbe5'); }}>
 
                     </motion.span>
@@ -132,7 +132,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
                     </motion.span>
                 </motion.div>
             )}
-            </AnimatePresence>
+            
 
         </motion.div>
      );
