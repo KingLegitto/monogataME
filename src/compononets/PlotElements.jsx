@@ -12,6 +12,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
     const [boundaryT, setBoundaryT] = useState(1)
     const [boundaryB, setBoundaryB] = useState(1)
     const [check, setCheck] = useState(true)
+    const [clickCounter, setClickCounter] = useState(0)
 
     const colorsCont = {
         hidden: {opacity: 0},
@@ -45,14 +46,28 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         //     // document.querySelector('.header').style.transform = 'translateY(-100%)'
         // }
     }, [check])
+    
+    const dblclickCheck = ()=>{
+        
+        setClickCounter(clickCounter+1)
+        setTimeout(() => {
+            setClickCounter(0)
+        }, 500);
+
+        if(clickCounter == 1){
+            setClickCounter(0)
+            setCheck(!check); 
+            setDrag(!dragctrl); updatePoint(); window.getSelection()?.removeAllRanges()
+        }
+        
+    }
 
 
     return ( 
         <motion.div ref={point} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
         whileDrag={{scale: 1.1}} dragMomentum={false} 
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
-        onContextMenu={(event)=>{event.preventDefault(); setCheck(!check); 
-            setDrag(!dragctrl); updatePoint(); window.getSelection()?.removeAllRanges()}}
+        onTapStart={(event)=>{dblclickCheck()}}
       
         className='point w-[auto] min-w-[100px] max-w-[200px] flex flex-wrap flex-col justify-between
         h-[auto] min-h-[100px] absolute rounded-[20px] p-[10px]'
