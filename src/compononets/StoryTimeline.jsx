@@ -6,6 +6,8 @@ const StoryTimeline = ({plotPointDetails, mouseTracking, entryCounter, setCounte
 deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
   
   const plotDragConstraints = useRef(null)
+
+  const [editModeLimiter, setEditModeLimiter] = useState(false)
   
   
   // FUNCTION TO HANDLE ADDING POINTS ON THE BACKGROUND ACCORDING TO THE MOUSE POSITION
@@ -38,8 +40,8 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
       {/* PLOT POINTS  //////////////////////////////////////////////////////// */}
       {plotPointDetails && plotPointDetails.map((entry)=>{
         return(
-              <PlotElements key={entry._id}
-              bgColor={entry.bg} x={entry.x} y={entry.y} details={entry.details}
+              <PlotElements key={entry._id} plotDragConstraints={plotDragConstraints}
+              bgColor={entry.bg} x={entry.x} y={entry.y} details={entry.details} editModeLimiter={editModeLimiter} setEditModeLimiter={setEditModeLimiter}
               type={entry.type} deletePoint={deletePoint} updatePoint={updatePoint} keyID={entry._id}/>
         )
         })

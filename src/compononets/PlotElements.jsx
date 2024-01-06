@@ -1,8 +1,8 @@
 import { RemoveRounded } from '@mui/icons-material';
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
-const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint,
+const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint, plotDragConstraints,
     referenceL, referenceR, referenceT, referenceB}) => {
     const point = useRef(null)
     const textbox = useRef(null)
@@ -61,6 +61,26 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         }
         
     }
+
+    useEffect(()=>{
+        if(!dragctrl){
+            window.addEventListener('click', closeEditMode)
+            // document.querySelector('.point').addEventListener('click', closeEditMode)
+        }
+    }, [dragctrl])
+
+    const closeEditMode = useCallback((e)=>{
+        let left = point.current.getBoundingClientRect().left
+        let right = point.current.getBoundingClientRect().right
+        let top = point.current.getBoundingClientRect().top
+        let bottom = point.current.getBoundingClientRect().bottom
+        if(!(((e.pageX >= left) && (e.pageX <= right)) && ((e.pageY >= top) && (e.pageY <= bottom)))){
+            setDrag(true)
+            window.removeEventListener('click', closeEditMode)
+        
+        }
+        
+    }, [])
 
 
     return ( 
