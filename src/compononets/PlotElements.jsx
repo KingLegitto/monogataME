@@ -74,7 +74,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
                 // AUTOMATICALLY FOCUS ON SELECTED POINT
                 document.querySelector('.overallParent').scrollTo(point.current.offsetLeft - (point.current.offsetLeft*(slider>40?(100-slider*2)/100:0.2)) - innerWidth/4, point.current.offsetTop - (point.current.offsetTop*(slider>=40?(100-slider*2)/100:0.2))- innerHeight/5)
                   
-            }, 500);
+            }, 300);
             
             // RESET CLICK COUNTER JUST IN CASE AND ACTIVATE EDIT MODE ON POINT
             setClickCounter(0)
