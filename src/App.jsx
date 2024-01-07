@@ -63,14 +63,14 @@ function App() {
     const [slider, setSlider] = useState(50)
     const handleZoom = (value)=>{
         
-        document.querySelector('.zoom').style.transform = `scale(${value*2}%)`
+        document.querySelector('.zoom').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
 
             let el = document.querySelector('.bgImage')
             switch(value){
                 case '50': el.style.borderRadius='0px'; break;
                 default: el.style.borderRadius='30px'
             }
-            document.querySelector('.pointsParent').style.transform = `scale(${value*2}%)`
+            document.querySelector('.pointsParent').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
         }
     // /////////////////////////////////////////////////////////////////
 
