@@ -57,7 +57,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         if(clickCounter == 1){
             setClickCounter(0)
             setCheck(!check); 
-            setDrag(!dragctrl); updatePoint(); window.getSelection()?.removeAllRanges()
+            setDrag(false); updatePoint(); window.getSelection()?.removeAllRanges()
         }
         
     }
