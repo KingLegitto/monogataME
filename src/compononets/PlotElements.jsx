@@ -60,8 +60,9 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
             setClickCounter(0)
         }, 700);
 
-        // STATEMENTS TO BE EXECUTED AT THE INITIAL CLICK
+        // STATEMENTS TO BE EXECUTED ONCE AT THE INITIAL CLICK
         if(clickCounter == 0){
+            setPreventAuto(false)
             setPrevZoom(slider)
             let scrollX = document.querySelector('.overallParent').scrollLeft
             let scrollY = document.querySelector('.overallParent').scrollTop
