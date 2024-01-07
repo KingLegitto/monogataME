@@ -2,13 +2,18 @@ import { useState, useEffect } from "react"
 import { sanityClient } from '../../client'
 import { motion } from "framer-motion"
 import { MenuRounded } from "@mui/icons-material"
+import { ZoomContext } from '../App.jsx'
+import { useContext } from 'react'
 
 const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     const [userDetails, setUserDetails] = useState(false)
     const [checkUserEmail, setCheckUserEmail] = useState(false)
-    const [slider, setSlider] = useState(50)
+    
     const [aside, setAside] = useState(true)
     const [updater, setUpdater] = useState(true)
+
+    const {handleZoom, setSlider, slider} = useContext(ZoomContext)
+    
 
     const handleNewPoint = ()=>{
         document.querySelector('.bg').style.cursor = 'crosshair'
@@ -33,21 +38,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
         .then((data)=> {setUserDetails(data)})
     }
 
-    const handleZoom = (value)=>{
-    let elements = document.querySelectorAll('.zoom')
-        elements.forEach((item)=>{
-            item.style.transform = `scale(${value*2}%)`
-        })
-
-        let el = document.querySelector('.bgImage')
-        switch(value){
-            case '50': el.style.borderRadius='0px'; break;
-            default: el.style.borderRadius='30px'
-        }
-        document.querySelector('.pointsParent').style.transform = `scale(${value*2}%)`
-        
-    
-    }
+    // INITIAL AUTO ZOOM IN FOR MOBILE DEVICES
     useEffect(()=>{
         if(innerWidth<1024){
             setSlider(40)

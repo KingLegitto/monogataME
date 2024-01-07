@@ -15,7 +15,11 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
     const [boundaryB, setBoundaryB] = useState(1)
     const [check, setCheck] = useState(true)
     const [clickCounter, setClickCounter] = useState(0)
-    const handleZoom = useContext(ZoomContext)
+    const [prevZoom, setPrevZoom] = useState(0)
+    const [prevScroll, setPrevScroll] = useState([])
+    const [preventAuto, setPreventAuto] = useState(false)
+    
+    const {handleZoom, setSlider, slider} = useContext(ZoomContext)
 
     const colorsCont = {
         hidden: {opacity: 0},
@@ -40,30 +44,46 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         setBoundaryT(limitT)
         setBoundaryB(limitB)
 
-        // if(check && innerWidth<900){
-        //     document.querySelector('.overallParent').style.top = '50px'
-        //     // document.querySelector('.header').style.transform = 'translateY(0)'
-        // }
-        // if(!check && innerWidth<900){
-        //     document.querySelector('.overallParent').style.top = '0px'
-        //     // document.querySelector('.header').style.transform = 'translateY(-100%)'
-        // }
     }, [check])
     
+
+    // FUNCTION TO CATCH WHEN THE USER DOUBLE CLICKS ON A POINT
     const dblclickCheck = ()=>{
+
+        // THIS ADDS PADDING AT THE BOTTOM TO GIVE ROOM FOR AUTO FOCUS SCROLL
         document.querySelector('.overallParent').style.paddingBottom = '100vh'
+
         setClickCounter(clickCounter+1)
+
+        // AFTER THIS SPECIFIED TIME ELAPSES, IT WON'T BE A DOUBLE CLICK ANYMORE
         setTimeout(() => {
             setClickCounter(0)
         }, 700);
 
+        // STATEMENTS TO BE EXECUTED AT THE INITIAL CLICK
+        if(clickCounter == 0){
+            setPrevZoom(slider)
+            let scrollX = document.querySelector('.overallParent').scrollLeft
+            let scrollY = document.querySelector('.overallParent').scrollTop
+            setPrevScroll([scrollX, scrollY])
+        }
+
+        // STATEMENTS TO BE EXECUTED AFTER SUCCESSFUL DOUBLE CLICK
         if(clickCounter == 1){
             
-            handleZoom(40)
-            // alert(point.current.offsetTop)
-            
+            // AUTOMATICALLY FOCUS ON SELECTED POINT
             document.querySelector('.overallParent').scrollTo(point.current.offsetLeft - (point.current.offsetLeft*0.2) - innerWidth/5,point.current.offsetTop - (point.current.offsetTop*0.2))
-            // document.querySelector('.overallParent').scrollLeft = `${point.current.offsetLeft - (point.current.offsetLeft*0.2)}`
+           
+
+            // WAIT FOR A LITTLE WHILE BEFORE AUTO ZOOMING ON POINT (ONLY FOR MOBILE DEVICES)
+            setTimeout(() => {
+                if(innerWidth < 500){
+                    handleZoom(40)
+                    setSlider(40)
+                }  
+            }, 200);
+            
+            // RESET CLICK COUNTER JUST IN CASE AND ACTIVATE EDIT MODE ON POINT
             setClickCounter(0)
             setCheck(!check); 
             setDrag(false); updatePoint(); window.getSelection()?.removeAllRanges()
@@ -72,26 +92,49 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
     }
 
     useEffect(()=>{
+        // ADDS EVENT LISTENER IF EDIT MODE ON A POINT IS ACTIVATED
         if(!dragctrl){
             window.addEventListener('click', closeEditMode)
-            
-            // document.querySelector('.point').addEventListener('click', closeEditMode)
         }else{
-            document.querySelector('.overallParent').style.paddingBottom = '0vh'
-        }
+                // RESET BOTTOM PADDING TO 0
+                document.querySelector('.overallParent').style.paddingBottom = '0vh'
+
+                //  TO RESET BACK TO PREVIOUS ZOOM STATE AND SCROLL AFTER LEAVING EDIT MODE ON A POINT
+                //  preventAuto PREVENTS BLOCK FROM EXECUTING IF THE NEXT PLACE CLICKED IS ANOTHER POINT
+                if(prevZoom != 0 && !preventAuto){
+
+                    document.querySelector('.overallParent').scrollTo(prevScroll[0], prevScroll[1])
+
+                    setTimeout(() => {
+                        handleZoom(prevZoom)
+                        setSlider(prevZoom)
+                    }, 200);
+                } 
+            }
     }, [dragctrl])
 
+    // FUNCTION TO CATCH IF EDIT MODE IS ACTIVE ON A POINT AND USER CLICKS OUTSIDE SAID POINT
     const closeEditMode = useCallback((e)=>{
         let left = point.current.getBoundingClientRect().left
         let right = point.current.getBoundingClientRect().right
         let top = point.current.getBoundingClientRect().top
         let bottom = point.current.getBoundingClientRect().bottom
 
+        // TO CATCH IF THE NEXT PLACE CLICKED IS ANOTHER POINT
+        let points = document.querySelectorAll('.point')
+        points.forEach((point)=>{
+            if(e.target == point){
+                setPreventAuto(true)
+            }
+        })
+        
+        // DEACTIVATES EDIT MODE FOR POINT IF USER CLICKS AWAY
         if(!((e.pageX >= left && e.pageX <= right) && (e.pageY >= top && e.pageY <= bottom))){
             setDrag(true)
             window.removeEventListener('click', closeEditMode)
         
         }
+        
         
     }, [])
 

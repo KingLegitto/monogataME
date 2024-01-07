@@ -58,7 +58,7 @@ aside button{
 }
 
 .zoom , .pointsParent{
-    transition: 0.3s;
+    transition: 0.7s;
     transform-origin: 50vw 50vh;
 }
 
