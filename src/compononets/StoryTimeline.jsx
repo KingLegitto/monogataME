@@ -2,12 +2,13 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 // import PlotElements from 'PlotElements.jsx'
 import PlotElements from './PlotElements.jsx'
 
+
 const StoryTimeline = ({plotPointDetails, mouseTracking, entryCounter, setCounter, newPoints, setTracking, setMidPoint, track,
 deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
   
   const plotDragConstraints = useRef(null)
-
-  const [editModeLimiter, setEditModeLimiter] = useState(false)
+  
+  // const [editModeLimiter, setEditModeLimiter] = useState(false)
   
   
   // FUNCTION TO HANDLE ADDING POINTS ON THE BACKGROUND ACCORDING TO THE MOUSE POSITION
@@ -41,7 +42,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
       {plotPointDetails && plotPointDetails.map((entry)=>{
         return(
               <PlotElements key={entry._id} plotDragConstraints={plotDragConstraints}
-              bgColor={entry.bg} x={entry.x} y={entry.y} details={entry.details} editModeLimiter={editModeLimiter} setEditModeLimiter={setEditModeLimiter}
+              bgColor={entry.bg} x={entry.x} y={entry.y} details={entry.details}
               type={entry.type} deletePoint={deletePoint} updatePoint={updatePoint} keyID={entry._id}/>
         )
         })

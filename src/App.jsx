@@ -6,6 +6,9 @@ import { sanityClient } from '../client'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import JumboAlert from './compononets/jumboAlert'
 import { motion, useInView } from 'framer-motion'
+import React, {createContext} from "react";
+
+export const ZoomContext = createContext()
 
 
 function App() {
@@ -25,7 +28,7 @@ function App() {
   const fullscreenChecker = useRef(null)
   const checkinview = useInView(fullscreenChecker)
 
-  // ARRAY SIMULATING DATA STORED IN THE DATABASE FOR THE STORY TIMELINE
+  
   useEffect(()=>{
     // if(innerWidth < 600){
     //   setJumboAlert(true)
@@ -79,23 +82,21 @@ function App() {
 
   }, [])
 
-  // useEffect(()=>{
-  //   if(checkinview){
-      
-  //       document.querySelector('.overallParent').style.position = 'fixed'
-  //       document.querySelector('.overallParent').style.height = '100vh'
-      
-      
-  //   }
-  //   if(!checkinview){
-      
-  //       document.querySelector('.overallParent').style.position = 'absolute'
-  //       document.querySelector('.overallParent').style.height = 'auto'
-      
-      
-     
-  //   }
-  // }, [checkinview])
+  const handleZoom = (value)=>{
+    let elements = document.querySelectorAll('.zoom')
+        elements.forEach((item)=>{
+            item.style.transform = `scale(${value*2}%)`
+        })
+
+        let el = document.querySelector('.bgImage')
+        switch(value){
+            case '50': el.style.borderRadius='0px'; break;
+            default: el.style.borderRadius='30px'
+        }
+        document.querySelector('.pointsParent').style.transform = `scale(${value*2}%)`
+        
+    
+    }
 
 
   // FUNCTION TO KNOW THE POSITION OF THE MOUSE SO AS TO INSERT PLOT POINTS THERE
@@ -143,7 +144,7 @@ function App() {
 
   return (
     <>
-
+      <ZoomContext.Provider value={handleZoom}>
       {/* MODES AND COMMANDS  ///////////////////////////////////////////////// */}
       <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} 
       setPoints={setPoints} plotPointDetails={plotPointDetails} savePoints={savePoints}/>
@@ -152,7 +153,7 @@ function App() {
       
       {/* OVERALL PARENT ////////////////////////////////////////////////////////// */}
       <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
-      className='overallParent duration-[0.3s] w-[100vw] h-[92vh] lg:h-[auto] overflow-scroll fixed lg:absolute z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'
+      className='overallParent duration-[0.3s] w-[100vw] h-[92vh] lg:h-[100vh] overflow-scroll fixed z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'
       >
 
         {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
@@ -167,6 +168,7 @@ function App() {
           </motion.div>
   
       </motion.div>
+      </ZoomContext.Provider>
 
     </>
   )

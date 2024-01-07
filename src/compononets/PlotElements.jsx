@@ -1,6 +1,8 @@
 import { RemoveRounded } from '@mui/icons-material';
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { ZoomContext } from '../App.jsx'
+import { useContext } from 'react'
 
 const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint, plotDragConstraints,
     referenceL, referenceR, referenceT, referenceB}) => {
@@ -13,6 +15,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
     const [boundaryB, setBoundaryB] = useState(1)
     const [check, setCheck] = useState(true)
     const [clickCounter, setClickCounter] = useState(0)
+    const handleZoom = useContext(ZoomContext)
 
     const colorsCont = {
         hidden: {opacity: 0},
@@ -52,9 +55,11 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         setClickCounter(clickCounter+1)
         setTimeout(() => {
             setClickCounter(0)
-        }, 500);
+        }, 700);
 
         if(clickCounter == 1){
+            handleZoom(40)
+            document.querySelector('.overallParent').scrollTop = point.current.getBoundingClientRect().top
             setClickCounter(0)
             setCheck(!check); 
             setDrag(false); updatePoint(); window.getSelection()?.removeAllRanges()
@@ -74,7 +79,8 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         let right = point.current.getBoundingClientRect().right
         let top = point.current.getBoundingClientRect().top
         let bottom = point.current.getBoundingClientRect().bottom
-        if(!(((e.pageX >= left) && (e.pageX <= right)) && ((e.pageY >= top) && (e.pageY <= bottom)))){
+
+        if(!((e.pageX >= left && e.pageX <= right) && (e.pageY >= top && e.pageY <= bottom))){
             setDrag(true)
             window.removeEventListener('click', closeEditMode)
         
@@ -87,7 +93,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         <motion.div ref={point} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
         whileDrag={{scale: 1.1}} dragMomentum={false} 
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
-        onTapStart={(event)=>{dblclickCheck()}}
+        onTap={(event)=>{dblclickCheck()}}
       
         className='point w-[auto] min-w-[100px] max-w-[200px] flex justify-center
         h-[auto] min-h-[100px] absolute rounded-[20px] p-[10px]'
