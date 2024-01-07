@@ -78,7 +78,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
 
             // WAIT FOR A LITTLE WHILE BEFORE AUTO ZOOMING ON POINT (ONLY FOR MOBILE DEVICES)
             setTimeout(() => {
-                if(innerWidth < 500){
+                if(innerWidth < 500 && slider < 40){
                     handleZoom(40)
                     setSlider(40)
                 }  
@@ -106,10 +106,10 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
 
                     document.querySelector('.overallParent').scrollTo(prevScroll[0], prevScroll[1])
 
-                    setTimeout(() => {
-                        handleZoom(prevZoom)
-                        setSlider(prevZoom)
-                    }, 200);
+                    // setTimeout(() => {
+                    //     handleZoom(prevZoom)
+                    //     setSlider(prevZoom)
+                    // }, 200);
                 } 
             }
     }, [dragctrl])
