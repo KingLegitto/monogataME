@@ -64,7 +64,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         if(clickCounter == 1){
             
             // AUTOMATICALLY FOCUS ON SELECTED POINT
-            document.querySelector('.overallParent').scrollTo(point.current.offsetLeft - (point.current.offsetLeft*0.2) - innerWidth/5,point.current.offsetTop - (point.current.offsetTop*0.2))
+            document.querySelector('.overallParent').scrollTo(point.current.offsetLeft - (point.current.offsetLeft*0.2) - innerWidth/5, point.current.offsetTop - (point.current.offsetTop*0.2)- innerHeight/5)
            
 
             // WAIT FOR A LITTLE WHILE BEFORE AUTO ZOOMING ON POINT (ONLY FOR MOBILE DEVICES)
