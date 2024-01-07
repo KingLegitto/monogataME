@@ -11,6 +11,9 @@
 html {
   scroll-behavior: smooth;
 }
+.overallParent{
+    scroll-behavior: smooth;
+}
 .colorCont span{
     aspect-ratio: 1/1;
     width: 20px;

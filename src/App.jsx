@@ -162,7 +162,7 @@ function App() {
           setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>
 
         {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
-          <motion.div className='zoom bgImage w-[1200px] h-[1000px] mx-auto' style={{backgroundImage: `url(${bgTexture})`, 
+          <motion.div className='zoom bgImage w-[1200px] h-[2000px] mx-auto ' style={{backgroundImage: `url(${bgTexture})`, 
           backgroundSize: '550px 643px', backgroundRepeat: 'repeat'}}>
           
           </motion.div>

@@ -51,15 +51,19 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
     }, [check])
     
     const dblclickCheck = ()=>{
-        
+        document.querySelector('.overallParent').style.paddingBottom = '100vh'
         setClickCounter(clickCounter+1)
         setTimeout(() => {
             setClickCounter(0)
         }, 700);
 
         if(clickCounter == 1){
+            
             handleZoom(40)
-            document.querySelector('.overallParent').scrollTop = point.current.getBoundingClientRect().top
+            // alert(point.current.offsetTop)
+            
+            document.querySelector('.overallParent').scrollTo(point.current.offsetLeft - (point.current.offsetLeft*0.2) - innerWidth/5,point.current.offsetTop - (point.current.offsetTop*0.2))
+            // document.querySelector('.overallParent').scrollLeft = `${point.current.offsetLeft - (point.current.offsetLeft*0.2)}`
             setClickCounter(0)
             setCheck(!check); 
             setDrag(false); updatePoint(); window.getSelection()?.removeAllRanges()
@@ -70,7 +74,10 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
     useEffect(()=>{
         if(!dragctrl){
             window.addEventListener('click', closeEditMode)
+            
             // document.querySelector('.point').addEventListener('click', closeEditMode)
+        }else{
+            document.querySelector('.overallParent').style.paddingBottom = '0vh'
         }
     }, [dragctrl])
 
