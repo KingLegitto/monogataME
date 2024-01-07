@@ -68,7 +68,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             style={{gridTemplateColumns: innerWidth<500? '1fr 1fr 1fr': '1fr 5fr 1fr'}}>
                 <div className="w-[100%] lg:w-[12vw] text-center justify-self-center">
                     
-                    {!checkUserEmail && (<button onClick={handleLogin} className="bg-[#fb4ffb] px-[10px] py-[5px] rounded-[12px] ">
+                    {!checkUserEmail && (<button onClick={handleLogin} className="bg-[#ff74c5] text-white px-[10px] py-[5px] rounded-[12px] ">
                         Log in
                     </button>)}
                     
@@ -78,7 +78,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                     MonogataME
                 </h1>
                 <div className="w-[100%] lg:w-[12vw] text-center justify-self-center">
-                    <button onClick={savePoints} className="bg-[#fb4ffb] px-[10px] py-[5px] rounded-[12px] ">Save</button>
+                    <button onClick={savePoints} className="bg-[#ff74c5] text-white px-[10px] py-[5px] rounded-[12px] ">Save</button>
                 </div>
                 
             </motion.header>

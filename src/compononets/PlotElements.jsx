@@ -60,15 +60,6 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
             setClickCounter(0)
         }, 700);
 
-        // STATEMENTS TO BE EXECUTED ONCE AT THE INITIAL CLICK
-        if(clickCounter == 0){
-            setPreventAuto(false)
-            setPrevZoom(slider)
-            let scrollX = document.querySelector('.overallParent').scrollLeft
-            let scrollY = document.querySelector('.overallParent').scrollTop
-            setPrevScroll([scrollX, scrollY])
-        }
-
         // STATEMENTS TO BE EXECUTED AFTER SUCCESSFUL DOUBLE CLICK
         if(clickCounter == 1){
             
@@ -82,7 +73,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
                     handleZoom(40)
                     setSlider(40)
                 }  
-            }, 200);
+            }, 500);
             
             // RESET CLICK COUNTER JUST IN CASE AND ACTIVATE EDIT MODE ON POINT
             setClickCounter(0)
@@ -100,17 +91,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
                 // RESET BOTTOM PADDING TO 0
                 document.querySelector('.overallParent').style.paddingBottom = '0vh'
 
-                //  TO RESET BACK TO PREVIOUS ZOOM STATE AND SCROLL AFTER LEAVING EDIT MODE ON A POINT
-                //  preventAuto PREVENTS BLOCK FROM EXECUTING IF THE NEXT PLACE CLICKED IS ANOTHER POINT
-                if(prevZoom != 0 && !preventAuto){
-
-                    document.querySelector('.overallParent').scrollTo(prevScroll[0], prevScroll[1])
-
-                    // setTimeout(() => {
-                    //     handleZoom(prevZoom)
-                    //     setSlider(prevZoom)
-                    // }, 200);
-                } 
+                
             }
     }, [dragctrl])
 
@@ -120,14 +101,6 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         let right = point.current.getBoundingClientRect().right
         let top = point.current.getBoundingClientRect().top
         let bottom = point.current.getBoundingClientRect().bottom
-
-        // TO CATCH IF THE NEXT PLACE CLICKED IS ANOTHER POINT
-        let points = document.querySelectorAll('.point')
-        points.forEach((point)=>{
-            if(e.target == point){
-                setPreventAuto(true)
-            }
-        })
         
         // DEACTIVATES EDIT MODE FOR POINT IF USER CLICKS AWAY
         if(!((e.pageX >= left && e.pageX <= right) && (e.pageY >= top && e.pageY <= bottom))){
