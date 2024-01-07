@@ -62,10 +62,8 @@ function App() {
     // CONTEXT STATES AND FUNCTIONS /////////////////////////////////
     const [slider, setSlider] = useState(50)
     const handleZoom = (value)=>{
-        let elements = document.querySelectorAll('.zoom')
-            elements.forEach((item)=>{
-                item.style.transform = `scale(${value*2}%)`
-            })
+        
+        document.querySelector('.zoom').style.transform = `scale(${value*2}%)`
 
             let el = document.querySelector('.bgImage')
             switch(value){
