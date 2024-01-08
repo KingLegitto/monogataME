@@ -15,9 +15,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
     const [boundaryB, setBoundaryB] = useState(1)
     const [check, setCheck] = useState(true)
     const [clickCounter, setClickCounter] = useState(0)
-    const [prevZoom, setPrevZoom] = useState(0)
-    const [prevScroll, setPrevScroll] = useState([])
-    const [preventAuto, setPreventAuto] = useState(false)
+    const [displacement, setDisplacement] = useState([0, 0])
     
     const {handleZoom, setSlider, slider} = useContext(ZoomContext)
 
@@ -49,7 +47,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
 
     // FUNCTION TO CATCH WHEN THE USER DOUBLE CLICKS ON A POINT
     const dblclickCheck = ()=>{
-
+        // alert(`offset:${point.current.offsetTop}, bounding:${point.current.getBoundingClientRect().top}`)
         // THIS ADDS PADDING AT THE BOTTOM TO GIVE ROOM FOR AUTO FOCUS SCROLL
         document.querySelector('.overallParent').style.paddingBottom = '100vh'
 
@@ -58,21 +56,22 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         // AFTER THIS SPECIFIED TIME ELAPSES, IT WON'T BE A DOUBLE CLICK ANYMORE
         setTimeout(() => {
             setClickCounter(0)
-        }, 700);
+        }, 500);
 
         // STATEMENTS TO BE EXECUTED AFTER SUCCESSFUL DOUBLE CLICK
         if(clickCounter == 1){
             
+            // AUTO ZOOMING ON POINT (ONLY FOR MOBILE DEVICES)
             if(innerWidth < 500 && slider < 40){
                 handleZoom(40)
                 setSlider(40)
             }
            
 
-            // WAIT FOR A LITTLE WHILE BEFORE AUTO ZOOMING ON POINT (ONLY FOR MOBILE DEVICES)
+            // WAIT FOR A LITTLE WHILE BEFORE AUTOMATICALLY FOCUS ON SELECTED POINT
             setTimeout(() => {
-                // AUTOMATICALLY FOCUS ON SELECTED POINT
-                document.querySelector('.overallParent').scrollTo(point.current.offsetLeft - (point.current.offsetLeft*(slider>40?(100-slider*2)/100:0.2)) - innerWidth/4, point.current.offsetTop - (point.current.offsetTop*(slider>=40?(100-slider*2)/100:0.2))- innerHeight/5)
+                document.querySelector('.overallParent').scrollTo(point.current.offsetLeft+displacement[0] - (point.current.offsetLeft*(slider>40?(100-slider*2)/100:0.2)) - innerWidth/4, point.current.offsetTop+displacement[1] - (point.current.offsetTop*(slider>=40?(100-slider*2)/100:0.2))- innerHeight/5)
+                // document.querySelector('.overallParent').scrollTo(point.current.getBoundingClientRect().left, point.current.getBoundingClientRect().top)
                   
             }, 300);
             
@@ -116,7 +115,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
 
     return ( 
         <motion.div ref={point} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
-        whileDrag={{scale: 1.1}} dragMomentum={false} 
+        whileDrag={{scale: 1.1}} dragMomentum={false} onDragEnd={(e, info)=>{setDisplacement([displacement[0] + info.offset.x, displacement[1] + info.offset.y]), console.log(`x:${info.offset.x}, y:${info.offset.y}`)}}
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
         onTap={(event)=>{dblclickCheck()}}
       
