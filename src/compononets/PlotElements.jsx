@@ -1,4 +1,4 @@
-import { RemoveRounded } from '@mui/icons-material';
+import { KeyboardDoubleArrowLeftRounded, KeyboardDoubleArrowRightRounded, RemoveRounded } from '@mui/icons-material';
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { ZoomContext } from '../App.jsx'
@@ -143,12 +143,12 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
 
             {/* SECTION POINT SIDE LINES  //////////////////////////////////////////////// */}
             {/* LEFT */}
-            { type=='section' && (<span className=' text-[35px] mr-[30px] absolute right-[100%] top-[50%] translate-y-[-50%] flex items-center'>
-                <hr className='w-[10vw] border-[1px] border-[#00000070] rounded-[10px] font-bold' />
+            { type=='section' && (<span className='mr-[50px] absolute right-[100%] top-[50%] translate-y-[-50%] flex items-center'>
+                <KeyboardDoubleArrowLeftRounded style={{transform: 'scale(2)', color: '#000000bb', opacity: 0.7}}/>
             </span>)}
             {/* RIGHT */}
-            { type=='section' && (<span className='text-[35px] ml-[30px] absolute left-[100%] top-[50%] translate-y-[-50%] flex items-center'>
-            <hr className='w-[10vw] border-[1px] border-[#00000070] rounded-[10px] font-bold' />
+            { type=='section' && (<span className='ml-[50px] absolute left-[100%] top-[50%] translate-y-[-50%] flex items-center'>
+            <KeyboardDoubleArrowRightRounded style={{transform: 'scale(2)', color: '#000000bb', opacity: 0.7}}/>
             </span>)}
 
 
