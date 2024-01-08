@@ -143,12 +143,12 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
 
             {/* SECTION POINT SIDE LINES  //////////////////////////////////////////////// */}
             {/* LEFT */}
-            { type=='section' && (<span className='mr-[50px] absolute right-[100%] top-[50%] translate-y-[-50%] flex items-center'>
-                <KeyboardDoubleArrowLeftRounded style={{transform: 'scale(2)', color: '#000000bb', opacity: 0.7}}/>
+            { type=='section' && (<span className='mr-[100px] absolute right-[100%] top-[50%] translate-y-[-50%] flex items-center'>
+                <KeyboardDoubleArrowLeftRounded style={{transform: 'scale(2)', color: '#000000bb', opacity: 0.5}}/>
             </span>)}
             {/* RIGHT */}
-            { type=='section' && (<span className='ml-[50px] absolute left-[100%] top-[50%] translate-y-[-50%] flex items-center'>
-            <KeyboardDoubleArrowRightRounded style={{transform: 'scale(2)', color: '#000000bb', opacity: 0.7}}/>
+            { type=='section' && (<span className='ml-[100px] absolute left-[100%] top-[50%] translate-y-[-50%] flex items-center'>
+            <KeyboardDoubleArrowRightRounded style={{transform: 'scale(2)', color: '#000000bb', opacity: 0.5}}/>
             </span>)}
 
 
