@@ -64,14 +64,17 @@ function App() {
     const handleZoom = (value)=>{
         
         document.querySelector('.zoom').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
-
+        document.querySelector('.pointsParent').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
+        document.querySelector('.colorHighLow').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
+        
             let el = document.querySelector('.bgImage')
             switch(value){
                 case '50': el.style.borderRadius='0px'; break;
                 default: el.style.borderRadius='30px'
             }
-            document.querySelector('.pointsParent').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
+            
         }
+    const [selectionArea, setSelectionArea] = useState(false)
     // /////////////////////////////////////////////////////////////////
 
 
@@ -120,7 +123,7 @@ function App() {
 
   return (
     <>
-        <ZoomContext.Provider value={{handleZoom, slider, setSlider}}>
+        <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea}}>
         {/* MODES AND COMMANDS  ///////////////////////////////////////////////// */}
         <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} 
         setPoints={setPoints} plotPointDetails={plotPointDetails} savePoints={savePoints}/>

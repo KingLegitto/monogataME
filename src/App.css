@@ -57,7 +57,7 @@ aside button{
     -webkit-tap-highlight-color: transparent;
 }
 
-.zoom , .pointsParent{
+.zoom , .pointsParent, .colorHighLow{
     transition: 0.3s;
     transition-timing-function: ease-out;
     transform-origin: 50vw 50vh;
@@ -87,4 +87,27 @@ aside button{
     transition: 1s;
 }
 
+.colorHighLow{
+    animation: highlow 4s infinite;
+}
+@keyframes highlow {
+    0%{
+        outline: 5px solid rgba(255, 255, 255, 0.1);
+        background-color: #00000000;
+    }
+    25%{
+        outline: 15px solid rgba(255, 255, 255, 1);
+    }
+    50%{
+        outline: 5px solid rgba(255, 255, 255, 0.1);
+        background-color: #00000083;
+    }
+    75%{
+        outline: 15px solid rgba(255, 255, 255, 1);
+    }
+    100%{
+        outline: 5px solid rgba(255, 255, 255, 0.1);
+        background-color: #00000000;
+    }
+}
 

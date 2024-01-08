@@ -124,7 +124,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
 
         style={{top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
         width:type=='section'?'200px': !dragctrl?'200px':'auto', minHeight: type=='section'?'auto':'100px', zIndex: type=='section'?'35': !dragctrl? '40': '5',
-        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0', paddingBottom: type=='plot'? '40px':'10px',
+        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: type=='plot'? '40px':'10px',
         border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black'}}>
 
             {/* BADGE  ///////////////////////////////////////////////////////////// */}

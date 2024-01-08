@@ -12,16 +12,23 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     const [aside, setAside] = useState(true)
     const [updater, setUpdater] = useState(true)
 
-    const {handleZoom, setSlider, slider} = useContext(ZoomContext)
+    const {handleZoom, setSlider, slider, setSelectionArea} = useContext(ZoomContext)
     
 
     const handleNewPoint = ()=>{
+        document.querySelector('.menuIcon').style.left = `0px`; 
+        document.querySelector('.aside').style.left = `0px`;
+        setSelectionArea(true)
+        document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(0/200)})` 
         document.querySelector('.bg').style.cursor = 'crosshair'
         document.querySelector('.bg').addEventListener('click', track)
         setTracking(true)
     }
 
     const handleNewSection = ()=>{
+        document.querySelector('.menuIcon').style.left = `0px`; 
+        document.querySelector('.aside').style.left = `0px`;
+        setSelectionArea(true)
         document.querySelector('.bg').style.cursor = 'crosshair'
         let value = (document.querySelector('.bg').offsetWidth)/2
         // alert(value)
@@ -103,20 +110,31 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             </motion.aside>)}
 
             {(
-            <motion.div onPan={(e, info)=>{
+            <motion.div 
+
+            // THIS PREVENTS THE ASIDE BAR AND MENU ICON FROM BEING DRAGGED BEYOND SPECIFIED AREA
+            onPan={(e, info)=>{
             if(info.point.x < 215 && info.point.x > 0){
                 document.querySelector('.menuIcon').style.left = `${info.point.x}px`; 
                 document.querySelector('.aside').style.left = `${info.point.x}px`; 
                 document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(info.point.x/200)})`
             }
             }}
+
+            // ENSURES NO TRANSITION DURATION TO LAG THE MOVEMENT BEHIND
             onPanStart={(e, info)=>{document.querySelector('.menuIcon').style.transition = '0s';
                                     document.querySelector('.aside').style.transition = '0s'}}
+
             onPanEnd={(e, info)=>{
+                // ADDS THE TRANSITION DURATION BACK, ENSURING SMOOTH SNAPPING TO EXPECTED POSITIONS
                 document.querySelector('.menuIcon').style.transition = '0.3s'; 
-                document.querySelector('.aside').style.transition = '0.3s'; 
+                document.querySelector('.aside').style.transition = '0.3s';
+
+                // LOGIC TO SNAP BACK TO EXPECTED POSITIONS
                 if(info.point.x > 100){
                     document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(180/200)})`
+                    
+                    // DIFFERENT SNAP POSITIONS FOR MOBILE AND PC
                     if(innerWidth<500){
                         document.querySelector('.menuIcon').style.left = `180px`; 
                         document.querySelector('.aside').style.left = `180px`; 
@@ -126,16 +144,18 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                     }
                     
                 }
+                // SNAP BACK TO ORIGIN
                 else{
                     document.querySelector('.menuIcon').style.left = `0px`; 
                     document.querySelector('.aside').style.left = `0px`; 
                     document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(0/200)})` 
                 }
             }}
-            className="menuIcon duration-[0.3s] w-[40px] h-[40px] rounded-[50%] bg-[#eeeeeee5] fixed z-[45] top-[50vh] left-0 flex justify-center items-center"
+            className="menuIcon duration-[0.3s] w-[40px] h-[40px] rounded-[50%] bg-[#eeeeeee5] fixed z-[45] top-[50vh] left-[0px] flex justify-center items-center"
             style={{transform: 'translate(-50%, -50%) scale(2)',  boxShadow: '0px 0px 20px 5px rgba(0,0,0,0.2)', touchAction: 'none'}}
             onClick={()=>{
-                if(document.querySelector('.menuIcon').style.left == `0px`){
+                // SNAP TO EXPECTED POSITIONS WHEN CLICKED
+                if(document.querySelector('.menuIcon').style.left < `10px`){
 
                     document.querySelector('.menuIcon').style.left = innerWidth<500?'180px':'215px';
                     document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(180/200)})`
