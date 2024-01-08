@@ -83,7 +83,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 
             </motion.header>
 
-            {(aside || innerWidth>500) && (<motion.aside className="aside translate-x-[-150%] lg:translate-x-[10px] translate-y-[-50%] w-[auto] min-w-[110px] max-w-[200px] lg:w-[200px] h-[35vh] lg:h-[50vh]
+            {(aside) && (<motion.aside className="aside translate-x-[-150%] translate-y-[-50%] w-[auto] min-w-[110px] max-w-[200px] h-[35vh] lg:h-[50vh]
              fixed top-[50vh] left-0 z-[45] flex flex-col justify-between duration-[0.3s]">
                 <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]">
                     Characters
@@ -102,9 +102,9 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
                 </motion.button>
             </motion.aside>)}
 
-            {innerWidth<500 &&(
+            {(
             <motion.div onPan={(e, info)=>{
-            if(info.point.x < 180 && info.point.x > 0){
+            if(info.point.x < 215 && info.point.x > 0){
                 document.querySelector('.menuIcon').style.left = `${info.point.x}px`; 
                 document.querySelector('.aside').style.left = `${info.point.x}px`; 
                 document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(info.point.x/200)})`
@@ -115,13 +115,21 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             onPanEnd={(e, info)=>{
                 document.querySelector('.menuIcon').style.transition = '0.3s'; 
                 document.querySelector('.aside').style.transition = '0.3s'; 
-                if(info.point.x > 90){
-                    document.querySelector('.menuIcon').style.left = `180px`; 
-                    document.querySelector('.aside').style.left = `180px`; 
+                if(info.point.x > 100){
+                    document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(180/200)})`
+                    if(innerWidth<500){
+                        document.querySelector('.menuIcon').style.left = `180px`; 
+                        document.querySelector('.aside').style.left = `180px`; 
+                    }else{
+                        document.querySelector('.menuIcon').style.left = `215px`; 
+                        document.querySelector('.aside').style.left = `215px`; 
+                    }
+                    
                 }
                 else{
                     document.querySelector('.menuIcon').style.left = `0px`; 
                     document.querySelector('.aside').style.left = `0px`; 
+                    document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(0/200)})` 
                 }
             }}
             className="menuIcon duration-[0.3s] w-[40px] h-[40px] rounded-[50%] bg-[#eeeeeee5] fixed z-[45] top-[50vh] left-0 flex justify-center items-center"
@@ -129,9 +137,9 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             onClick={()=>{
                 if(document.querySelector('.menuIcon').style.left == `0px`){
 
-                    document.querySelector('.menuIcon').style.left = `180px`;
+                    document.querySelector('.menuIcon').style.left = innerWidth<500?'180px':'215px';
                     document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(180/200)})`
-                    document.querySelector('.aside').style.left = `180px`;
+                    document.querySelector('.aside').style.left = innerWidth<500?'180px':'215px';
                 }else{
                     document.querySelector('.menuIcon').style.left = `0px`;
                     document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(0/200)})` 
