@@ -28,6 +28,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     const handleNewSection = ()=>{
         document.querySelector('.menuIcon').style.left = `0px`; 
         document.querySelector('.aside').style.left = `0px`;
+        document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(0/200)})` 
         setSelectionArea(true)
         document.querySelector('.bg').style.cursor = 'crosshair'
         let value = (document.querySelector('.bg').offsetWidth)/2
