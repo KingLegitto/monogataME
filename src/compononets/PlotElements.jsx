@@ -1,4 +1,4 @@
-import { KeyboardDoubleArrowLeftRounded, KeyboardDoubleArrowRightRounded, RemoveRounded } from '@mui/icons-material';
+import { ArrowDropDownRounded, KeyboardDoubleArrowLeftRounded, KeyboardDoubleArrowRightRounded, RemoveRounded } from '@mui/icons-material';
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { ZoomContext } from '../App.jsx'
@@ -119,12 +119,12 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
         onTap={(event)=>{dblclickCheck()}}
       
-        className='point w-[auto] min-w-[100px] max-w-[200px] flex justify-center
-        h-[auto] min-h-[100px] absolute rounded-[20px] p-[10px]'
+        className={`${type=='section'?'sectionPoint': 'plotPoint'} point w-[auto] min-w-[100px] max-w-[200px] flex 
+        flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] p-[10px]`}
 
         style={{top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
-        width:type=='section'?'200px': !dragctrl?'200px':'auto', minHeight: type=='section'?'auto':'100px', zIndex: type=='section'?'35': !dragctrl? '40': '5',
-        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: type=='plot'? '40px':'10px',
+        width:type=='section'?'200px': !dragctrl?'200px':'auto', minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl? '40': '5',
+        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: type=='plot'? '30px':'10px',
         border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black'}}>
 
             {/* BADGE  ///////////////////////////////////////////////////////////// */}
@@ -141,15 +141,26 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
                 {details}
             </div>
 
-            {/* SECTION POINT SIDE LINES  //////////////////////////////////////////////// */}
+            {/* SECTION POINT SIDES  //////////////////////////////////////////////// */}
             {/* LEFT */}
             { type=='section' && (<span className='mr-[50px] absolute right-[100%] top-[50%] translate-y-[-50%] flex items-center'>
                 <KeyboardDoubleArrowLeftRounded style={{transform: 'scale(2)', color: '#000000bb', opacity: 0.5}}/>
             </span>)}
             {/* RIGHT */}
             { type=='section' && (<span className='ml-[50px] absolute left-[100%] top-[50%] translate-y-[-50%] flex items-center'>
-            <KeyboardDoubleArrowRightRounded style={{transform: 'scale(2)', color: '#000000bb', opacity: 0.5}}/>
+                <KeyboardDoubleArrowRightRounded style={{transform: 'scale(2)', color: '#000000bb', opacity: 0.5}}/>
             </span>)}
+
+            {/* COLLAPSE FOR SECTION POINTS */}
+            { type=='section' && !dragctrl && (<span>
+                <ArrowDropDownRounded />
+            </span>)}
+
+            {/* COLLAPSE FOR PLOT POINTS */}
+            { type=='plot' && (<span className='absolute bottom-[10px]'>
+                <ArrowDropDownRounded />
+            </span>)
+            }
 
 
             {/* DELETE BUTTON  ///////////////////////////////////////////////////////////// */}
@@ -164,7 +175,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
             
             {!dragctrl && type=='plot' && (
             
-                <motion.div variants={colorsCont} initial={'hidden'} animate={'visible'} className='colorCont w-[150px] h-[20px] absolute bottom-[14px] flex justify-evenly mt-[10px]'>
+                <motion.div variants={colorsCont} initial={'hidden'} animate={'visible'} className='colorCont w-[150px] h-[20px] absolute bottom-[8px] flex justify-evenly mt-[10px]'>
                     <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#1bffbb]' onClick={()=>{updatePoint(keyID, '#1bffbbe5'); }}>
 
                     </motion.span>
