@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
 
-const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint, plotDragConstraints,
+const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoint, updatePoint, plotDragConstraints,
     referenceL, referenceR, referenceT, referenceB}) => {
     const point = useRef(null)
     const textbox = useRef(null)
@@ -16,6 +16,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
     const [check, setCheck] = useState(true)
     const [clickCounter, setClickCounter] = useState(0)
     const [displacement, setDisplacement] = useState([0, 0])
+    const [viewDetails, setViewDetails] = useState(false)
     
     const {handleZoom, setSlider, slider} = useContext(ZoomContext)
 
@@ -42,7 +43,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         setBoundaryT(limitT)
         setBoundaryB(limitB)
 
-    }, [check])
+    }, [check, viewDetails])
     
 
     // FUNCTION TO CATCH WHEN THE USER DOUBLE CLICKS ON A POINT
@@ -60,6 +61,8 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
 
         // STATEMENTS TO BE EXECUTED AFTER SUCCESSFUL DOUBLE CLICK
         if(clickCounter == 1){
+
+            setViewDetails(true)
             
             // AUTO ZOOMING ON POINT (ONLY FOR MOBILE DEVICES)
             if(innerWidth < 500 && slider < 40){
@@ -89,7 +92,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
             window.addEventListener('click', closeEditMode)
         }else{
                 // RESET BOTTOM PADDING TO 0
-                document.querySelector('.overallParent').style.paddingBottom = '0vh'
+                document.querySelector('.overallParent').style.paddingBottom = '50px'
 
                 
             }
@@ -105,6 +108,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         // DEACTIVATES EDIT MODE FOR POINT IF USER CLICKS AWAY
         if(!((e.pageX >= left && e.pageX <= right) && (e.pageY >= top && e.pageY <= bottom))){
             setDrag(true)
+            setViewDetails(false)
             window.removeEventListener('click', closeEditMode)
         
         }
@@ -120,7 +124,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
         onTap={(event)=>{dblclickCheck()}}
       
         className={`${type=='section'?'sectionPoint': 'plotPoint'} point w-[auto] min-w-[100px] max-w-[200px] flex 
-        flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] p-[10px]`}
+        flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px]`}
 
         style={{top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
         width:type=='section'?'200px': !dragctrl?'200px':'auto', minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl? '40': '5',
@@ -134,12 +138,22 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
                     {type=='plot' && (<span></span>)}
             </div>
 
-            {/* TEXTBOX  //////////////////////////////////////////////////////////// */}
+            {/* POINT TITLE  //////////////////////////////////////////////////////////// */}
             <div ref={textbox} contentEditable suppressContentEditableWarning={true} spellCheck={false}
-            className='w-[auto] max-w-[100%] px-[5px] rounded-[10px] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
-            style={{textAlign: type=='plot'?'left':'center', pointerEvents: dragctrl?'none':'all'}}>
-                {details}
+            className={`w-[auto] max-w-[100%] px-[7px] rounded-[10px] focus:outline-none selection:bg-[#fd79ee]`}
+            style={{textAlign: 'center', pointerEvents: dragctrl?'none':'all', fontWeight: viewDetails? 'bold': 'normal'}}>
+                {pointTitle}
             </div>
+
+            {/* POINT DETAILS //////////////////////////////////////////////////////// */}
+            
+            {type=='plot' && viewDetails && (<div contentEditable suppressContentEditableWarning={true} spellCheck={false}
+            className='w-[auto] max-w-[100%] px-[15px] bg-[#00000032] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
+            style={{textAlign: type=='plot'?'left':'center', pointerEvents: dragctrl?'none':'all', height: viewDetails? 'auto': '0px', 
+            borderTop: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'? '1px solid rgba(255, 255, 255, 0.5)': '1px solid rgba(255, 255, 255, 0.5)',
+            borderBottom: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'? '1px solid rgba(255, 255, 255, 0.5)': '1px solid rgba(255, 255, 255, 0.5)'}}>
+                {pointDetails}
+            </div>)}
 
             {/* SECTION POINT SIDES  //////////////////////////////////////////////// */}
             {/* LEFT */}
@@ -157,7 +171,7 @@ const PlotElements = ({keyID,y,x,details,bgColor, type, deletePoint, updatePoint
             </span>)}
 
             {/* COLLAPSE FOR PLOT POINTS */}
-            { type=='plot' && (<span className='absolute bottom-[10px]'>
+            { type=='plot' && (<span className='absolute bottom-[10px] w-[100%] flex justify-center'>
                 <ArrowDropDownRounded />
             </span>)
             }

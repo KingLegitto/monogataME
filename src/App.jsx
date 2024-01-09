@@ -17,7 +17,7 @@ function App() {
     const [mouseY, setmouseY] = useState('')
     const [midPoint, setMidPoint] = useState(false)
     const [updater, setUpdater] = useState(true)
-    const [plotPointDetails, setPoints] = useState([])
+    const [points, setPoints] = useState([])
     const [entryCounter, setCounter] = useState(0)
     const [newPoints, setNewPoints] = useState([])
     const [InnerHeight, setInnerHeight] = useState(0)
@@ -29,7 +29,7 @@ function App() {
   
     useEffect(()=>{
         // INITIAL FETCH FROM SANITY
-        sanityClient.fetch(`*[_type == "plotPoints"]`).then((data)=> {setPoints(data)});
+        sanityClient.fetch(`*[_type == "points"]`).then((data)=> {setPoints(data)});
 
         if(innerWidth<1024){
         document.querySelector('.overallParent').addEventListener('scroll', scroll)
@@ -86,7 +86,7 @@ function App() {
 
     function updatePoint(keyID, bg){
         if(bg != undefined){
-        plotPointDetails.forEach((entry)=>{if(entry._id == keyID){entry.bg = bg}});
+        points.forEach((entry)=>{if(entry._id == keyID){entry.bg = bg}});
         setUpdater(!updater);
         }
         
@@ -97,7 +97,7 @@ function App() {
     }
 
     function deletePoint(keyID){
-        let listOfPoints = (plotPointDetails.filter((entry)=>(entry._id != keyID)))
+        let listOfPoints = (points.filter((entry)=>(entry._id != keyID)))
         setPoints(listOfPoints)
         
     }
@@ -126,17 +126,17 @@ function App() {
         <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea}}>
         {/* MODES AND COMMANDS  ///////////////////////////////////////////////// */}
         <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} 
-        setPoints={setPoints} plotPointDetails={plotPointDetails} savePoints={savePoints}/>
+        setPoints={setPoints} points={points} savePoints={savePoints}/>
 
         
         
         {/* OVERALL PARENT ////////////////////////////////////////////////////////// */}
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
-        className='overallParent duration-[0.5s] w-[100vw] h-[92vh] lg:h-[100vh] overflow-scroll fixed z-[1] top-[50px] lg:top-[70px] left-0 bg-inherit'
+        className='overallParent duration-[0.5s] w-[100vw] h-[92vh] lg:h-[100vh] overflow-scroll fixed z-[1] top-[50px] lg:top-[70px]  left-0 bg-inherit'
         >
 
             {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
-            <StoryTimeline plotPointDetails={plotPointDetails} mouseTracking={mouseTracking} 
+            <StoryTimeline points={points} mouseTracking={mouseTracking} 
             entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint} newPoints={newPoints} setTracking={setTracking} 
             setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>
 
