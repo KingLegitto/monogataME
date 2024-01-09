@@ -81,9 +81,9 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             // setViewDetails(true)
             
             // AUTO ZOOMING ON POINT (ONLY FOR MOBILE DEVICES)
-            if(innerWidth < 500 && slider < 40){
-                handleZoom(40)
-                setSlider(40)
+            if(innerWidth < 500 && slider < 32){
+                handleZoom(32)
+                setSlider(32)
             }
            
 

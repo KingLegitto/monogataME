@@ -49,8 +49,8 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     // INITIAL AUTO ZOOM IN FOR MOBILE DEVICES
     useEffect(()=>{
         if(innerWidth<1024){
-            setSlider(40)
-            handleZoom(40)
+            setSlider(32)
+            handleZoom(32)
         }
     }, [])
 
