@@ -44,6 +44,22 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         setBoundaryB(limitB)
 
     }, [check, viewDetails])
+
+    useEffect(()=>{
+        setTimeout(() => {
+            let limitL = point.current.offsetLeft
+        let limitR = document.querySelector('.bgImage').offsetWidth - (point.current.offsetWidth + point.current.offsetLeft)
+        let limitT = point.current.offsetTop
+        let limitB = document.querySelector('.bgImage').offsetHeight - (point.current.offsetHeight + point.current.offsetTop)
+
+        setBoundaryL(limitL)
+        setBoundaryR(limitR)
+        setBoundaryT(limitT)
+        setBoundaryB(limitB)
+        }, 1000);
+        
+
+    }, [viewDetails])
     
 
     // FUNCTION TO CATCH WHEN THE USER DOUBLE CLICKS ON A POINT
@@ -62,7 +78,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         // STATEMENTS TO BE EXECUTED AFTER SUCCESSFUL DOUBLE CLICK
         if(clickCounter == 1){
 
-            setViewDetails(true)
+            // setViewDetails(true)
             
             // AUTO ZOOMING ON POINT (ONLY FOR MOBILE DEVICES)
             if(innerWidth < 500 && slider < 40){
@@ -108,7 +124,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         // DEACTIVATES EDIT MODE FOR POINT IF USER CLICKS AWAY
         if(!((e.pageX >= left && e.pageX <= right) && (e.pageY >= top && e.pageY <= bottom))){
             setDrag(true)
-            setViewDetails(false)
+            // setViewDetails(false)
             window.removeEventListener('click', closeEditMode)
         
         }
@@ -124,36 +140,34 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         onTap={(event)=>{dblclickCheck()}}
       
         className={`${type=='section'?'sectionPoint': 'plotPoint'} point w-[auto] min-w-[100px] max-w-[200px] flex 
-        flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px]`}
+        flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px] px-[10px]`}
 
         style={{top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
         width:type=='section'?'200px': !dragctrl?'200px':'auto', minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl? '40': '5',
-        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: type=='plot'? '30px':'10px',
+        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: !dragctrl&&type=='plot'? '40px': type=='plot'&& !viewDetails? '0px': '20px',
         border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black'}}>
 
             {/* BADGE  ///////////////////////////////////////////////////////////// */}
-            <div className='w-[20px] h-[20px] bg-black absolute top-0 left-0
+            {type=='plot' && (<div className='w-[20px] h-[20px] bg-black absolute top-0 left-0
              translate-x-[-35%] translate-y-[-40%] text-white flex justify-center items-center'
              style={{left: type=='section'?'50%':0, cursor: 'pointer', borderRadius: dragctrl? '50%': '25%'}}>
                     {type=='plot' && (<span></span>)}
-            </div>
+            </div>)}
 
             {/* POINT TITLE  //////////////////////////////////////////////////////////// */}
             <div ref={textbox} contentEditable suppressContentEditableWarning={true} spellCheck={false}
-            className={`w-[auto] max-w-[100%] px-[7px] rounded-[10px] focus:outline-none selection:bg-[#fd79ee]`}
+            className={`w-[auto] ${viewDetails?'Lora':''} max-w-[100%] rounded-[10px] focus:outline-none selection:bg-[#fd79ee]`}
             style={{textAlign: 'center', pointerEvents: dragctrl?'none':'all', fontWeight: viewDetails? 'bold': 'normal'}}>
                 {pointTitle}
             </div>
 
             {/* POINT DETAILS //////////////////////////////////////////////////////// */}
             
-            {type=='plot' && viewDetails && (<div contentEditable suppressContentEditableWarning={true} spellCheck={false}
-            className='w-[auto] max-w-[100%] px-[15px] bg-[#00000032] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
-            style={{textAlign: type=='plot'?'left':'center', pointerEvents: dragctrl?'none':'all', height: viewDetails? 'auto': '0px', 
-            borderTop: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'? '1px solid rgba(255, 255, 255, 0.5)': '1px solid rgba(255, 255, 255, 0.5)',
-            borderBottom: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'? '1px solid rgba(255, 255, 255, 0.5)': '1px solid rgba(255, 255, 255, 0.5)'}}>
+            {type=='plot' && (<motion.div animate={{height: viewDetails? 'auto': '0px', opacity: viewDetails? 1: 0}} contentEditable suppressContentEditableWarning={true} spellCheck={false}
+            className='w-[auto] max-w-[100%] overflow-hidden  px-[8px] text-center rounded-[20px] py-[10px] bg-[#ffffff32] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
+            style={{pointerEvents: dragctrl?'none':'all' }}>
                 {pointDetails}
-            </div>)}
+            </motion.div>)}
 
             {/* SECTION POINT SIDES  //////////////////////////////////////////////// */}
             {/* LEFT */}
@@ -165,16 +179,14 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                 <KeyboardDoubleArrowRightRounded style={{transform: 'scale(2)', color: '#000000bb', opacity: 0.5}}/>
             </span>)}
 
-            {/* COLLAPSE FOR SECTION POINTS */}
-            { type=='section' && !dragctrl && (<span>
-                <ArrowDropDownRounded />
-            </span>)}
 
-            {/* COLLAPSE FOR PLOT POINTS */}
-            { type=='plot' && (<span className='absolute bottom-[10px] w-[100%] flex justify-center'>
-                <ArrowDropDownRounded />
-            </span>)
-            }
+            {/* COLLAPSE BUTTON */}
+            <span className='absolute top-[100%] translate-y-[-52%]  w-[20%] rounded-[20px] flex justify-center border-[1px] border-[#ffffffa9]'
+            style={{background:type=='section'? '#2c2c2c': bgColor=='#000000bb'? '#000000':bgColor=='#1bffbbe5'?'#1bffbb':bgColor=='#ff3e5fe5'? '#ff3e5f':bgColor=='#ffe42be5'? '#ffe42b': '#eeeeee', boxShadow: '0px 0px 5px 5px rgba(0,0,0,0.11)'}}
+            onClick={()=>{setViewDetails(!viewDetails)}}>
+                <ArrowDropDownRounded style={{transform: 'scale(1.5)'}}/>
+            </span>
+            
 
 
             {/* DELETE BUTTON  ///////////////////////////////////////////////////////////// */}
@@ -189,7 +201,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             
             {!dragctrl && type=='plot' && (
             
-                <motion.div variants={colorsCont} initial={'hidden'} animate={'visible'} className='colorCont w-[150px] h-[20px] absolute bottom-[8px] flex justify-evenly mt-[10px]'>
+                <motion.div variants={colorsCont} initial={'hidden'} animate={'visible'} className='colorCont w-[150px] h-[20px] absolute bottom-[15px] flex justify-evenly mt-[10px]'>
                     <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#1bffbb]' onClick={()=>{updatePoint(keyID, '#1bffbbe5'); }}>
 
                     </motion.span>
