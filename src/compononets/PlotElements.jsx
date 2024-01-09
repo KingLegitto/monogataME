@@ -9,10 +9,10 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     const point = useRef(null)
     const textbox = useRef(null)
     const [dragctrl, setDrag] = useState(true)
-    const [boundaryL, setBoundaryL] = useState(1)
-    const [boundaryR, setBoundaryR] = useState(1)
-    const [boundaryT, setBoundaryT] = useState(1)
-    const [boundaryB, setBoundaryB] = useState(1)
+    const [boundaryL, setBoundaryL] = useState(0)
+    const [boundaryR, setBoundaryR] = useState(0)
+    const [boundaryT, setBoundaryT] = useState(0)
+    const [boundaryB, setBoundaryB] = useState(0)
     const [check, setCheck] = useState(true)
     const [clickCounter, setClickCounter] = useState(0)
     const [displacement, setDisplacement] = useState([0, 0])
@@ -43,7 +43,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         setBoundaryT(limitT)
         setBoundaryB(limitB)
 
-    }, [check, viewDetails])
+    }, [check])
 
     useEffect(()=>{
         setTimeout(() => {
@@ -132,10 +132,34 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         
     }, [])
 
+    useEffect(()=>{
+        if(displacement[0] < boundaryL*-1){
+            // alert('left')
+            setDisplacement([boundaryL,displacement[1]])
+        }
+        if(displacement[0] > boundaryR){
+            // alert('right')
+            setDisplacement([boundaryR,displacement[1]])
+        }
+        if(displacement[1] < boundaryT*-1){
+            // alert('top')
+            setDisplacement([displacement[0],boundaryT])
+        }
+        if(displacement[1] > boundaryB){
+            // alert('bottom')
+            setDisplacement([displacement[0],boundaryB])
+        }
+    }, [displacement])
+
 
     return ( 
         <motion.div ref={point} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
-        whileDrag={{scale: 1.1}} dragMomentum={false} onDragEnd={(e, info)=>{setDisplacement([displacement[0] + info.offset.x, displacement[1] + info.offset.y]), console.log(`x:${info.offset.x}, y:${info.offset.y}`)}}
+        whileDrag={{scale: 1.1}} dragMomentum={false} onDragStart={()=>{setCheck(!check)}} onDragEnd={(e, info)=>{
+            // alert(`BL:${boundaryL}, BT:${boundaryT}, BR:${boundaryR}, BB:${boundaryB}, offsetx:${info.offset.x}`)
+            setDisplacement([displacement[0] + info.offset.x, displacement[1] + info.offset.y])
+           
+            
+        }} dragTransition={{ bounceStiffness: 600, bounceDamping: 50 }}
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
         onTap={(event)=>{dblclickCheck()}}
       
@@ -163,8 +187,8 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
             {/* POINT DETAILS //////////////////////////////////////////////////////// */}
             
-            {type=='plot' && (<motion.div animate={{height: viewDetails? 'auto': '0px', opacity: viewDetails? 1: 0}} contentEditable suppressContentEditableWarning={true} spellCheck={false}
-            className='w-[auto] max-w-[100%] overflow-hidden  px-[8px] text-center rounded-[20px] py-[10px] bg-[#ffffff32] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
+            {type=='plot' && (<motion.div initial={{height: 0, opacity: 0}} animate={{height: viewDetails? 'auto': '0px', opacity: viewDetails? 1: 0}} contentEditable suppressContentEditableWarning={true} spellCheck={false}
+            className='w-[auto] max-w-[100%] overflow-hidden opacity-0 h-0 px-[8px] text-center rounded-[20px] py-[10px] bg-[#ffffff32] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
             style={{pointerEvents: dragctrl?'none':'all' }}>
                 {pointDetails}
             </motion.div>)}
