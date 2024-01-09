@@ -180,16 +180,16 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
             {/* POINT TITLE  //////////////////////////////////////////////////////////// */}
             <div ref={textbox} contentEditable suppressContentEditableWarning={true} spellCheck={false}
-            className={`w-[auto] ${viewDetails?'Lora':''} max-w-[100%] rounded-[10px] focus:outline-none selection:bg-[#fd79ee]`}
+            className={`w-[auto] ${viewDetails?'Rubik':''} max-w-[100%] rounded-[10px] focus:outline-none selection:bg-[#fd79ee]`}
             style={{textAlign: 'center', pointerEvents: dragctrl?'none':'all', fontWeight: viewDetails? 'bold': 'normal'}}>
                 {pointTitle}
             </div>
 
             {/* POINT DETAILS //////////////////////////////////////////////////////// */}
             
-            {type=='plot' && (<motion.div initial={{height: 0, opacity: 0}} animate={{height: viewDetails? 'auto': '0px', opacity: viewDetails? 1: 0}} contentEditable suppressContentEditableWarning={true} spellCheck={false}
-            className='w-[auto] max-w-[100%] overflow-hidden opacity-0 h-0 px-[8px] text-center rounded-[20px] py-[10px] bg-[#ffffff32] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
-            style={{pointerEvents: dragctrl?'none':'all' }}>
+            {type=='plot' && (<motion.div animate={{y: viewDetails?0:-30}} contentEditable suppressContentEditableWarning={true} spellCheck={false}
+            className='w-[100%] overflow-hidden h-0 px-[8px] text-center rounded-[20px] py-[10px] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
+            style={{pointerEvents: dragctrl?'none':'all' , height: viewDetails? 'auto': '0px', opacity: viewDetails? 1:0, background: bgColor=='#eeeeeee5'||bgColor=='#1bffbbe5'?'#00000032':'#ffffff32'}}>
                 {pointDetails}
             </motion.div>)}
 
@@ -205,7 +205,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
 
             {/* COLLAPSE BUTTON */}
-            <span className='absolute top-[100%] translate-y-[-52%]  w-[20%] rounded-[20px] flex justify-center border-[1px] border-[#ffffffa9]'
+            <span className='absolute top-[100%] translate-y-[-52%]  w-[50px] rounded-[20px] flex justify-center border-[1px] border-[#ffffffa9]'
             style={{background:type=='section'? '#2c2c2c': bgColor=='#000000bb'? '#000000':bgColor=='#1bffbbe5'?'#1bffbb':bgColor=='#ff3e5fe5'? '#ff3e5f':bgColor=='#ffe42be5'? '#ffe42b': '#eeeeee', boxShadow: '0px 0px 5px 5px rgba(0,0,0,0.11)'}}
             onClick={()=>{setViewDetails(!viewDetails)}}>
                 <ArrowDropDownRounded style={{transform: 'scale(1.5)'}}/>
