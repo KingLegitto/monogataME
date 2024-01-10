@@ -76,7 +76,7 @@ aside button{
 }
 
 .zoom , .pointsParent, .colorHighLow{
-    transition: 0.3s;
+    /* transition: 0.3s; */
     transition-timing-function: ease-out;
     transform-origin: 50vw 50vh;
 }
