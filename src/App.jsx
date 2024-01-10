@@ -142,7 +142,7 @@ function App() {
             setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>
 
             {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
-            <motion.div animate={{scale: slider*2/100}} transition={{duration: 0.3}} className='zoom bgImage mx-auto transform-gpu' style={{backgroundImage: `url(${bgTexture})`, 
+            <motion.div animate={{scale: slider*2/100}} transition={{duration: 0.1}} className='zoom bgImage mx-auto transform-gpu' style={{backgroundImage: `url(${bgTexture})`, 
             backgroundSize: '550px 643px', backgroundRepeat: 'repeat', height: workableArea.height, width: workableArea.width}}>
             
             </motion.div>
