@@ -82,7 +82,7 @@ aside button{
 }
 
 .slider{
-
+    touch-action: none;
     -webkit-appearance: none;  
     appearance: none;
     border-radius: 10px;
