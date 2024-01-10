@@ -60,6 +60,7 @@ function App() {
 
 
     // CONTEXT STATES AND FUNCTIONS /////////////////////////////////
+    const [workableArea, setWorkableArea] = useState({width: 1200, height: 3000})
     const [slider, setSlider] = useState(50)
     const handleZoom = (value)=>{
         
@@ -123,7 +124,7 @@ function App() {
 
   return (
     <>
-        <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea}}>
+        <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea}}>
         {/* MODES AND COMMANDS  ///////////////////////////////////////////////// */}
         <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} 
         setPoints={setPoints} points={points} savePoints={savePoints}/>
@@ -141,8 +142,8 @@ function App() {
             setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>
 
             {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
-            <motion.div className='zoom bgImage w-[1200px] h-[1000px] mx-auto transform-gpu' style={{backgroundImage: `url(${bgTexture})`, 
-            backgroundSize: '550px 643px', backgroundRepeat: 'repeat'}}>
+            <motion.div className='zoom bgImage mx-auto transform-gpu' style={{backgroundImage: `url(${bgTexture})`, 
+            backgroundSize: '550px 643px', backgroundRepeat: 'repeat', height: workableArea.height, width: workableArea.width}}>
             
             </motion.div>
   

@@ -89,7 +89,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
             // WAIT FOR A LITTLE WHILE BEFORE AUTOMATICALLY FOCUS ON SELECTED POINT
             setTimeout(() => {
-                document.querySelector('.overallParent').scrollTo(point.current.offsetLeft+displacement[0] - (point.current.offsetLeft*(slider>40?(100-slider*2)/100:0.2)) - innerWidth/4, point.current.offsetTop+displacement[1] - (point.current.offsetTop*(slider>=40?(100-slider*2)/100:0.2))- innerHeight/5)
+                document.querySelector('.overallParent').scrollTo((point.current.offsetLeft+displacement[0] - innerWidth/2 + (point.current.getBoundingClientRect().width/2)+30)*(slider<32&&innerWidth<500?32*2/100:slider*2/100), (point.current.offsetTop+displacement[1] - innerHeight/4)*(slider<32&&innerWidth<500?32*2/100:slider*2/100))
                 // document.querySelector('.overallParent').scrollTo(point.current.getBoundingClientRect().left, point.current.getBoundingClientRect().top)
                   
             }, 300);
@@ -159,7 +159,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             setDisplacement([displacement[0] + info.offset.x, displacement[1] + info.offset.y])
            
             
-        }} dragTransition={{ bounceStiffness: 600, bounceDamping: 50 }}
+        }} dragTransition={{ bounceStiffness: 1000, bounceDamping: 20 }}
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
         onTap={(event)=>{dblclickCheck()}}
       

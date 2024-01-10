@@ -10,7 +10,7 @@ const StoryTimeline = ({points, mouseTracking, entryCounter, setCounter, newPoin
 deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
   
   const plotDragConstraints = useRef(null)
-  const {setSelectionArea, selectionArea} = useContext(ZoomContext)
+  const {setSelectionArea, selectionArea, workableArea} = useContext(ZoomContext)
   
   // const [editModeLimiter, setEditModeLimiter] = useState(false)
   
@@ -42,15 +42,16 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
   return ( 
     <>
 
-    <div className='colorHighLow duration-[0.5s] rounded-[30px] w-[1200px] h-[1000px] absolute z-[6] top-0 left-0 right-0 mx-auto'
-    style={{opacity: selectionArea? 1: 0}}>
+    <div className='colorHighLow duration-[0.5s] rounded-[30px] absolute z-[6] top-0 left-0 right-0 mx-auto'
+    style={{opacity: selectionArea? 1: 0, height: workableArea.height, width: workableArea.width}}>
 
     </div>
     
     
 
     {/* CLICKABLE BACKGROUND  ///////////////////////////////////////////////////////// */}
-    <div ref={plotDragConstraints} className='bg pointsParent rounded-[30px] w-[1200px] h-[1000px] absolute z-[7] left-0 right-0 mx-auto' onClick={handleBgClick}>
+    <div ref={plotDragConstraints} className='bg pointsParent rounded-[30px] absolute z-[7] left-0 right-0 mx-auto' onClick={handleBgClick}
+    style={{height: workableArea.height, width: workableArea.width}}>
       {/* PLOT POINTS  //////////////////////////////////////////////////////// */}
       {points && points.map((entry)=>{
         return(
