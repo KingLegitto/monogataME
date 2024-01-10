@@ -89,7 +89,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
             // WAIT FOR A LITTLE WHILE BEFORE AUTOMATICALLY FOCUS ON SELECTED POINT
             setTimeout(() => {
-                document.querySelector('.overallParent').scrollTo((point.current.offsetLeft+displacement[0] - innerWidth/2 + (point.current.getBoundingClientRect().width/2)+30)*(slider<32&&innerWidth<500?32*2/100:slider*2/100), (point.current.offsetTop+displacement[1] - innerHeight/4)*(slider<32&&innerWidth<500?32*2/100:slider*2/100))
+                document.querySelector('.overallParent').scrollTo((point.current.offsetLeft+displacement[0] - innerWidth/2 + (point.current.getBoundingClientRect().width/2)+25)*(slider<32&&innerWidth<500?32*2/100:slider*2/100), (point.current.offsetTop+displacement[1] - innerHeight/4)*(slider<32&&innerWidth<500?32*2/100:slider*2/100))
                 // document.querySelector('.overallParent').scrollTo(point.current.getBoundingClientRect().left, point.current.getBoundingClientRect().top)
                   
             }, 300);
