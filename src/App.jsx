@@ -64,9 +64,9 @@ function App() {
     const [slider, setSlider] = useState(50)
     const handleZoom = (value)=>{
         
-        // document.querySelector('.zoom').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
-        // document.querySelector('.pointsParent').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
-        // document.querySelector('.colorHighLow').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
+        document.querySelector('.zoom').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
+        document.querySelector('.pointsParent').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
+        document.querySelector('.colorHighLow').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
         
             let el = document.querySelector('.bgImage')
             switch(value){
@@ -142,7 +142,7 @@ function App() {
             setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>
 
             {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
-            <motion.div animate={{scale: slider*2/100}} transition={{duration: 0.1}} className='zoom bgImage mx-auto transform-gpu' style={{backgroundImage: `url(${bgTexture})`, 
+            <motion.div className='zoom bgImage mx-auto transform-gpu' style={{backgroundImage: `url(${bgTexture})`, 
             backgroundSize: '550px 643px', backgroundRepeat: 'repeat', height: workableArea.height, width: workableArea.width}}>
             
             </motion.div>
