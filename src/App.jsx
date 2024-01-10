@@ -78,6 +78,10 @@ function App() {
     const [selectionArea, setSelectionArea] = useState(false)
     // /////////////////////////////////////////////////////////////////
 
+    useEffect(()=>{
+        setUpdater(!updater)
+    }, [innerHeight])
+
 
     // FUNCTION TO KNOW THE POSITION OF THE MOUSE SO AS TO INSERT PLOT POINTS PRECISELY
     const track = useCallback((e)=>{
@@ -132,7 +136,7 @@ function App() {
         
         
         {/* OVERALL PARENT ////////////////////////////////////////////////////////// */}
-        <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} 
+        <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} style={{height: innerHeight}}
         className='overallParent duration-[0.5s] w-[100vw] h-[92vh] lg:h-[100vh] overflow-scroll fixed z-[1] top-[50px] lg:top-[70px]  left-0 bg-inherit'
         >
 
