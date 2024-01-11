@@ -23,6 +23,7 @@ function App() {
     const [InnerHeight, setInnerHeight] = useState(0)
     const [savePointCounter, setSavePointCounter] = useState(0)
     const [jumboAlert, setJumboAlert] = useState(false)
+    const [bgOverlay, setBgOverlay] = useState(true)
 
     const fullscreenChecker = useRef(null)
     const checkinview = useInView(fullscreenChecker)
@@ -135,7 +136,11 @@ function App() {
     <>
         <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea}}>
         {/* ALERTS */}
-        {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} />}
+        {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} setBgOverlay={setBgOverlay}/>}
+
+        {bgOverlay && (<motion.div initial={{opacity: 0}} animate={{opacity: 0.6}} transition={{duration: 1, delay: 2}} className='bg-black fixed w-screen h-screen z-[99]'>
+
+        </motion.div>)}
         
         {/* MODES AND COMMANDS  ///////////////////////////////////////////////// */}
         <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} 
