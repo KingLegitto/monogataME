@@ -22,6 +22,7 @@ function App() {
     const [newPoints, setNewPoints] = useState([])
     const [InnerHeight, setInnerHeight] = useState(0)
     const [savePointCounter, setSavePointCounter] = useState(0)
+    const [jumboAlert, setJumboAlert] = useState(false)
 
     const fullscreenChecker = useRef(null)
     const checkinview = useInView(fullscreenChecker)
@@ -34,6 +35,10 @@ function App() {
         if(innerWidth<1024){
         document.querySelector('.overallParent').addEventListener('scroll', scroll)
         }
+
+        setTimeout(() => {
+            setJumboAlert(true)
+        }, 3000);
     }, [])
 
     const handleScreenResize = useCallback(()=>{
@@ -129,6 +134,9 @@ function App() {
   return (
     <>
         <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea}}>
+        {/* ALERTS */}
+        {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} />}
+        
         {/* MODES AND COMMANDS  ///////////////////////////////////////////////// */}
         <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} 
         setPoints={setPoints} points={points} savePoints={savePoints}/>
