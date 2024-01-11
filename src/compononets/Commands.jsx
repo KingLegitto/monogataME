@@ -172,7 +172,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
             {/* ZOOM SLIDER ////////////////////////////////////////////// */}
             <input type="range" min={innerWidth<500? 15: 25} max={50} value={slider} step={1} onInput={(e)=>{handleZoom(e.target.value); setSlider(e.target.value)}}
-            className="slider w-[70vw] absolute z-[51] bottom-[50%] lg:bottom-[5%] right-[-25%] lg:right-[50%] translate-y-[50%] lg:translate-y-0  translate-x-0 lg:translate-x-[50%] rotate-[-90deg] lg:rotate-0"/>
+            className="slider w-[85vw] lg:w-[90vw] absolute z-[51] bottom-[5%] left-[50%] translate-x-[-50%]"/>
 
 
             <div className="fixed w-[100vw] h-[2px] bg-white z-[50] bottom-0">
