@@ -153,7 +153,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
 
     return ( 
-        <motion.div ref={point} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
+        <motion.div ref={point} initial={{opacity: 0}} animate={{opacity: 1, transition:{duration: 0.2}}} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
         whileDrag={{scale: 1.1}} dragMomentum={false} onDragStart={()=>{setCheck(!check)}} onDragEnd={(e, info)=>{
             // alert(`BL:${boundaryL}, BT:${boundaryT}, BR:${boundaryR}, BB:${boundaryB}, offsetx:${info.offset.x}`)
             setDisplacement([displacement[0] + info.offset.x, displacement[1] + info.offset.y])
@@ -190,7 +190,8 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             {type=='plot' && (<motion.div animate={{y: viewDetails?0:-30}} contentEditable suppressContentEditableWarning={true} spellCheck={false}
             className='w-[100%] overflow-hidden h-0 px-[8px] text-center rounded-[20px] py-[10px] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
             style={{pointerEvents: dragctrl?'none':'all' , height: viewDetails? 'auto': '0px', opacity: viewDetails? 1:0, 
-            background: bgColor=='#eeeeeee5'||bgColor=='#1bffbbe5'?'#00000032': bgColor=='#ffe42be5'?'#ffffff82':'#ffffff32'}}>
+            background: bgColor=='#eeeeeee5'||bgColor=='#1bffbbe5'?'#00000032': bgColor=='#ffe42be5'?'#ffffff82':'#ffffff32',
+            letterSpacing: '-0.5px'}}>
                 {pointDetails}
             </motion.div>)}
 

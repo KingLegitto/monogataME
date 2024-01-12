@@ -24,6 +24,7 @@ function App() {
     const [savePointCounter, setSavePointCounter] = useState(0)
     const [jumboAlert, setJumboAlert] = useState(false)
     const [bgOverlay, setBgOverlay] = useState(true)
+    const [showPoints, setShowPoints] = useState(false)
 
     const fullscreenChecker = useRef(null)
     const checkinview = useInView(fullscreenChecker)
@@ -137,7 +138,8 @@ function App() {
         <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea}}>
         {/* ALERTS */}
         <AnimatePresence>
-        {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} setBgOverlay={setBgOverlay}/>}
+        {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} jumboAlert={jumboAlert} setBgOverlay={setBgOverlay}
+        setShowPoints={setShowPoints}/>}
         </AnimatePresence>
         
         <AnimatePresence>
@@ -159,9 +161,9 @@ function App() {
         >
 
             {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
-            <StoryTimeline points={points} mouseTracking={mouseTracking} 
+            {showPoints &&(<StoryTimeline points={points} mouseTracking={mouseTracking} 
             entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint} newPoints={newPoints} setTracking={setTracking} 
-            setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>
+            setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>)}
 
             {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
             <motion.div className='zoom bgImage mx-auto transform-gpu' style={{backgroundImage: `url(${bgTexture})`, 

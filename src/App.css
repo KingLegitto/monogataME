@@ -1,21 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Lora&family=Roboto:wght@300&family=Rubik&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Nunito&family=Rubik&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
 *{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Nunito', sans-serif;
 }
 
-.Lora{
-    font-family: 'Lora', serif;
-    /* color: #000000bb; */
-}
-.Roboto{
-    font-family: 'Roboto', sans-serif;
-    /* color: #000000bb; */
-}
+
 .Rubik{
     font-family: 'Rubik', sans-serif;
     /* color: #2c2c2c; */
