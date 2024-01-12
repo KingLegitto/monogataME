@@ -60,6 +60,22 @@ aside button{
     font-size: 12px;
 }
 
+.button{
+    animation: btnAnim 0.5s 1;
+}
+@keyframes btnAnim {
+	0% {
+		transform: scale(1);
+	}
+    50% {
+		transform: scale(0.5);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+
 @media(max-width: 1023px){
     button:hover{
         transform: scale(1.1);

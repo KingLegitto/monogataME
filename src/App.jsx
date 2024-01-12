@@ -5,7 +5,7 @@ import StoryTimeline from './compononets/StoryTimeline'
 import { sanityClient } from '../client'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import JumboAlert from './compononets/jumboAlert'
-import { motion, useInView } from 'framer-motion'
+import { AnimatePresence, motion, useInView } from 'framer-motion'
 import React, {createContext} from "react";
 
 export const ZoomContext = createContext()
@@ -136,11 +136,16 @@ function App() {
     <>
         <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea}}>
         {/* ALERTS */}
+        <AnimatePresence>
         {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} setBgOverlay={setBgOverlay}/>}
-
-        {bgOverlay && (<motion.div initial={{opacity: 0}} animate={{opacity: 0.6}} transition={{duration: 1, delay: 2}} className='bg-black fixed w-screen h-screen z-[99]'>
+        </AnimatePresence>
+        
+        <AnimatePresence>
+        {bgOverlay && (<motion.div exit={{opacity: 0, transition: {delay: 0.5, duration: 0.5}}} initial={{opacity: 0}} animate={{opacity: 0.6}} transition={{duration: 1, delay: 2}} className='bg-black fixed w-screen h-screen z-[99]'>
 
         </motion.div>)}
+        </AnimatePresence>
+        
         
         {/* MODES AND COMMANDS  ///////////////////////////////////////////////// */}
         <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} 
