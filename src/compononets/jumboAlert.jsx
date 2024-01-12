@@ -76,17 +76,28 @@ const JumboAlert = ({setJumboAlert, setBgOverlay,jumboAlert,setShowPoints}) => {
             
         </motion.div>
 
+        <AnimatePresence>
+        {innerWidth<=768 && btn && (<motion.button variants={button} initial={{x: '-50%', opacity: 0}} animate={{x:'-50%', opacity: 1}} exit={'clicked'} transition={{delay: 3}} 
+        onClick={()=>{
+            setBtn(false)
 
-        {innerWidth<=768 && (<motion.button initial={{x: '-50%', opacity: 0}} animate={{x:'-50%', opacity: 1}} transition={{delay: 3}} 
-        exit={{opacity: 0, transition:{duration: 0.5, delay: 0.1}}} onClick={()=>{
-            setTimeout(() => {
-                setJumboAlert(false)
-                setBgOverlay(false)
-            }, 300);
+                setTimeout(() => {
+                    setTimeout(() => {
+                        setShowPoints(true)
+                    }, 1000);
+                    
+
+                    setJumboAlert(false)
+            
+                
+                    setBgOverlay(false)
+                }, 500);
         }} className="initialBtn absolute z-[100] left-[50%] w-[70%] md:w-[50%] bottom-[10%] sm:bottom-[20%] 
         bg-[#ff74c5] p-[7px] md:p-[10px] rounded-[30px] text-[white] Rubik">
             Continue
         </motion.button>)}
+        </AnimatePresence>
+        
         </>
      );
 }

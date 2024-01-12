@@ -12,7 +12,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     const [aside, setAside] = useState(true)
     const [updater, setUpdater] = useState(true)
 
-    const {handleZoom, setSlider, slider, setSelectionArea} = useContext(ZoomContext)
+    const {handleZoom, setSlider, slider, setSelectionArea, workableArea} = useContext(ZoomContext)
     
 
     const handleNewPoint = ()=>{
@@ -51,6 +51,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
         if(innerWidth<1024){
             setSlider(32)
             handleZoom(32)
+            document.querySelector('.overallParent').scrollTo(workableArea.width / 2 *(0.46),0)
         }
     }, [])
 

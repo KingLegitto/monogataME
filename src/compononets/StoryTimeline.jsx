@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 
 const StoryTimeline = ({points, mouseTracking, entryCounter, setCounter, newPoints, setTracking, setMidPoint, track,
-deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
+deletePoint, updatePoint, midPoint, mouseX, mouseY, showPoints}) => {
   
   const plotDragConstraints = useRef(null)
   const {setSelectionArea, selectionArea, workableArea, slider} = useContext(ZoomContext)
@@ -53,7 +53,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY}) => {
     <motion.div ref={plotDragConstraints} className='bg pointsParent rounded-[30px] absolute z-[7] left-0 right-0 mx-auto' onClick={handleBgClick}
     style={{height: workableArea.height, width: workableArea.width}}>
       {/* PLOT POINTS  //////////////////////////////////////////////////////// */}
-      {points && points.map((entry)=>{
+      {showPoints && points && points.map((entry)=>{
         return(
               <PlotElements key={entry._id} plotDragConstraints={plotDragConstraints}
               bgColor={entry.bg} x={entry.x} y={entry.y} pointTitle={entry.pointTitle} pointDetails={entry.pointDetails}
