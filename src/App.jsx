@@ -90,9 +90,31 @@ function App() {
 
 
     // FUNCTION TO KNOW THE POSITION OF THE MOUSE SO AS TO INSERT PLOT POINTS PRECISELY
+    // COMPLEX LOGIC TO ENSURE NEW POINTS ARE INSERTED IN ACCORDANCE WITH THE GRID SYSTEM
     const track = useCallback((e)=>{
-        setmouseX(e.offsetX)
-        setmouseY(e.offsetY)
+        // LOGIC FOR X AXIS
+        let nX = Math.floor(e.offsetX / 100)
+        let cX = nX*100
+        if(e.offsetX%100 == 0){
+            setmouseX(cX)
+        }
+        else if(e.offsetX%100 < 50){
+            setmouseX(cX)
+        }else{
+            setmouseX(cX + 100)
+        }
+
+        // LOGIC FOR Y AXIS
+        let nY = Math.floor(e.offsetY / 100)
+        let cY = nY*100
+        if(e.offsetY%100 == 0){
+            setmouseY(cY)
+        }
+        else if(e.offsetY%100 < 50){
+            setmouseY(cY)
+        }else{
+            setmouseY(cY + 100)
+        }
     }, [])
 
     function updatePoint(keyID, bg){

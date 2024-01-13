@@ -179,8 +179,17 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         if(Math.abs(distanceX) >= 100 && type == 'plot'){
             let n = Math.floor(distanceX/100)
             let c = n*100
-            // let remainder = distance - c
-            setGridEnforcementX(gridEnforcementX + c)
+            // console.log(`x: ${distanceX}, c: ${c}, n: ${n}`)
+            if(Math.abs(distanceX%100) == 0){
+                setGridEnforcementX(gridEnforcementX + c)
+            }
+            else if(Math.abs(distanceX%100)<50){
+                setGridEnforcementX(gridEnforcementX + c + (c<0?100:0))
+            }else{
+                setGridEnforcementX(gridEnforcementX + c + (c<0?0:100))
+            }
+            
+            
         }
         
         // GRID SOLUTION FOR Y
@@ -205,10 +214,16 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
         }
         if(Math.abs(distanceY) >= 100){
-            let n = Math.floor(distanceY/100) 
+            let n = Math.floor(distanceY/100)
             let c = n*100
-            // let remainder = distance - c
-            setGridEnforcementY(gridEnforcementY + c)
+            if(Math.abs(distanceY%100) == 0){
+                setGridEnforcementY(gridEnforcementY + c)
+            }
+            else if(Math.abs(distanceY%100)<50){
+                setGridEnforcementY(gridEnforcementY + c + (c<0?100:0))
+            }else{
+                setGridEnforcementY(gridEnforcementY + c + (c<0?0:100))
+            }
         }
         
     }
@@ -231,7 +246,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             // console.log('BottomBound')
             setGridEnforcementY(boundaryB)
         }
-    }, [gridEnforcementX ])
+    }, [gridEnforcementX, gridEnforcementY])
 
 
     return ( 
@@ -252,7 +267,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px] px-[10px]`}
 
         style={{ top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
-        width:type=='section'?'200px': !dragctrl?'200px':'auto', minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl? '40': '5',
+        width:type=='section'?'200px': !dragctrl?'200px':'auto', minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl || viewDetails? '40': '5',
         boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: !dragctrl&&type=='plot'? '40px': type=='plot'&& !viewDetails? '0px': '20px',
         border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black'}}>
 
@@ -265,8 +280,8 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
             {/* POINT TITLE  //////////////////////////////////////////////////////////// */}
             <div ref={textbox} contentEditable suppressContentEditableWarning={true} spellCheck={false}
-            className={`w-[auto] ${viewDetails?'Rubik':''} max-w-[100%] rounded-[10px] focus:outline-none selection:bg-[#fd79ee]`}
-            style={{textAlign: 'center', pointerEvents: dragctrl?'none':'all', fontWeight: viewDetails? 'bold': 'normal'}}>
+            className={`w-[auto] ${viewDetails? type=='plot'? 'Rubik':'':''} max-w-[100%] rounded-[10px] focus:outline-none selection:bg-[#fd79ee]`}
+            style={{textAlign: 'center', pointerEvents: dragctrl?'none':'all', fontWeight: viewDetails? type=='plot'? 'bold': 'normal': 'normal'}}>
                 {pointTitle}
             </div>
 
