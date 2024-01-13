@@ -1,8 +1,9 @@
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useState } from 'react'
 
-const JumboAlert = ({setJumboAlert, setBgOverlay,jumboAlert,setShowPoints}) => {
+const JumboAlert = ({setJumboAlert, setBgOverlay,jumboAlert,setShowPoints, bgOverlay}) => {
     const [btn, setBtn] = useState(true)
+    const [remove, setRemove] = useState(false)
     const modal ={
         hidden: {
             y: '-50%',
@@ -27,7 +28,8 @@ const JumboAlert = ({setJumboAlert, setBgOverlay,jumboAlert,setShowPoints}) => {
         visible: {
            
             opacity: 1,
-            
+            scale: btn?1:0.7,
+            transition: {delay: 3,scale:{delay: 0, duration: 0.1}}
         },
 
         clicked: {
@@ -50,10 +52,13 @@ const JumboAlert = ({setJumboAlert, setBgOverlay,jumboAlert,setShowPoints}) => {
             Many planned features are still in the works and quality of life changes will
             definitely be implemented along the way...
 
-            <AnimatePresence>
-            {innerWidth>768 && btn && (<motion.button variants={button} initial={'hidden'} animate={'visible'} exit={'clicked'} transition={{delay: 3}}
+            
+            {innerWidth>768 && (<motion.button variants={button} initial={'hidden'} animate={'visible'} transition={{delay: 3}}
             onClick={()=>{
                 setBtn(false)
+                setTimeout(() => {
+                    setBtn(true)
+                }, 200);
 
                 setTimeout(() => {
                     setTimeout(() => {
@@ -72,15 +77,20 @@ const JumboAlert = ({setJumboAlert, setBgOverlay,jumboAlert,setShowPoints}) => {
             bg-[#ff74c5] p-[7px] md:p-[10px] rounded-[30px] text-[white] Rubik">
                 Continue
             </motion.button>)}
-            </AnimatePresence>
+            
             
         </motion.div>
 
         <AnimatePresence>
-        {innerWidth<=768 && btn && (<motion.button variants={button} initial={{x: '-50%', opacity: 0}} animate={{x:'-50%', opacity: 1}} exit={'clicked'} transition={{delay: 3}} 
-        onClick={()=>{
+        {innerWidth<=768 && !remove && (<motion.button variants={button} initial={{x: '-50%', opacity: 0}} animate={'visible'} transition={{delay: 3}} 
+        exit={{opacity: 0, transition:{duration: 0.5, delay: 0.5}}} onClick={()=>{
             setBtn(false)
+            setTimeout(() => {
+                setBtn(true)
+            }, 200);
 
+            
+            
                 setTimeout(() => {
                     setTimeout(() => {
                         setShowPoints(true)
@@ -88,8 +98,7 @@ const JumboAlert = ({setJumboAlert, setBgOverlay,jumboAlert,setShowPoints}) => {
                     
 
                     setJumboAlert(false)
-            
-                
+                    setRemove(true)
                     setBgOverlay(false)
                 }, 500);
         }} className="initialBtn absolute z-[100] left-[50%] w-[70%] md:w-[50%] bottom-[10%] sm:bottom-[20%] 

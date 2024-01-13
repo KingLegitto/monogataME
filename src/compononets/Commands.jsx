@@ -51,7 +51,7 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
         if(innerWidth<1024){
             setSlider(32)
             handleZoom(32)
-            document.querySelector('.overallParent').scrollTo(workableArea.width / 2 *(0.46),0)
+            document.querySelector('.overallParent').scrollTo(workableArea.width / 2 *(0.46), 0)
         }
     }, [])
 

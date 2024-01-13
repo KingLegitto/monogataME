@@ -4,8 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
 
-const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoint, updatePoint, plotDragConstraints,
-    referenceL, referenceR, referenceT, referenceB}) => {
+const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoint, updatePoint, plotDragConstraints}) => {
     const point = useRef(null)
     const textbox = useRef(null)
     const [dragctrl, setDrag] = useState(true)
@@ -17,6 +16,8 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     const [clickCounter, setClickCounter] = useState(0)
     const [displacement, setDisplacement] = useState([0, 0])
     const [viewDetails, setViewDetails] = useState(false)
+    const [gridEnforcementX, setGridEnforcementX] = useState(0)
+    const [gridEnforcementY, setGridEnforcementY] = useState(0)
     
     const {handleZoom, setSlider, slider} = useContext(ZoomContext)
 
@@ -132,6 +133,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         
     }, [])
 
+    // TO PREVENT THE 'AUTO SCROLL TO POINTS' FROM OVERSHOOTING PAST THE BOUNDARIES
     useEffect(()=>{
         if(displacement[0] < boundaryL*-1){
             // alert('left')
@@ -151,10 +153,93 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         }
     }, [displacement])
 
+    function snapToGrid(distanceX, distanceY){
+        
+        // GRID SOLUTION FOR X
+        if(Math.abs(distanceX) < 100 && type == 'plot'){
+
+            if(Math.abs(distanceX) < 50){
+                if(distanceX < 0){
+    
+                    setGridEnforcementX(gridEnforcementX + 0.001)
+                }
+                else{
+                    setGridEnforcementX(gridEnforcementX - 0.001)
+                }
+            }
+            if(Math.abs(distanceX) >= 50){
+                if(distanceX < 0){
+                    setGridEnforcementX(gridEnforcementX - 100)
+                }else{
+                    setGridEnforcementX(gridEnforcementX + 100)
+                }
+            }
+
+        }
+        if(Math.abs(distanceX) >= 100 && type == 'plot'){
+            let n = Math.floor(distanceX/100)
+            let c = n*100
+            // let remainder = distance - c
+            setGridEnforcementX(gridEnforcementX + c)
+        }
+        
+        // GRID SOLUTION FOR Y
+        if(Math.abs(distanceY) < 100){
+
+            if(Math.abs(distanceY) < 50){
+                if(distanceY < 0){
+    
+                    setGridEnforcementY(gridEnforcementY + 0.001)
+                }
+                else{
+                    setGridEnforcementY(gridEnforcementY - 0.001)
+                }
+            }
+            if(Math.abs(distanceY) >= 50){
+                if(distanceY < 0){
+                    setGridEnforcementY(gridEnforcementY - 100)
+                }else{
+                    setGridEnforcementY(gridEnforcementY + 100)
+                }
+            }
+
+        }
+        if(Math.abs(distanceY) >= 100){
+            let n = Math.floor(distanceY/100) 
+            let c = n*100
+            // let remainder = distance - c
+            setGridEnforcementY(gridEnforcementY + c)
+        }
+        
+    }
+
+    // TO PREVENT THE GRID FROM SNAPPING TO POINTS BEYOND THE BOUNDARIES
+    useEffect(()=>{
+        if(gridEnforcementX < boundaryL*-1){
+            // console.log('leftBound')
+            setGridEnforcementX(-boundaryL)
+        }
+        if(gridEnforcementX > boundaryR){
+            // console.log('RightBound')
+            setGridEnforcementX(boundaryR)
+        }
+        if(gridEnforcementY < boundaryT*-1){
+            // console.log('TopBound')
+            setGridEnforcementY(-boundaryT)
+        }
+        if(gridEnforcementY > boundaryB){
+            // console.log('BottomBound')
+            setGridEnforcementY(boundaryB)
+        }
+    }, [gridEnforcementX ])
+
 
     return ( 
-        <motion.div ref={point} initial={{opacity: 0}} animate={{opacity: 1, transition:{duration: 0.2}}} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
+        <motion.div ref={point} initial={{opacity: 0}} animate={{opacity: 1, transition:{duration: 0.2}, x: gridEnforcementX, y: gridEnforcementY}} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
         whileDrag={{scale: 1.1}} dragMomentum={false} onDragStart={()=>{setCheck(!check)}} onDragEnd={(e, info)=>{
+            
+            snapToGrid(info.offset.x, info.offset.y)
+            
             // alert(`BL:${boundaryL}, BT:${boundaryT}, BR:${boundaryR}, BB:${boundaryB}, offsetx:${info.offset.x}`)
             setDisplacement([displacement[0] + info.offset.x, displacement[1] + info.offset.y])
            
@@ -166,7 +251,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         className={`${type=='section'?'sectionPoint': 'plotPoint'} point w-[auto] min-w-[100px] max-w-[200px] flex 
         flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px] px-[10px]`}
 
-        style={{top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
+        style={{ top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
         width:type=='section'?'200px': !dragctrl?'200px':'auto', minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl? '40': '5',
         boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: !dragctrl&&type=='plot'? '40px': type=='plot'&& !viewDetails? '0px': '20px',
         border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black'}}>

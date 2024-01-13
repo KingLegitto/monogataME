@@ -20,7 +20,6 @@ function App() {
     const [points, setPoints] = useState([])
     const [entryCounter, setCounter] = useState(0)
     const [newPoints, setNewPoints] = useState([])
-    const [InnerHeight, setInnerHeight] = useState(0)
     const [savePointCounter, setSavePointCounter] = useState(0)
     const [jumboAlert, setJumboAlert] = useState(false)
     const [bgOverlay, setBgOverlay] = useState(true)
@@ -138,8 +137,8 @@ function App() {
         <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea}}>
         {/* ALERTS */}
         <AnimatePresence>
-        {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} jumboAlert={jumboAlert} setBgOverlay={setBgOverlay}
-        setShowPoints={setShowPoints}/>}
+        {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} jumboAlert={jumboAlert} setBgOverlay={setBgOverlay} bgOverlay={bgOverlay}
+        setShowPoints={setShowPoints} />}
         </AnimatePresence>
         
         <AnimatePresence>
