@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
 
-const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoint, updatePoint, kind, sliderVal}) => {
+const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoint, updatePoint, kind, sliderVal, points}) => {
     const point = useRef(null)
     const textbox = useRef(null)
     const [dragctrl, setDrag] = useState(true)
@@ -274,7 +274,9 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             // TO FILL UP THE SPACE
             let allPoints = document.querySelectorAll('.point')
             allPoints.forEach((points)=>{
-
+                // if(points.classList.contains('new')){
+                //     console.log(sliderVal)
+                // }
                 // HIDE POINTS WITHIN SECTIONS RANGE OF EFFECT
                 if(!viewDetails && points.getBoundingClientRect().top > currentSectionTop && points.getBoundingClientRect().top < nextSectionTop){
                     points.style.visibility = 'hidden'
@@ -286,7 +288,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     let y = points.style.top
                     y = (parseInt(y.replace(/px/,"")))
                     // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
-                    points.style.top = `${(kind=='new'?y*slider*2/sliderVal:y*slider*2/100 - (nextSectionTop - currentSectionTop) + (100))}px`
+                    points.style.top = `${(y - (nextSectionTop - currentSectionTop)*100/(slider*2) + (100))}px`
                     setTimeout(() => {
                         points.style.transition = '0s'
                     }, 500);
@@ -302,7 +304,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                         let y = points.style.top
                         y = (parseInt(y.replace(/px/,"")))
                         // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
-                        points.style.top = `${(y + sectionRange - (100))*100/(slider*2)}px`
+                        points.style.top = `${(y + sectionRange*100/(slider*2) - (100))}px`
                         setTimeout(() => {
                             points.style.transition = '0s'
                         }, 500);
@@ -328,11 +330,12 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             setDisplacement([displacement[0] + info.offset.x, displacement[1] + info.offset.y])
            
             
-        }} dragTransition={{ bounceStiffness: 1000, bounceDamping: 20 }}
+        }}
+        dragTransition={{ bounceStiffness: 1000, bounceDamping: 20 }}
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
-        onTap={(event)=>{dblclickCheck()}}
+        onTap={(event)=>{dblclickCheck()}} onClick={()=>{console.log(point.current.style.top)}}
       
-        className={`${type=='section'?'sectionPoint': 'plotPoint'} point w-[auto] min-w-[100px] flex 
+        className={`${type=='section'?'sectionPoint': 'plotPoint'} ${kind=='new'?'new':''} point w-[auto] min-w-[100px] flex 
         flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px] px-[10px]`}
 
         style={{ top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',

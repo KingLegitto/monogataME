@@ -6,7 +6,7 @@ import { useContext } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 
-const StoryTimeline = ({points, mouseTracking, entryCounter, setCounter, newPoints, setTracking, setMidPoint, track,
+const StoryTimeline = ({points, setPoints, mouseTracking, entryCounter, setCounter, newPoints, setTracking, setMidPoint, track,
 deletePoint, updatePoint, midPoint, mouseX, mouseY, showPoints}) => {
   
   const plotDragConstraints = useRef(null)
@@ -28,6 +28,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY, showPoints}) => {
   
       points.push({_id: entryCounter, x: midPoint?midPoint:mouseX, y: mouseY, pointTitle: '[ Empty... ]', pointDetails: '-----',
       bg: midPoint?'#000000bb':'#eeeeeee5', type: midPoint?'section':'plot', kind: 'new', sliderVal: slider*2})
+      setPoints(points)
       // console.log(points)
       newPoints.push({_type: 'plotPoints', x: midPoint?midPoint:mouseX, y: mouseY, pointTitle: '[ Empty... ]', pointDetails: '-----',
       bg: midPoint?'#000000bb':'#eeeeeee5', type: midPoint?'section':'plot'})
@@ -55,7 +56,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY, showPoints}) => {
       {/* PLOT POINTS  //////////////////////////////////////////////////////// */}
       {showPoints && points && points.map((entry)=>{
         return(
-              <PlotElements key={entry._id} plotDragConstraints={plotDragConstraints}
+              <PlotElements key={entry._id} plotDragConstraints={plotDragConstraints} points={points}
               bgColor={entry.bg} x={entry.x} y={entry.y} pointTitle={entry.pointTitle} pointDetails={entry.pointDetails}
               type={entry.type} deletePoint={deletePoint} updatePoint={updatePoint} keyID={entry._id} kind={entry.kind} sliderVal={entry.sliderVal}/>
         )

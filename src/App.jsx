@@ -183,7 +183,7 @@ function App() {
 
             {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
             <StoryTimeline points={points} mouseTracking={mouseTracking} showPoints={showPoints}
-            entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint} newPoints={newPoints} setTracking={setTracking} 
+            entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint} newPoints={newPoints} setPoints={setPoints} setTracking={setTracking} 
             setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>
 
             {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
