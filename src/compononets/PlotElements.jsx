@@ -18,6 +18,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     const [viewDetails, setViewDetails] = useState(false)
     const [gridEnforcementX, setGridEnforcementX] = useState(0)
     const [gridEnforcementY, setGridEnforcementY] = useState(0)
+    const [sectionRange, setSectionRange] = useState(0)
     
     const {handleZoom, setSlider, slider} = useContext(ZoomContext)
 
@@ -248,9 +249,77 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         }
     }, [gridEnforcementX, gridEnforcementY])
 
+    function sectionCollapse(){
+
+            // THE SECTION POINT WHOSE COLLAPSE BUTTON WAS CLICKED IS THE CURRENT SECTION POINT
+            let currentSectionTop = point.current.getBoundingClientRect().top
+
+            let allSections = document.querySelectorAll('.sectionPoint')
+            let targetSections = []
+
+            // GET THE TOP POSITION OF ALL SECTION POINTS BELOW THE CURRENT SECTION POINT
+            allSections.forEach((section)=>{
+                if(section.getBoundingClientRect().top > currentSectionTop){
+                    targetSections.push(section.getBoundingClientRect().top)
+                }
+            })
+            
+            // THE SMALLEST TOP POSITION VALUE IS INDEED THE IMMEDIATE NEXT SECTION BELOW CURRENT SECTION
+            let nextSectionTop = Math.min(...targetSections)
+            
+            // THIS IS TO REMEMBER THE RANGE OF EFFECT THE CURRENT SECTION POINT HAS
+            setSectionRange(!viewDetails? (nextSectionTop - currentSectionTop) : sectionRange)
+            
+            // LOGIC TO HIDE PLOT PLOINTS WITHIN RANGE AND TO MOVE ALL OTHER POINTS BELOW CURRENT SECTION POINT UPWARDS
+            // TO FILL UP THE SPACE
+            let allPoints = document.querySelectorAll('.point')
+            allPoints.forEach((points)=>{
+
+                // HIDE POINTS WITHIN SECTIONS RANGE OF EFFECT
+                if(!viewDetails && points.getBoundingClientRect().top > currentSectionTop && points.getBoundingClientRect().top < nextSectionTop){
+                    points.style.visibility = 'hidden'
+                    
+                }
+                // ALL OTHER POINTS BELOW THAT ARE NOT WITHIN RANGE SHOULD MOVE UP 
+                else if(!viewDetails && points.getBoundingClientRect().top > currentSectionTop){
+                    points.style.transition = '0.5s'
+                    let y = points.style.top
+                    y = (parseInt(y.replace(/px/,"")))
+                    // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
+                    points.style.top = `${y - (nextSectionTop - currentSectionTop - 100)}px`
+                    setTimeout(() => {
+                        points.style.transition = '0s'
+                    }, 500);
+                }
+
+                // WHEN COLLAPSE BUTTON IS PRESSED AGAIN, ALL POINTS BELOW SHOULD MOVE BACK DOWN
+                if(viewDetails && points.getBoundingClientRect().top > currentSectionTop){
+                    // EXCEPT THE POINTS WITHIN RANGE. THEY STAY IN THEIR POSITION
+                    if(points.style.visibility == 'hidden'){
+
+                    }else{
+                        points.style.transition = '0.5s'
+                        let y = points.style.top
+                        y = (parseInt(y.replace(/px/,"")))
+                        // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
+                        points.style.top = `${y + sectionRange - 100}px`
+                        setTimeout(() => {
+                            points.style.transition = '0s'
+                        }, 500);
+                    }   
+                }
+                // WHEN COLLAPSE BUTTON IS PRESSED AGAIN, POINTS WITHIN RANGE SHOULD GET VISIBLE
+                if(viewDetails && points.getBoundingClientRect().top > currentSectionTop && points.getBoundingClientRect().top < currentSectionTop + sectionRange){
+                    points.style.visibility = 'visible'
+                }
+            })
+        
+        
+    }
+
 
     return ( 
-        <motion.div ref={point} initial={{opacity: 0}} animate={{opacity: 1, transition:{duration: 0.2}, x: gridEnforcementX, y: gridEnforcementY}} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
+        <motion.div ref={point} initial={{opacity: 0}} animate={{opacity: 1, transition:{duration: 0.2, opacity:{duration: 0.2, delay: 0.3}}, x: type=='section'?'-50%': gridEnforcementX, y: gridEnforcementY}} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
         whileDrag={{scale: 1.1}} dragMomentum={false} onDragStart={()=>{setCheck(!check)}} onDragEnd={(e, info)=>{
             
             snapToGrid(info.offset.x, info.offset.y)
@@ -263,13 +332,13 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
         onTap={(event)=>{dblclickCheck()}}
       
-        className={`${type=='section'?'sectionPoint': 'plotPoint'} point w-[auto] min-w-[100px] max-w-[200px] flex 
+        className={`${type=='section'?'sectionPoint': 'plotPoint'} point w-[auto] min-w-[100px] flex 
         flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px] px-[10px]`}
 
         style={{ top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
-        width:type=='section'?'200px': !dragctrl?'200px':'auto', minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl || viewDetails? '40': '5',
-        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: !dragctrl&&type=='plot'? '40px': type=='plot'&& !viewDetails? '0px': '20px',
-        border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black'}}>
+        width:type=='section'?'auto': !dragctrl?'200px':'auto', maxWidth: type=='section'?'300px':'200px',minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl || viewDetails? '40': '5',
+        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: !dragctrl&&type=='plot'? '40px': type=='plot'&& !viewDetails? '0px': '15px',
+        border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black', borderRadius: type=='plot'?'20px':'30px'}}>
 
             {/* BADGE  ///////////////////////////////////////////////////////////// */}
             {type=='plot' && (<div className='w-[20px] h-[20px] bg-black absolute top-0 left-0
@@ -280,7 +349,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
             {/* POINT TITLE  //////////////////////////////////////////////////////////// */}
             <div ref={textbox} contentEditable suppressContentEditableWarning={true} spellCheck={false}
-            className={`w-[auto] ${viewDetails? type=='plot'? 'Rubik':'':''} max-w-[100%] rounded-[10px] focus:outline-none selection:bg-[#fd79ee]`}
+            className={`w-[auto] ${viewDetails? type=='plot'? 'Rubik':'':''} ${type=='section'? 'px-[10px]': ''} max-w-[100%] rounded-[10px] focus:outline-none selection:bg-[#fd79ee]`}
             style={{textAlign: 'center', pointerEvents: dragctrl?'none':'all', fontWeight: viewDetails? type=='plot'? 'bold': 'normal': 'normal'}}>
                 {pointTitle}
             </div>
@@ -307,11 +376,11 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
 
             {/* COLLAPSE BUTTON */}
-            <span className='absolute top-[100%] translate-y-[-52%]  w-[50px] rounded-[20px] flex justify-center border-[1px] border-[#ffffffa9]'
+            <motion.span initial={{y: '-52%'}} animate={{y:'-52%'}} whileTap={{scale: 1.2}} className='absolute top-[100%] w-[50px] rounded-[20px] flex justify-center border-[1px] border-[#ffffffa9]'
             style={{background:type=='section'? '#2c2c2c': bgColor=='#000000bb'? '#000000':bgColor=='#1bffbbe5'?'#1bffbb':bgColor=='#ff3e5fe5'? '#ff3e5f':bgColor=='#ffe42be5'? '#ffe42b': '#eeeeee', boxShadow: '0px 0px 5px 5px rgba(0,0,0,0.11)'}}
-            onClick={()=>{setViewDetails(!viewDetails)}}>
-                <ArrowDropDownRounded style={{transform: 'scale(1.5)'}}/>
-            </span>
+            onClick={()=>{setViewDetails(!viewDetails), type=='section'? sectionCollapse(): ''}}>
+                <ArrowDropDownRounded style={{transform: 'scale(1.5)', rotate: viewDetails? '180deg': '0deg'}}/>
+            </motion.span>
             
 
 
