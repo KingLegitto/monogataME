@@ -27,7 +27,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY, showPoints}) => {
       document.querySelector('.bg').style.cursor = 'default'
   
       points.push({_id: entryCounter, x: midPoint?midPoint:mouseX, y: mouseY, pointTitle: '[ Empty... ]', pointDetails: '-----',
-      bg: midPoint?'#000000bb':'#eeeeeee5', type: midPoint?'section':'plot'})
+      bg: midPoint?'#000000bb':'#eeeeeee5', type: midPoint?'section':'plot', kind: 'new', sliderVal: slider*2})
       // console.log(points)
       newPoints.push({_type: 'plotPoints', x: midPoint?midPoint:mouseX, y: mouseY, pointTitle: '[ Empty... ]', pointDetails: '-----',
       bg: midPoint?'#000000bb':'#eeeeeee5', type: midPoint?'section':'plot'})
@@ -57,7 +57,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY, showPoints}) => {
         return(
               <PlotElements key={entry._id} plotDragConstraints={plotDragConstraints}
               bgColor={entry.bg} x={entry.x} y={entry.y} pointTitle={entry.pointTitle} pointDetails={entry.pointDetails}
-              type={entry.type} deletePoint={deletePoint} updatePoint={updatePoint} keyID={entry._id}/>
+              type={entry.type} deletePoint={deletePoint} updatePoint={updatePoint} keyID={entry._id} kind={entry.kind} sliderVal={entry.sliderVal}/>
         )
         })
       }

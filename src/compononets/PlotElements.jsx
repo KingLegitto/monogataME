@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
 
-const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoint, updatePoint, plotDragConstraints}) => {
+const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoint, updatePoint, kind, sliderVal}) => {
     const point = useRef(null)
     const textbox = useRef(null)
     const [dragctrl, setDrag] = useState(true)
@@ -286,7 +286,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     let y = points.style.top
                     y = (parseInt(y.replace(/px/,"")))
                     // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
-                    points.style.top = `${(y*slider*2/100 - (nextSectionTop - currentSectionTop) + (100))}px`
+                    points.style.top = `${(kind=='new'?y*slider*2/sliderVal:y*slider*2/100 - (nextSectionTop - currentSectionTop) + (100))}px`
                     setTimeout(() => {
                         points.style.transition = '0s'
                     }, 500);
