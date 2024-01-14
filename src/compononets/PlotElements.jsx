@@ -278,7 +278,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                 //     console.log(sliderVal)
                 // }
                 // HIDE POINTS WITHIN SECTIONS RANGE OF EFFECT
-                if(!viewDetails && points.getBoundingClientRect().top > currentSectionTop && points.getBoundingClientRect().top < nextSectionTop){
+                if(!viewDetails && points.getBoundingClientRect().top > currentSectionTop && points.getBoundingClientRect().top < nextSectionTop && points.style.visibility != 'hidden'){
                     
                     points.classList.add(`${keyID}`);
                     points.style.visibility = 'hidden';
@@ -301,7 +301,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                 // WHEN COLLAPSE BUTTON IS PRESSED AGAIN, ALL POINTS BELOW SHOULD MOVE BACK DOWN
                 if(viewDetails && points.getBoundingClientRect().top > currentSectionTop){
                     // EXCEPT THE POINTS WITHIN RANGE. THEY STAY IN THEIR POSITION
-                    if(points.style.visibility == 'hidden'){
+                    if(points.style.visibility == 'hidden' && points.classList.contains(`${keyID}`)){
 
                     }else{
                         points.style.transition = sectionRange*100/(slider*2)>=300?'0.5s':'0.2s'
@@ -309,7 +309,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                         let y = points.style.top
                         y = (parseInt(y.replace(/px/,"")))
                         // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
-                        points.style.top = `${(y + (sectionRange-range)*100/(slider*2) - (100))}px`
+                        points.style.top = `${(y + (sectionRange)*(100/(slider*2)) - (100))}px`
                         setTimeout(() => {
                             points.style.transition = '0s'
                         }, 500);

@@ -77,7 +77,7 @@ function App() {
             let el = document.querySelector('.bgImage')
             switch(value){
                 case '50': el.style.borderRadius='0px'; break;
-                default: el.style.borderRadius='30px'
+                default: el.style.borderRadius='50px'
             }
             
         }
