@@ -279,16 +279,20 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                 // }
                 // HIDE POINTS WITHIN SECTIONS RANGE OF EFFECT
                 if(!viewDetails && points.getBoundingClientRect().top > currentSectionTop && points.getBoundingClientRect().top < nextSectionTop){
-                    points.style.visibility = 'hidden'
+                    
+                    points.classList.add(`${keyID}`);
+                    points.style.visibility = 'hidden';
                     
                 }
                 // ALL OTHER POINTS BELOW THAT ARE NOT WITHIN RANGE SHOULD MOVE UP 
                 else if(!viewDetails && points.getBoundingClientRect().top > currentSectionTop){
-                    points.style.transition = '0.5s'
+                    let range = nextSectionTop - currentSectionTop
+                    points.style.transition = range*100/(slider*2)>=300?'0.5s':'0.2s'
                     let y = points.style.top
+                    
                     y = (parseInt(y.replace(/px/,"")))
                     // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
-                    points.style.top = `${(y - (nextSectionTop - currentSectionTop)*100/(slider*2) + (100))}px`
+                    points.style.top = `${(y - (range)*100/(slider*2) + (100))}px`
                     setTimeout(() => {
                         points.style.transition = '0s'
                     }, 500);
@@ -300,7 +304,8 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     if(points.style.visibility == 'hidden'){
 
                     }else{
-                        points.style.transition = '0.5s'
+                        points.style.transition = sectionRange*100/(slider*2)>=300?'0.5s':'0.2s'
+
                         let y = points.style.top
                         y = (parseInt(y.replace(/px/,"")))
                         // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
@@ -311,12 +316,24 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     }   
                 }
                 // WHEN COLLAPSE BUTTON IS PRESSED AGAIN, POINTS WITHIN RANGE SHOULD GET VISIBLE
-                if(viewDetails && points.getBoundingClientRect().top > currentSectionTop && points.getBoundingClientRect().top < currentSectionTop + sectionRange){
+                if(viewDetails && points.classList.contains(`${keyID}`)){
                     points.style.visibility = 'visible'
+                    points.classList.remove(`${keyID}`)
+
                 }
             })
-        
-        
+    }
+
+    function sectionChildren(distance){
+        let allPoints = document.querySelectorAll('.point')
+            allPoints.forEach((points)=>{
+                if(points.classList.contains(`${keyID}`)){
+                    let oldPos = points.style.top
+                    oldPos = (parseInt(oldPos.replace(/px/,"")))
+                    points.style.top = `${oldPos + distance}px`
+                }
+            })
+
     }
 
 
@@ -324,8 +341,8 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         <motion.div ref={point} initial={{opacity: 0}} animate={{opacity: 1, transition:{duration: 0.2, opacity:{duration: 0.2, delay: 0.3}}, x: type=='section'?'-50%': gridEnforcementX, y: gridEnforcementY}} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
         whileDrag={{scale: 1.1}}  dragMomentum={false} onDragStart={()=>{setCheck(!check)}} onDragEnd={(e, info)=>{
             
-            snapToGrid(info.offset.x, info.offset.y)
-            
+            snapToGrid(info.offset.x, info.offset.y);
+            type=='section'&&viewDetails?sectionChildren(info.offset.y):''
             // alert(`BL:${boundaryL}, BT:${boundaryT}, BR:${boundaryR}, BB:${boundaryB}, offsetx:${info.offset.x}`)
             setDisplacement([displacement[0] + info.offset.x, displacement[1] + info.offset.y])
            
@@ -333,15 +350,15 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         }}
         dragTransition={{ bounceStiffness: 1000, bounceDamping: 20 }}
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
-        onTap={(event)=>{dblclickCheck()}} onClick={()=>{console.log(point.current.style.top)}}
+        onTap={(event)=>{dblclickCheck()}}
       
         className={`${type=='section'?'sectionPoint': 'plotPoint'} ${kind=='new'?'new':''} point w-[auto] min-w-[100px] flex 
         flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px] px-[10px]`}
 
         style={{ top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
-        width:type=='section'?'auto': !dragctrl?'200px':'auto', maxWidth: type=='section'?'300px':'200px',minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl || viewDetails? '40': '5',
+        width:type=='section'?viewDetails?'700px':'auto': !dragctrl?'200px':'auto', maxWidth: type=='section'?viewDetails?'700px':'300px':'200px',minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl || viewDetails? '40': '5',
         boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: !dragctrl&&type=='plot'? '40px': type=='plot'&& !viewDetails? '0px': '15px',
-        border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black', borderRadius: type=='plot'?'20px':'30px'}}>
+        border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black', borderRadius: type=='plot'?'20px':viewDetails? '10px':'30px'}}>
 
             {/* BADGE  ///////////////////////////////////////////////////////////// */}
             {type=='plot' && (<div className='w-[20px] h-[20px] bg-black absolute top-0 left-0
