@@ -66,7 +66,7 @@ function App() {
 
 
     // CONTEXT STATES AND FUNCTIONS /////////////////////////////////
-    const [workableArea, setWorkableArea] = useState({width: 1000, height: 1500})
+    const [workableArea, setWorkableArea] = useState({width: 1000, height: 1200})
     const [slider, setSlider] = useState(50)
     const handleZoom = (value)=>{
         
