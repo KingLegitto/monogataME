@@ -286,7 +286,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     let y = points.style.top
                     y = (parseInt(y.replace(/px/,"")))
                     // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
-                    points.style.top = `${y - (nextSectionTop - currentSectionTop - 100)}px`
+                    points.style.top = `${(y*slider*2/100 - (nextSectionTop - currentSectionTop) + (100))}px`
                     setTimeout(() => {
                         points.style.transition = '0s'
                     }, 500);
@@ -302,7 +302,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                         let y = points.style.top
                         y = (parseInt(y.replace(/px/,"")))
                         // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
-                        points.style.top = `${y + sectionRange - 100}px`
+                        points.style.top = `${(y + sectionRange - (100))*100/(slider*2)}px`
                         setTimeout(() => {
                             points.style.transition = '0s'
                         }, 500);
@@ -320,7 +320,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
     return ( 
         <motion.div ref={point} initial={{opacity: 0}} animate={{opacity: 1, transition:{duration: 0.2, opacity:{duration: 0.2, delay: 0.3}}, x: type=='section'?'-50%': gridEnforcementX, y: gridEnforcementY}} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
-        whileDrag={{scale: 1.1}} dragMomentum={false} onDragStart={()=>{setCheck(!check)}} onDragEnd={(e, info)=>{
+        whileDrag={{scale: 1.1}}  dragMomentum={false} onDragStart={()=>{setCheck(!check)}} onDragEnd={(e, info)=>{
             
             snapToGrid(info.offset.x, info.offset.y)
             
