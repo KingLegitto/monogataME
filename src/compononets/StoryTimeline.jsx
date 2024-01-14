@@ -58,7 +58,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY, showPoints}) => {
         return(
               <PlotElements key={entry._id} plotDragConstraints={plotDragConstraints} points={points}
               bgColor={entry.bg} x={entry.x} y={entry.y} pointTitle={entry.pointTitle} pointDetails={entry.pointDetails}
-              type={entry.type} deletePoint={deletePoint} updatePoint={updatePoint} keyID={entry._id} kind={entry.kind} sliderVal={entry.sliderVal}/>
+              type={entry.type} deletePoint={deletePoint} updatePoint={updatePoint} keyID={entry._id}/>
         )
         })
       }
