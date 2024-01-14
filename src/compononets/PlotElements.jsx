@@ -352,11 +352,11 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
         onTap={(event)=>{dblclickCheck()}}
       
-        className={`${type=='section'?'sectionPoint': 'plotPoint'} ${kind=='new'?'new':''} point w-[auto] min-w-[100px] flex 
+        className={`${type=='section'?'sectionPoint': 'plotPoint'} point w-[auto] min-w-[100px] flex 
         flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px] px-[10px]`}
 
         style={{ top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
-        width:type=='section'?viewDetails?'700px':'auto': !dragctrl?'200px':'auto', maxWidth: type=='section'?viewDetails?'700px':'300px':'200px',minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl || viewDetails? '40': '5',
+        width:type=='section'?viewDetails?'500px':'auto': !dragctrl?'200px':'auto', maxWidth: type=='section'?viewDetails?'500px':'300px':'200px',minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl || viewDetails? '40': '5',
         boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: !dragctrl&&type=='plot'? '40px': type=='plot'&& !viewDetails? '0px': '15px',
         border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black', borderRadius: type=='plot'?'20px':viewDetails? '10px':'30px'}}>
 
