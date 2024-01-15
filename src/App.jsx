@@ -82,6 +82,7 @@ function App() {
             
         }
     const [selectionArea, setSelectionArea] = useState(false)
+    const [collapseShiftCorrect, setCollapseShiftCorrect] = useState(0)
     // /////////////////////////////////////////////////////////////////
 
     useEffect(()=>{
@@ -156,7 +157,7 @@ function App() {
 
   return (
     <>
-        <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea}}>
+        <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea, collapseShiftCorrect, setCollapseShiftCorrect}}>
         {/* ALERTS */}
         <AnimatePresence>
         {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} jumboAlert={jumboAlert} setBgOverlay={setBgOverlay} bgOverlay={bgOverlay}

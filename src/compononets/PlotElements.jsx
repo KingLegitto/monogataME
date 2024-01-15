@@ -20,7 +20,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     const [gridEnforcementY, setGridEnforcementY] = useState(0)
     const [sectionRange, setSectionRange] = useState(0)
     
-    const {handleZoom, setSlider, slider} = useContext(ZoomContext)
+    const {handleZoom, setSlider, slider, collapseShiftCorrect, setCollapseShiftCorrect} = useContext(ZoomContext)
 
     const colorsCont = {
         hidden: {opacity: 0},
@@ -268,8 +268,8 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             let nextSectionTop = Math.min(...targetSections)
             
             // THIS IS TO REMEMBER THE RANGE OF EFFECT THE CURRENT SECTION POINT HAS
-            setSectionRange(!viewDetails? (nextSectionTop - currentSectionTop) : sectionRange)
-            
+            setSectionRange(!viewDetails? (nextSectionTop - currentSectionTop)*(100/(slider*2)) : sectionRange)
+            console.log(`sectionRange: ${sectionRange}`)
             // LOGIC TO HIDE PLOT PLOINTS WITHIN RANGE AND TO MOVE ALL OTHER POINTS BELOW CURRENT SECTION POINT UPWARDS
             // TO FILL UP THE SPACE
             let allPoints = document.querySelectorAll('.point')
@@ -286,6 +286,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                 }
                 // ALL OTHER POINTS BELOW THAT ARE NOT WITHIN RANGE SHOULD MOVE UP 
                 else if(!viewDetails && points.getBoundingClientRect().top > currentSectionTop){
+                    points.classList.add('csc')
                     let range = nextSectionTop - currentSectionTop
                     points.style.transition = range*100/(slider*2)>=300?'0.5s':'0.2s'
                     let y = points.style.top
@@ -304,14 +305,26 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     if(points.style.visibility == 'hidden' && points.classList.contains(`${keyID}`)){
 
                     }else{
-                        points.style.transition = sectionRange*100/(slider*2)>=300?'0.5s':'0.2s'
-                        let range = nextSectionTop - currentSectionTop - 100
+                        points.style.transition = sectionRange>=300?'0.5s':'0.2s'
+                        
+                        let range = (nextSectionTop - currentSectionTop)*(100/(slider*2))
                         let y = points.style.top
                         y = (parseInt(y.replace(/px/,"")))
                         // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
-                        points.style.top = `${(y + (sectionRange)*(100/(slider*2)) - (100))}px`
+                        points.style.top = `${(y + (sectionRange) - (100))}px`
+
+                        // let csc = `${(y + (sectionRange) - (100))}px`
+                        if(range > 100){
+                            setCollapseShiftCorrect(((sectionRange - range)-100)*-1)
+                            
+                        }
+                        // console.log(collapseShiftCorrect)
+                        
+                        // console.log(`range: ${range}`)
+                        
                         setTimeout(() => {
                             points.style.transition = '0s'
+                            // points.classList.remove('csc')
                         }, 500);
                     }   
                 }
@@ -323,6 +336,19 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                 }
             })
     }
+
+    useEffect(()=>{
+        if(point.current.classList.contains('csc')){
+            console.log(collapseShiftCorrect)
+            setGridEnforcementY(gridEnforcementY - collapseShiftCorrect)
+            point.current.classList.remove('csc')
+        }
+        
+    }, [collapseShiftCorrect])
+
+    // useEffect(()=>{
+    //     console.log('y')
+    // }, [gridEnforcementY])
 
     function sectionChildren(distance){
         let allPoints = document.querySelectorAll('.point')
