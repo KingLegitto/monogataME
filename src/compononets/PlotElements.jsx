@@ -14,7 +14,6 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     const [boundaryB, setBoundaryB] = useState(0)
     const [check, setCheck] = useState(true)
     const [clickCounter, setClickCounter] = useState(0)
-    const [displacement, setDisplacement] = useState([0, 0])
     const [viewDetails, setViewDetails] = useState(false)
     const [gridEnforcementX, setGridEnforcementX] = useState(0)
     const [gridEnforcementY, setGridEnforcementY] = useState(0)
@@ -95,7 +94,8 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
             // WAIT FOR A LITTLE WHILE BEFORE AUTOMATICALLY FOCUS ON SELECTED POINT
             setTimeout(() => {
-                document.querySelector('.overallParent').scrollTo((point.current.offsetLeft+displacement[0] - innerWidth/2 + (point.current.getBoundingClientRect().width/2)+25)*(slider<32&&innerWidth<500?32*2/100:slider*2/100), (point.current.offsetTop+displacement[1] - innerHeight/4)*(slider<32&&innerWidth<500?32*2/100:slider*2/100))
+                type=='section'?document.querySelector('.overallParent').scrollTo((point.current.offsetLeft+gridEnforcementX - innerWidth/2 + (point.current.getBoundingClientRect().width/2)+25-(point.current.getBoundingClientRect().width/1.5))*(slider<32&&innerWidth<500?32*2/100:slider*2/100), (point.current.offsetTop+gridEnforcementY - innerHeight/4)*(slider<32&&innerWidth<500?32*2/100:slider*2/100)):
+                document.querySelector('.overallParent').scrollTo((point.current.offsetLeft+gridEnforcementX - innerWidth/2 + (point.current.getBoundingClientRect().width/2)+25)*(slider<32&&innerWidth<500?32*2/100:slider*2/100), (point.current.offsetTop+gridEnforcementY - innerHeight/4)*(slider<32&&innerWidth<500?32*2/100:slider*2/100))
                 // document.querySelector('.overallParent').scrollTo(point.current.getBoundingClientRect().left, point.current.getBoundingClientRect().top)
                   
             }, 300);
@@ -139,25 +139,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     }, [])
 
     // TO PREVENT THE 'AUTO SCROLL TO POINTS' FROM OVERSHOOTING PAST THE BOUNDARIES
-    useEffect(()=>{
-        if(displacement[0] < boundaryL*-1){
-            // alert('left')
-            setDisplacement([boundaryL,displacement[1]])
-        }
-        if(displacement[0] > boundaryR){
-            // alert('right')
-            setDisplacement([boundaryR,displacement[1]])
-        }
-        if(displacement[1] < boundaryT*-1){
-            // alert('top')
-            setDisplacement([displacement[0],boundaryT])
-        }
-        if(displacement[1] > boundaryB){
-            // alert('bottom')
-            setDisplacement([displacement[0],boundaryB])
-        }
-    }, [displacement])
-
+    
     function snapToGrid(distanceX, distanceY){
         
         // GRID SOLUTION FOR X
@@ -279,7 +261,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                 Points.forEach((points)=>{
                     console.log('yep')
                     if(points.getBoundingClientRect().top > currentSectionTop){
-                        lastSetOfPoints.push(((points.getBoundingClientRect().top) + 100))
+                        lastSetOfPoints.push(((points.getBoundingClientRect().top) + 100*(slider*2)/100))
                     }
                 })
                 nextSectionTop = (Math.max(...lastSetOfPoints))
@@ -287,7 +269,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             }
             
             // THIS IS TO REMEMBER THE RANGE OF EFFECT THE CURRENT SECTION POINT HAS
-            setSectionRange(!viewDetails? Math.round((nextSectionTop - currentSectionTop)*(100/(slider*2))/100)*100 : sectionRange)
+            setSectionRange(!viewDetails? (nextSectionTop - currentSectionTop)*(100/(slider*2)) : sectionRange)
             console.log(nextSectionTop)
             console.log(`sectionRange: ${sectionRange}`)
             console.log(currentSectionTop)
@@ -404,9 +386,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             
             snapToGrid(info.offset.x, info.offset.y);
             type=='section'&&viewDetails?sectionChildren(info.offset.y):''
-            // alert(`BL:${boundaryL}, BT:${boundaryT}, BR:${boundaryR}, BB:${boundaryB}, offsetx:${info.offset.x}`)
-            setDisplacement([displacement[0] + info.offset.x, displacement[1] + info.offset.y])
-           
+            // alert(`BL:${boundaryL}, BT:${boundaryT}, BR:${boundaryR}, BB:${boundaryB}, offsetx:${info.offset.x}`)           
             
         }}
         dragTransition={{ bounceStiffness: 1000, bounceDamping: 20 }}

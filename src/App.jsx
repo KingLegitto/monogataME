@@ -58,7 +58,7 @@ function App() {
         // TAKE HEADER OUT OF VIEW
         if(document.querySelector('.overallParent').scrollTop > 10){
         document.querySelector('.header').style.transform = 'translateY(-100%)'
-        document.querySelector('.overallParent').style.top = '0px'
+        // document.querySelector('.overallParent').style.top = '0px'
         // document.querySelector('.overallParent').removeEventListener('scroll', scroll)
         }
 
