@@ -287,7 +287,8 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             }
             
             // THIS IS TO REMEMBER THE RANGE OF EFFECT THE CURRENT SECTION POINT HAS
-            setSectionRange(!viewDetails? (nextSectionTop - currentSectionTop)*(100/(slider*2)) : sectionRange)
+            setSectionRange(!viewDetails? Math.round((nextSectionTop - currentSectionTop)*(100/(slider*2))/100)*100 : sectionRange)
+            console.log(nextSectionTop)
             console.log(`sectionRange: ${sectionRange}`)
             console.log(currentSectionTop)
 
