@@ -20,7 +20,11 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     const [gridEnforcementY, setGridEnforcementY] = useState(0)
     const [sectionRange, setSectionRange] = useState(0)
     
-    const {handleZoom, setSlider, slider, collapseShiftCorrect, setCollapseShiftCorrect} = useContext(ZoomContext)
+    const {
+        handleZoom, setSlider, slider, 
+        collapseShiftCorrect, setCollapseShiftCorrect,
+        workableArea
+    } = useContext(ZoomContext)
 
     const colorsCont = {
         hidden: {opacity: 0},
@@ -266,10 +270,27 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             
             // THE SMALLEST TOP POSITION VALUE IS INDEED THE IMMEDIATE NEXT SECTION BELOW CURRENT SECTION
             let nextSectionTop = Math.min(...targetSections)
+            if(nextSectionTop > workableArea.height){
+                // alert('yh')
+                let currentSectionHeight = point.current.offsetHeight
+                // currentSectionHeight = (parseInt(currentSectionHeight.replace(/px/,"")))
+                let lastSetOfPoints = []
+                let Points = document.querySelectorAll('.plotPoint')
+                Points.forEach((points)=>{
+                    console.log('yep')
+                    if(points.getBoundingClientRect().top > currentSectionTop){
+                        lastSetOfPoints.push(((points.getBoundingClientRect().top) + 100))
+                    }
+                })
+                nextSectionTop = (Math.max(...lastSetOfPoints))
+                console.log(Math.max(...lastSetOfPoints))
+            }
             
             // THIS IS TO REMEMBER THE RANGE OF EFFECT THE CURRENT SECTION POINT HAS
             setSectionRange(!viewDetails? (nextSectionTop - currentSectionTop)*(100/(slider*2)) : sectionRange)
             console.log(`sectionRange: ${sectionRange}`)
+            console.log(currentSectionTop)
+
             // LOGIC TO HIDE PLOT PLOINTS WITHIN RANGE AND TO MOVE ALL OTHER POINTS BELOW CURRENT SECTION POINT UPWARDS
             // TO FILL UP THE SPACE
             let allPoints = document.querySelectorAll('.point')
@@ -277,6 +298,11 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                 // if(points.classList.contains('new')){
                 //     console.log(sliderVal)
                 // }
+                if(viewDetails && points.getBoundingClientRect().top <= currentSectionTop){
+                    if(points.classList.contains('csc')){
+                        points.classList.remove('csc')
+                    }
+                }
                 // HIDE POINTS WITHIN SECTIONS RANGE OF EFFECT
                 if(!viewDetails && points.getBoundingClientRect().top > currentSectionTop && points.getBoundingClientRect().top < nextSectionTop && points.style.visibility != 'hidden'){
                     
@@ -303,7 +329,9 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                 if(viewDetails && points.getBoundingClientRect().top > currentSectionTop){
                     // EXCEPT THE POINTS WITHIN RANGE. THEY STAY IN THEIR POSITION
                     if(points.style.visibility == 'hidden' && points.classList.contains(`${keyID}`)){
-
+                        if(points.classList.contains('csc')){
+                            points.classList.remove('csc')
+                        }
                     }else{
                         points.style.transition = sectionRange>=300?'0.5s':'0.2s'
                         
@@ -334,12 +362,15 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     points.classList.remove(`${keyID}`)
 
                 }
+
+                
+                
             })
     }
 
     useEffect(()=>{
         if(point.current.classList.contains('csc')){
-            console.log(collapseShiftCorrect)
+            console.log(`csc: ${collapseShiftCorrect}`)
             setGridEnforcementY(gridEnforcementY - collapseShiftCorrect)
             point.current.classList.remove('csc')
         }
@@ -351,12 +382,15 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     // }, [gridEnforcementY])
 
     function sectionChildren(distance){
+        let y = Math.round((distance/100))*100
+        // console.log(distance)
+        // console.log(y)
         let allPoints = document.querySelectorAll('.point')
             allPoints.forEach((points)=>{
                 if(points.classList.contains(`${keyID}`)){
                     let oldPos = points.style.top
                     oldPos = (parseInt(oldPos.replace(/px/,"")))
-                    points.style.top = `${oldPos + distance}px`
+                    points.style.top = `${oldPos + y}px`
                 }
             })
 

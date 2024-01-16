@@ -27,7 +27,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY, showPoints}) => {
       document.querySelector('.bg').style.cursor = 'default'
   
       points.push({_id: entryCounter, x: midPoint?midPoint:mouseX, y: mouseY, pointTitle: '[ Empty... ]', pointDetails: '-----',
-      bg: midPoint?'#000000bb':'#eeeeeee5', type: midPoint?'section':'plot', kind: 'new', sliderVal: slider*2})
+      bg: midPoint?'#000000bb':'#eeeeeee5', type: midPoint?'section':'plot'})
       setPoints(points)
       // console.log(points)
       newPoints.push({_type: 'plotPoints', x: midPoint?midPoint:mouseX, y: mouseY, pointTitle: '[ Empty... ]', pointDetails: '-----',
