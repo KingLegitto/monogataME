@@ -82,8 +82,12 @@ function App() {
             
         }
     const [selectionArea, setSelectionArea] = useState(false)
-    const [collapseShiftCorrect, setCollapseShiftCorrect] = useState(0)
+    const [collapseShiftCorrect, setCollapseShiftCorrect] = useState([0, false])
+    const [removeCsc, setRemoveCsc] = useState([0,false])
+    const [childCarryTrigger, setChildCarryTrigger] = useState(true)
+    const [ currentCollapseInstigator, setCurrentCollapseInstigator] = useState(workableArea.height)
     // /////////////////////////////////////////////////////////////////
+
 
     useEffect(()=>{
         setUpdater(!updater)
@@ -157,7 +161,9 @@ function App() {
 
   return (
     <>
-        <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea, collapseShiftCorrect, setCollapseShiftCorrect}}>
+        <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea, 
+            collapseShiftCorrect, setCollapseShiftCorrect, removeCsc, setRemoveCsc, childCarryTrigger, setChildCarryTrigger, 
+            currentCollapseInstigator, setCurrentCollapseInstigator}}>
         {/* ALERTS */}
         <AnimatePresence>
         {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} jumboAlert={jumboAlert} setBgOverlay={setBgOverlay} bgOverlay={bgOverlay}

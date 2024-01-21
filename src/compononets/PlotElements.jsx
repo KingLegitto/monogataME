@@ -18,11 +18,15 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     const [gridEnforcementX, setGridEnforcementX] = useState(0)
     const [gridEnforcementY, setGridEnforcementY] = useState(0)
     const [sectionRange, setSectionRange] = useState(0)
+    const [currentTopPos, setCurrentTopPos] = useState()
+    const [pcsc, setPcsc] = useState(false)
+    
     
     const {
         handleZoom, setSlider, slider, 
         collapseShiftCorrect, setCollapseShiftCorrect,
-        workableArea
+        workableArea, removeCsc, setRemoveCsc, setChildCarryTrigger, childCarryTrigger,
+        currentCollapseInstigator, setCurrentCollapseInstigator
     } = useContext(ZoomContext)
 
     const colorsCont = {
@@ -41,7 +45,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         let limitL = point.current.offsetLeft
         let limitR = document.querySelector('.bgImage').offsetWidth - (point.current.offsetWidth + point.current.offsetLeft)
         let limitT = point.current.offsetTop
-        let limitB = document.querySelector('.bgImage').offsetHeight - (point.current.offsetHeight + point.current.offsetTop)
+        let limitB = document.querySelector('.bgImage').offsetHeight - (point.current.offsetTop + 100)
 
         setBoundaryL(limitL)
         setBoundaryR(limitR)
@@ -55,7 +59,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             let limitL = point.current.offsetLeft
         let limitR = document.querySelector('.bgImage').offsetWidth - (point.current.offsetWidth + point.current.offsetLeft)
         let limitT = point.current.offsetTop
-        let limitB = document.querySelector('.bgImage').offsetHeight - (point.current.offsetHeight + point.current.offsetTop)
+        let limitB = document.querySelector('.bgImage').offsetHeight - (point.current.offsetTop + 100)
 
         setBoundaryL(limitL)
         setBoundaryR(limitR)
@@ -71,7 +75,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     const dblclickCheck = ()=>{
         // alert(`offset:${point.current.offsetTop}, bounding:${point.current.getBoundingClientRect().top}`)
         // THIS ADDS PADDING AT THE BOTTOM TO GIVE ROOM FOR AUTO FOCUS SCROLL
-        document.querySelector('.overallParent').style.paddingBottom = '100vh'
+      
 
         setClickCounter(clickCounter+1)
 
@@ -82,7 +86,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
         // STATEMENTS TO BE EXECUTED AFTER SUCCESSFUL DOUBLE CLICK
         if(clickCounter == 1){
-
+            document.querySelector('.overallParent').style.paddingBottom = '100vh'
             // setViewDetails(true)
             
             // AUTO ZOOMING ON POINT (ONLY FOR MOBILE DEVICES)
@@ -185,10 +189,10 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             if(Math.abs(distanceY) < 50){
                 if(distanceY < 0){
     
-                    setGridEnforcementY(gridEnforcementY + 0.001)
+                    setGridEnforcementY(gridEnforcementY + 0.0001)
                 }
                 else{
-                    setGridEnforcementY(gridEnforcementY - 0.001)
+                    setGridEnforcementY(gridEnforcementY - 0.0001)
                 }
             }
             if(Math.abs(distanceY) >= 50){
@@ -212,11 +216,12 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                 setGridEnforcementY(gridEnforcementY + c + (c<0?0:100))
             }
         }
-        
+        console.log(gridEnforcementY)
     }
 
     // TO PREVENT THE GRID FROM SNAPPING TO POINTS BEYOND THE BOUNDARIES
     useEffect(()=>{
+        
         if(gridEnforcementX < boundaryL*-1){
             // console.log('leftBound')
             setGridEnforcementX(-boundaryL)
@@ -231,14 +236,34 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         }
         if(gridEnforcementY > boundaryB){
             // console.log('BottomBound')
+
+            // TO ENSURE THE CHILDREN STAY WITH THE COLLAPSED SECTION POINT
+            sectionChildren(boundaryB - gridEnforcementY)
+
+            
             setGridEnforcementY(boundaryB)
+            
         }
     }, [gridEnforcementX, gridEnforcementY])
+
+    useEffect(()=>{
+        if(!(point.current.classList.contains('csc'))){
+            let plotPoints = document.querySelectorAll('.plotPoint')
+            plotPoints.forEach((child)=>{
+                if(child.classList.contains('csc')){
+                    child.classList.remove('csc')
+                }
+            })
+        }
+        
+    }, [gridEnforcementY])
 
     function sectionCollapse(){
 
             // THE SECTION POINT WHOSE COLLAPSE BUTTON WAS CLICKED IS THE CURRENT SECTION POINT
             let currentSectionTop = point.current.getBoundingClientRect().top
+            let topPos = point.current.getBoundingClientRect().top
+            setCurrentCollapseInstigator(topPos)
 
             let allSections = document.querySelectorAll('.sectionPoint')
             let targetSections = []
@@ -254,7 +279,6 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             let nextSectionTop = Math.min(...targetSections)
             if(nextSectionTop > workableArea.height){
                 // alert('yh')
-                let currentSectionHeight = point.current.offsetHeight
                 // currentSectionHeight = (parseInt(currentSectionHeight.replace(/px/,"")))
                 let lastSetOfPoints = []
                 let Points = document.querySelectorAll('.plotPoint')
@@ -266,7 +290,13 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                 })
                 nextSectionTop = (Math.max(...lastSetOfPoints))
                 console.log(Math.max(...lastSetOfPoints))
+                
             }
+
+            // if(!viewDetails){
+            //     alert('yes')
+            //     setCurrentCollapseInstigator(true)
+            // }
             
             // THIS IS TO REMEMBER THE RANGE OF EFFECT THE CURRENT SECTION POINT HAS
             setSectionRange(!viewDetails? (nextSectionTop - currentSectionTop)*(100/(slider*2)) : sectionRange)
@@ -278,14 +308,25 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             // TO FILL UP THE SPACE
             let allPoints = document.querySelectorAll('.point')
             allPoints.forEach((points)=>{
-                // if(points.classList.contains('new')){
-                //     console.log(sliderVal)
-                // }
+                
                 if(viewDetails && points.getBoundingClientRect().top <= currentSectionTop){
+
                     if(points.classList.contains('csc')){
                         points.classList.remove('csc')
+                        setRemoveCsc([keyID,true])
                     }
                 }
+
+                if(points.getBoundingClientRect().top < currentSectionTop - 10){
+                    
+                    points.classList.add('potentialCsc')
+                    // console.log(`potentialCsc: ${points.getBoundingClientRect().top}`)
+
+                }
+                // if(points.classList.contains('sectionPoint') && points.getBoundingClientRect().top > currentSectionTop){
+                //     points.classList.add('csc')
+                //     // points.classList.remove('potentialCsc')
+                // }
                 // HIDE POINTS WITHIN SECTIONS RANGE OF EFFECT
                 if(!viewDetails && points.getBoundingClientRect().top > currentSectionTop && points.getBoundingClientRect().top < nextSectionTop && points.style.visibility != 'hidden'){
                     
@@ -293,6 +334,12 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     points.style.visibility = 'hidden';
                     
                 }
+                
+                else if(viewDetails && points.classList.contains('potentialCsc')){
+                    points.classList.add('csc')
+                    // points.classList.remove('potentialCsc')
+                }
+                
                 // ALL OTHER POINTS BELOW THAT ARE NOT WITHIN RANGE SHOULD MOVE UP 
                 else if(!viewDetails && points.getBoundingClientRect().top > currentSectionTop){
                     points.classList.add('csc')
@@ -300,12 +347,19 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     points.style.transition = range*100/(slider*2)>=300?'0.5s':'0.2s'
                     let y = points.style.top
                     
-                    y = (parseInt(y.replace(/px/,"")))
-                    // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
-                    points.style.top = `${(y - (range)*100/(slider*2) + (100))}px`
+                    // ONLY SECTION POINTS SHOULD MOVE
+                    if(points.classList.contains('sectionPoint') || points.style.visibility != 'hidden'){
+                        y = (parseInt(y.replace(/px/,"")))
+                        // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
+                        
+                        points.style.top = `${(y - (range)*100/(slider*2) + (100))}px`
+                        setChildCarryTrigger(!childCarryTrigger)
+                        // console.log(`triggerIsTrue`)
+                    }
+                    
                     setTimeout(() => {
                         points.style.transition = '0s'
-                    }, 500);
+                    }, 300);
                 }
 
                 // WHEN COLLAPSE BUTTON IS PRESSED AGAIN, ALL POINTS BELOW SHOULD MOVE BACK DOWN
@@ -316,27 +370,46 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                             points.classList.remove('csc')
                         }
                     }else{
+                        
                         points.style.transition = sectionRange>=300?'0.5s':'0.2s'
                         
                         let range = (nextSectionTop - currentSectionTop)*(100/(slider*2))
-                        let y = points.style.top
-                        y = (parseInt(y.replace(/px/,"")))
-                        // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
-                        points.style.top = `${(y + (sectionRange) - (100))}px`
+
+                        // ONLY SECTION POINTS MOVE UP
+                        if(points.classList.contains('sectionPoint') || points.style.visibility != 'hidden'){
+                            let y = points.style.top
+                            y = (parseInt(y.replace(/px/,"")))
+                            // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
+                            points.style.top = `${(y + (sectionRange) - (100))}px`
+
+                            setChildCarryTrigger(!childCarryTrigger)
+                            // console.log(`triggerIsTrue`)
+                            
+                        }
+                        
 
                         // let csc = `${(y + (sectionRange) - (100))}px`
-                        if(range > 100){
-                            setCollapseShiftCorrect(((sectionRange - range)-100)*-1)
+                        // if(points.classList.contains('potentialCsc')){
+                        //     console.log(`pcsc range: ${range}`)
+                        // }
+                        if(points.classList.contains('potentialCsc')){
                             
+                            setCollapseShiftCorrect([range-100, true])
+                            // points.classList.remove('potentialCsc')
+                        }
+                        else if(range > 100){
+                            
+                            setCollapseShiftCorrect([Math.abs((sectionRange - range)-100), true])
+                            // console.log(`sectionRange: ${sectionRange}`)
                         }
                         // console.log(collapseShiftCorrect)
                         
-                        // console.log(`range: ${range}`)
+                        
                         
                         setTimeout(() => {
                             points.style.transition = '0s'
                             // points.classList.remove('csc')
-                        }, 500);
+                        }, 300);
                     }   
                 }
                 // WHEN COLLAPSE BUTTON IS PRESSED AGAIN, POINTS WITHIN RANGE SHOULD GET VISIBLE
@@ -352,18 +425,47 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     }
 
     useEffect(()=>{
-        if(point.current.classList.contains('csc')){
-            console.log(`csc: ${collapseShiftCorrect}`)
-            setGridEnforcementY(gridEnforcementY - collapseShiftCorrect)
+        if(point.current.classList.contains('sectionPoint') && point.current.getBoundingClientRect().top < currentCollapseInstigator){
+            setPcsc(true)
+            // alert('instigator')
+        }
+        console.log(`collapseInst: ${currentCollapseInstigator}`)
+    },[currentCollapseInstigator])
+
+    useEffect(()=>{
+        
+        if(point.current.classList.contains('csc') && point.current.getBoundingClientRect().top > currentCollapseInstigator && collapseShiftCorrect){
+            if(point.current.classList.contains('plotPoint') && point.current.classList.contains('potentialCsc')){
+                
+            }
+            else if(point.current.style.visibility == 'hidden'){
+
+            }
+            else if(point.current.style.visibility != 'hidden'){
+                let y = point.current.style.top
+                    
+                    y = (parseInt(y.replace(/px/,"")))
+                    // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
+                    
+                    point.current.style.top = `${y - collapseShiftCorrect[0]}px`
+                    // alert(collapseShiftCorrect)
+                    // alert(`csc, topY and boundingY: ${collapseShiftCorrect}, ${y}, ${point.current.getBoundingClientRect().top}`)
+            
+            }
             point.current.classList.remove('csc')
+            point.current.classList.remove('potentialCsc')
+            setPcsc(false)
+            // alert('pcsc removed')
+            setCollapseShiftCorrect([collapseShiftCorrect[0], false])
         }
         
-    }, [collapseShiftCorrect])
+    }, [collapseShiftCorrect[1]])
 
     // useEffect(()=>{
     //     console.log('y')
     // }, [gridEnforcementY])
 
+    // THIS FUNCTION ENSURES CHILDREN POINTS ARE DRAGGED ALONG WITH SECTION WHEN USER DRAGS COLLAPSED SECTION
     function sectionChildren(distance){
         let y = Math.round((distance/100))*100
         // console.log(distance)
@@ -379,6 +481,101 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
     }
 
+    useEffect(()=>{
+        if(removeCsc[1] && point.current.classList.contains(`${removeCsc[0]}`) && point.current.classList.contains('plotPoint')){
+            point.current.classList.remove('csc')
+        }
+    }, [removeCsc])
+
+    
+    useEffect(()=>{
+        let pos = point.current.style.top
+        pos = (parseInt(pos.replace(/px/,"")))
+
+
+        // CARRY CHILDREN ALONG ANYTIME TOP POSITION CHANGES
+        if(point.current.classList.contains('collapsed')){
+            // console.log(`currentTop: ${currentTopPos}`)
+            // console.log(`newTop: ${pos}`)
+
+            // currentTopPos is actually the previous top position of section point
+            if(currentTopPos > pos || currentTopPos < pos){
+                
+                let plotPoints = document.querySelectorAll('.plotPoint')
+                plotPoints.forEach((plot)=>{
+                
+                if(plot.classList.contains(`${keyID}`)){
+                    console.log('good')
+                    let y = plot.style.top
+                
+                    y = (parseInt(y.replace(/px/,"")))
+                            // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
+                            
+                    let move = pos - currentTopPos
+                    plot.style.top = `${(y + move)}px`
+                    console.log(currentTopPos)
+                    
+                    console.log(y+move)
+                    // setChildCarryTrigger(false)
+                }
+            })
+            setCurrentTopPos(pos)
+            }    
+        }
+
+        // RECALIBRATE TO TOP POSITION 0 IF TOP POSITIONS EXCEEDS -100
+        // if(point.current.style.visibility != 'hidden'){
+        //     let pointPos = point.current.style.top
+        //     pointPos = (parseInt(pointPos.replace(/px/,"")))
+
+            // point.current.style.top = `${Math.round(pointPos)}px`
+            // if(pointPos <= -300){
+            //     setTimeout(() => {
+            //         point.current.style.top = `${(gridEnforcementY + pointPos)}px`
+            //         setGridEnforcementY(0)
+
+            //         if(point.current.classList.contains('sectionPoint')){
+            //             setCurrentTopPos(0)
+            //         }
+                    
+
+            //     }, 700);
+                
+            // }
+        // }
+        
+        
+            if( point.current.style.visibility != 'hidden' && pos + gridEnforcementY > workableArea.height -100){
+                alert('Oops. It appears some points have escaped their boundaries')
+
+                point.current.style.visibility = 'hidden'
+
+                setTimeout(() => {
+                    setGridEnforcementY(0)
+                    point.current.style.top = `${workableArea.height-100}px`
+                    setTimeout(() => {
+                        point.current.style.visibility = 'visible'
+                    }, 700);
+                }, 500);
+                    
+                   
+
+                 
+            }
+        
+        
+
+
+        
+    }, [childCarryTrigger])
+
+    useEffect(()=>{
+        let y = point.current.style.top
+        y = (parseInt(y.replace(/px/,"")))
+        setCurrentTopPos(y)
+    }, [])
+
+
 
     return ( 
         <motion.div ref={point} initial={{opacity: 0}} animate={{opacity: 1, transition:{duration: 0.2, opacity:{duration: 0.2, delay: 0.3}}, x: type=='section'?'-50%': gridEnforcementX, y: gridEnforcementY}} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
@@ -393,13 +590,13 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
         onTap={(event)=>{dblclickCheck()}}
       
-        className={`${type=='section'?'sectionPoint': 'plotPoint'} point w-[auto] min-w-[100px] flex 
+        className={`${type=='section'?'sectionPoint': 'plotPoint'}  ${viewDetails? type=='section'? 'collapsed': '' :'' } ${pcsc? type=='section'?'potentialCsc':'':''} point w-[auto] min-w-[100px] flex 
         flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px] px-[10px]`}
 
         style={{ top: y, left: x, backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
         width:type=='section'?viewDetails?'500px':'auto': !dragctrl?'200px':'auto', maxWidth: type=='section'?viewDetails?'500px':'300px':'200px',minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl || viewDetails? '40': '5',
         boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: !dragctrl&&type=='plot'? '40px': type=='plot'&& !viewDetails? '0px': '15px',
-        border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black', borderRadius: type=='plot'?'20px':viewDetails? '10px':'30px'}}>
+        border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black', borderRadius: type=='plot'?'20px':viewDetails? '20px':'30px'}}>
 
             {/* BADGE  ///////////////////////////////////////////////////////////// */}
             {type=='plot' && (<div className='w-[20px] h-[20px] bg-black absolute top-0 left-0
