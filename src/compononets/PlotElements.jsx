@@ -394,8 +394,11 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                         // }
                         if(points.classList.contains('potentialCsc')){
                             
-                            setCollapseShiftCorrect([range-100, true])
-                            // points.classList.remove('potentialCsc')
+                            
+                                setCollapseShiftCorrect([range - 100, true])
+                            
+                            
+                            
                         }
                         else if(range > 100){
                             
@@ -434,7 +437,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
 
     useEffect(()=>{
         
-        if(point.current.classList.contains('csc') && point.current.getBoundingClientRect().top > currentCollapseInstigator && collapseShiftCorrect){
+        if(point.current.classList.contains('csc') && point.current.getBoundingClientRect().top > currentCollapseInstigator && collapseShiftCorrect[1]){
             if(point.current.classList.contains('plotPoint') && point.current.classList.contains('potentialCsc')){
                 
             }
@@ -453,7 +456,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             
             }
             point.current.classList.remove('csc')
-            point.current.classList.remove('potentialCsc')
+            // point.current.classList.remove('potentialCsc')
             setPcsc(false)
             // alert('pcsc removed')
             setCollapseShiftCorrect([collapseShiftCorrect[0], false])

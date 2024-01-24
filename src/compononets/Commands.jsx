@@ -5,7 +5,8 @@ import { MenuRounded } from "@mui/icons-material"
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
 
-const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
+const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints, characterMode, setCharacterMode,
+storyTimeline, setStoryTimeline}) => {
     const [userDetails, setUserDetails] = useState(false)
     const [checkUserEmail, setCheckUserEmail] = useState(false)
     
@@ -16,19 +17,13 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
     
 
     const handleNewPoint = ()=>{
-        document.querySelector('.menuIcon').style.left = `0px`; 
-        document.querySelector('.aside').style.left = `0px`;
         setSelectionArea(true)
-        document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(0/200)})` 
         document.querySelector('.bg').style.cursor = 'crosshair'
         document.querySelector('.bg').addEventListener('click', track)
         setTracking(true)
     }
 
     const handleNewSection = ()=>{
-        document.querySelector('.menuIcon').style.left = `0px`; 
-        document.querySelector('.aside').style.left = `0px`;
-        document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(0/200)})` 
         setSelectionArea(true)
         document.querySelector('.bg').style.cursor = 'crosshair'
         let value = (document.querySelector('.bg').offsetWidth)/2
@@ -36,6 +31,12 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
         setMidPoint(value)
         document.querySelector('.bg').addEventListener('click', track)
         setTracking(true)
+    }
+
+    const hideSideMenu = ()=>{
+        document.querySelector('.menuIcon').style.left = `0px`; 
+        document.querySelector('.aside').style.left = `0px`;
+        document.querySelector('.menuIcon').style.transform = `translate(-50%, -50%) scale(${2-(0/200)})` 
     }
 
     const handleLogin = ()=>{
@@ -71,6 +72,15 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
         
       }, [userDetails])
 
+      function resetWorkArea(){
+        setSlider(50)
+        handleZoom(50)
+        document.querySelector('.overallParent').scrollTo(0,0)
+        document.querySelector('.overallParent').style.overflowX = 'hidden'
+        document.querySelector('.bgImage').style.borderRadius='0px'
+        
+      }
+
     return ( 
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.3}} className="h-auto w-screen">
             <motion.header className="header duration-[0.3s] w-[100vw] h-[50px] lg:h-[70px] grid bg-white fixed top-0 z-[90] justify-between items-center" 
@@ -94,21 +104,51 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
 
             {(aside) && (<motion.aside className="aside translate-x-[-150%] translate-y-[-50%] w-[auto] min-w-[110px] max-w-[200px] h-[35vh] lg:h-[50vh]
              fixed top-[50vh] left-0 z-[45] flex flex-col justify-between duration-[0.3s]">
-                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]">
+                
+                {/* STORY TIMELINE ////////////////////////////////////////////////////// */}
+                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]" onClick={()=>{setStoryTimeline(true), setCharacterMode(false), 
+                document.querySelector('.overallParent').style.overflowX = 'scroll', hideSideMenu()}}
+
+                style={{backgroundColor: storyTimeline? '#ff74c5':'#eeeeeee5', color: storyTimeline? 'white':'black'}}>
+                    Story timeline
+                </motion.button>
+                    {storyTimeline &&(<>
+                    <motion.button whileTap={{scale: 0.8}} style={{background: '#000000bb'}} className=" lg:hover:scale-[1.05] text-white" onClick={()=>{handleNewPoint(); hideSideMenu()}}>
+                        Add new point
+                    </motion.button>
+                    <motion.button whileTap={{scale: 0.8}} style={{background: '#000000bb'}} className=" lg:hover:scale-[1.05] text-white" onClick={()=>{handleNewSection(); hideSideMenu()}}>
+                        Add section point
+                    </motion.button>
+                    </>)}
+                    
+                
+                {/* CHARACTER MODE /////////////////////////////////////////////////////// */}
+                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]" 
+                onClick={()=>{setCharacterMode(true), setStoryTimeline(false), resetWorkArea(), hideSideMenu()}}
+                style={{backgroundColor: characterMode? '#ff74c5':'#eeeeeee5', color: characterMode? 'white':'black'}}>
                     Characters
                 </motion.button>
+                    {characterMode && (<motion.button whileTap={{scale: 0.8}} style={{background: '#000000bb'}} className=" lg:hover:scale-[1.05] text-white"
+                    onClick={()=>{hideSideMenu()}}>
+                        Add new character
+                    </motion.button>)}
+
+                {/* PROGRESSIONS /////////////////////////////////////////////////////////// */}
                 <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]">
                     Progressions
                 </motion.button>
+                    {false && (<motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]">
+                        Add new progression
+                    </motion.button>)}
+
+                {/* LISTS /////////////////////////////////////////////////////////////////// */}
                 <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]">
                     Lists
                 </motion.button>
-                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05]" onClick={handleNewPoint}>
-                    Add new point
-                </motion.button>
-                <motion.button whileTap={{scale: 0.8}} className=" lg:hover:scale-[1.05] " onClick={handleNewSection}>
-                    Add section point
-                </motion.button>
+                    {false && (<motion.button whileTap={{scale: 0.8}} className="lg:hover:scale-[1.05]">
+                        Add new list
+                    </motion.button>)}
+                
             </motion.aside>)}
 
             {(
@@ -172,8 +212,8 @@ const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints}) => {
             </motion.div>)}
 
             {/* ZOOM SLIDER ////////////////////////////////////////////// */}
-            <input type="range" min={innerWidth<500? 15: 25} max={50} value={slider} step={1} onInput={(e)=>{handleZoom(e.target.value); setSlider(e.target.value)}}
-            className="slider w-[85vw] lg:w-[90vw] absolute z-[51] bottom-[5%] left-[50%] translate-x-[-50%]"/>
+            {storyTimeline && (<input type="range" min={innerWidth<500? 15: 25} max={50} value={slider} step={1} onInput={(e)=>{handleZoom(e.target.value); setSlider(e.target.value)}}
+            className="slider w-[85vw] lg:w-[90vw] absolute z-[51] bottom-[5%] left-[50%] translate-x-[-50%]"/>)}
 
 
             <div className="fixed w-[100vw] h-[2px] bg-white z-[50] bottom-0">

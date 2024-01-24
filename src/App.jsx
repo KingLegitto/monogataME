@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import JumboAlert from './compononets/jumboAlert'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import React, {createContext} from "react";
+import Characters from './compononets/Characters'
 
 export const ZoomContext = createContext()
 
@@ -22,8 +23,10 @@ function App() {
     const [newPoints, setNewPoints] = useState([])
     const [savePointCounter, setSavePointCounter] = useState(0)
     const [jumboAlert, setJumboAlert] = useState(false)
-    const [bgOverlay, setBgOverlay] = useState(true)
+    
     const [showPoints, setShowPoints] = useState(false)
+    const [storyTimeline, setStoryTimeline] = useState(true)
+    const [characterMode, setCharacterMode] = useState(false)
 
     const fullscreenChecker = useRef(null)
     const checkinview = useInView(fullscreenChecker)
@@ -46,21 +49,32 @@ function App() {
         
     }, [])
 
+    // useEffect(()=>{
+    //     if(storyTimeline){
+    //         setCharacterMode(false)
+    //     }
+    //     if(characterMode){
+    //         setStoryTimeline(false)
+    //     }
+    // }, [storyTimeline, characterMode])
+
     
     const scroll = useCallback(()=>{
 
         // BRING HEADER BACK IN VIEW
-        if(document.querySelector('.overallParent').scrollTop < 2){
-        document.querySelector('.header').style.transform = 'translateY(0)'
+        // if(document.querySelector('.overallParent').scrollTop < 2){
+        // document.querySelector('.header').style.transform = 'translateY(0)'
+
         // document.querySelector('.overallParent').style.top = '50px'
-        }
+        // }
 
         // TAKE HEADER OUT OF VIEW
-        if(document.querySelector('.overallParent').scrollTop > 10){
-        document.querySelector('.header').style.transform = 'translateY(-100%)'
+        // if(document.querySelector('.overallParent').scrollTop > 10){
+        // document.querySelector('.header').style.transform = 'translateY(-100%)'
+
         // document.querySelector('.overallParent').style.top = '0px'
         // document.querySelector('.overallParent').removeEventListener('scroll', scroll)
-        }
+        // }
 
     }, [])
 
@@ -86,6 +100,7 @@ function App() {
     const [removeCsc, setRemoveCsc] = useState([0,false])
     const [childCarryTrigger, setChildCarryTrigger] = useState(true)
     const [ currentCollapseInstigator, setCurrentCollapseInstigator] = useState(workableArea.height)
+    const [bgOverlay, setBgOverlay] = useState(true)
     // /////////////////////////////////////////////////////////////////
 
 
@@ -163,7 +178,7 @@ function App() {
     <>
         <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea, 
             collapseShiftCorrect, setCollapseShiftCorrect, removeCsc, setRemoveCsc, childCarryTrigger, setChildCarryTrigger, 
-            currentCollapseInstigator, setCurrentCollapseInstigator}}>
+            currentCollapseInstigator, setCurrentCollapseInstigator, setBgOverlay}}>
         {/* ALERTS */}
         <AnimatePresence>
         {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} jumboAlert={jumboAlert} setBgOverlay={setBgOverlay} bgOverlay={bgOverlay}
@@ -179,7 +194,9 @@ function App() {
         
         {/* MODES AND COMMANDS  ///////////////////////////////////////////////// */}
         <Commands setTracking={setTracking} track={track} setMidPoint={setMidPoint} 
-        setPoints={setPoints} points={points} savePoints={savePoints}/>
+        setPoints={setPoints} points={points} savePoints={savePoints} 
+        characterMode={characterMode} setCharacterMode={setCharacterMode}
+        storyTimeline={storyTimeline} setStoryTimeline={setStoryTimeline}/>
 
         
         
@@ -189,9 +206,12 @@ function App() {
         >
 
             {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
-            <StoryTimeline points={points} mouseTracking={mouseTracking} showPoints={showPoints}
+            {storyTimeline && <StoryTimeline points={points} mouseTracking={mouseTracking} showPoints={showPoints}
             entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint} newPoints={newPoints} setPoints={setPoints} setTracking={setTracking} 
-            setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>
+            setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>}
+
+            {/* CHARACTERS MODE */}
+            {characterMode && <Characters />}
 
             {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
             <motion.div className='zoom bgImage mx-auto transform-gpu' style={{backgroundImage: `url(${bgTexture})`, 

@@ -43,7 +43,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY, showPoints}) => {
   return ( 
     <>
 
-    <motion.div className='colorHighLow duration-[0.5s] rounded-[30px] absolute z-[6] top-0 left-0 right-0 mx-auto'
+    <motion.div className='colorHighLow duration-[0.5s] rounded-[50px] absolute z-[6] top-0 left-0 right-0 mx-auto'
     style={{opacity: selectionArea? 1: 0, height: workableArea.height, width: workableArea.width}}>
 
     </motion.div>
@@ -51,7 +51,7 @@ deletePoint, updatePoint, midPoint, mouseX, mouseY, showPoints}) => {
     
 
     {/* CLICKABLE BACKGROUND  ///////////////////////////////////////////////////////// */}
-    <motion.div ref={plotDragConstraints} className='bg pointsParent rounded-[30px] absolute z-[7] left-0 right-0 mx-auto' onClick={handleBgClick}
+    <motion.div ref={plotDragConstraints} className='bg pointsParent rounded-[50px] absolute z-[7] left-0 right-0 mx-auto' onClick={handleBgClick}
     style={{height: workableArea.height, width: workableArea.width}}>
       {/* PLOT POINTS  //////////////////////////////////////////////////////// */}
       {showPoints && points && points.map((entry)=>{

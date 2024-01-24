@@ -138,3 +138,32 @@ aside button{
     }
 }
 
+.characterDetails span{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.characterDetails span input{
+    width: 48%;
+    height: 25px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.characterDetails span input:focus{
+    outline: none;
+}
+
+.characterDetails input{
+    width: 100%;
+    height: 25px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.characterDetails input:focus{
+    outline: none;
+}
+
