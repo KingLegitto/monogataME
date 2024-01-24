@@ -151,7 +151,7 @@ storyTimeline, setStoryTimeline}) => {
                 
             </motion.aside>)}
 
-            {(
+            
             <motion.div 
 
             // THIS PREVENTS THE ASIDE BAR AND MENU ICON FROM BEING DRAGGED BEYOND SPECIFIED AREA
@@ -209,7 +209,7 @@ storyTimeline, setStoryTimeline}) => {
                 }
             }}>
                 <MenuRounded style={{fontSize: '20px', color: '#2c2c2c'}}/>
-            </motion.div>)}
+            </motion.div>
 
             {/* ZOOM SLIDER ////////////////////////////////////////////// */}
             {storyTimeline && (<input type="range" min={innerWidth<500? 15: 25} max={50} value={slider} step={1} onInput={(e)=>{handleZoom(e.target.value); setSlider(e.target.value)}}
