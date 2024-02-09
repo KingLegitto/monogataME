@@ -4,6 +4,8 @@ import { motion } from "framer-motion"
 import { MenuRounded } from "@mui/icons-material"
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
+import { useSelector, useDispatch } from "react-redux"
+import { handleZoom } from "../redux/reduxStates.js"
 
 const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints, characterMode, setCharacterMode,
 storyTimeline, setStoryTimeline}) => {
@@ -13,7 +15,10 @@ storyTimeline, setStoryTimeline}) => {
     const [aside, setAside] = useState(true)
     const [updater, setUpdater] = useState(true)
 
-    const {handleZoom, setSlider, slider, setSelectionArea, workableArea} = useContext(ZoomContext)
+    const { workableArea, slider } = useSelector((state) => state.overallStates)
+    const dispatch = useDispatch()
+
+    const {setSelectionArea} = useContext(ZoomContext)
     
 
     const handleNewPoint = ()=>{
@@ -50,8 +55,7 @@ storyTimeline, setStoryTimeline}) => {
     // INITIAL AUTO ZOOM IN FOR MOBILE DEVICES
     useEffect(()=>{
         if(innerWidth<1024){
-            setSlider(32)
-            handleZoom(32)
+            dispatch(handleZoom(32))
             document.querySelector('.overallParent').scrollTo(workableArea.width / 2 *(0.46), 0)
         }
     }, [])
@@ -73,8 +77,9 @@ storyTimeline, setStoryTimeline}) => {
       }, [userDetails])
 
       function resetWorkArea(){
-        setSlider(50)
-        handleZoom(50)
+        dispatch(handleZoom(50))
+        document.querySelector('.zoom').style.transition = '0s'
+        
         document.querySelector('.overallParent').scrollTo(0,0)
         document.querySelector('.overallParent').style.overflowX = 'hidden'
         document.querySelector('.bgImage').style.borderRadius='0px'
@@ -212,7 +217,7 @@ storyTimeline, setStoryTimeline}) => {
             </motion.div>
 
             {/* ZOOM SLIDER ////////////////////////////////////////////// */}
-            {storyTimeline && (<input type="range" min={innerWidth<500? 15: 25} max={50} value={slider} step={1} onInput={(e)=>{handleZoom(e.target.value); setSlider(e.target.value)}}
+            {storyTimeline && (<input type="range" min={innerWidth<500? 15: 25} max={50} value={slider} step={1} onInput={(e)=>{dispatch(handleZoom(e.target.value))}}
             className="slider w-[85vw] lg:w-[90vw] absolute z-[51] bottom-[5%] left-[50%] translate-x-[-50%]"/>)}
 
 

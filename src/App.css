@@ -166,6 +166,7 @@ aside button{
     height: 25px;
     border-radius: 5px;
     padding: 5px;
+    background-color: transparent;
 }
 
 .characterDetails input:focus{

@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { handleZoom } from '../redux/reduxStates.js';
 
 const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoint, updatePoint, kind}) => {
     const point = useRef(null)
@@ -21,11 +23,12 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     const [currentTopPos, setCurrentTopPos] = useState()
     const [pcsc, setPcsc] = useState(false)
     
-    
+    const { workableArea, slider } = useSelector((state)=> state.overallStates)
+    const dispatch = useDispatch()
+
     const {
-        handleZoom, setSlider, slider, 
         collapseShiftCorrect, setCollapseShiftCorrect,
-        workableArea, removeCsc, setRemoveCsc, setChildCarryTrigger, childCarryTrigger,
+        removeCsc, setRemoveCsc, setChildCarryTrigger, childCarryTrigger,
         currentCollapseInstigator, setCurrentCollapseInstigator
     } = useContext(ZoomContext)
 
@@ -91,8 +94,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
             
             // AUTO ZOOMING ON POINT (ONLY FOR MOBILE DEVICES)
             if(innerWidth < 500 && slider < 32){
-                handleZoom(32)
-                setSlider(32)
+                dispatch(handleZoom(32))
             }
            
 
@@ -347,13 +349,17 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     points.style.transition = range*100/(slider*2)>=300?'0.5s':'0.2s'
                     let y = points.style.top
                     
-                    // ONLY SECTION POINTS SHOULD MOVE
+                    // ONLY SECTION POINTS OR VISIBLE PLOT POINTS SHOULD MOVE UP
                     if(points.classList.contains('sectionPoint') || points.style.visibility != 'hidden'){
                         y = (parseInt(y.replace(/px/,"")))
                         // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
                         
                         points.style.top = `${(y - (range)*100/(slider*2) + (100))}px`
-                        setChildCarryTrigger(!childCarryTrigger)
+
+                        
+                            setChildCarryTrigger(!childCarryTrigger)
+                        
+                        
                         // console.log(`triggerIsTrue`)
                     }
                     
@@ -375,14 +381,17 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                         
                         let range = (nextSectionTop - currentSectionTop)*(100/(slider*2))
 
-                        // ONLY SECTION POINTS MOVE UP
+                        // ONLY SECTION POINTS MOVE DOWN
                         if(points.classList.contains('sectionPoint') || points.style.visibility != 'hidden'){
                             let y = points.style.top
                             y = (parseInt(y.replace(/px/,"")))
                             // console.log(`${y - (nextSectionTop - currentSectionTop)}px`)
                             points.style.top = `${(y + (sectionRange) - (100))}px`
 
-                            setChildCarryTrigger(!childCarryTrigger)
+                            
+                                setChildCarryTrigger(!childCarryTrigger)
+                            
+                            
                             // console.log(`triggerIsTrue`)
                             
                         }
@@ -494,16 +503,17 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
     useEffect(()=>{
         let pos = point.current.style.top
         pos = (parseInt(pos.replace(/px/,"")))
-
+        setCurrentTopPos(pos)
 
         // CARRY CHILDREN ALONG ANYTIME TOP POSITION CHANGES
         if(point.current.classList.contains('collapsed')){
+            
             // console.log(`currentTop: ${currentTopPos}`)
             // console.log(`newTop: ${pos}`)
 
             // currentTopPos is actually the previous top position of section point
             if(currentTopPos > pos || currentTopPos < pos){
-                
+                console.log('SECTION CARRY!!!')
                 let plotPoints = document.querySelectorAll('.plotPoint')
                 plotPoints.forEach((plot)=>{
                 
@@ -522,7 +532,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     // setChildCarryTrigger(false)
                 }
             })
-            setCurrentTopPos(pos)
+            
             }    
         }
 

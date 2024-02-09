@@ -4,15 +4,22 @@ import PlotElements from './PlotElements.jsx'
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useSelector } from 'react-redux'
 
 
 const StoryTimeline = ({points, setPoints, mouseTracking, entryCounter, setCounter, newPoints, setTracking, setMidPoint, track,
 deletePoint, updatePoint, midPoint, mouseX, mouseY, showPoints}) => {
   
   const plotDragConstraints = useRef(null)
-  const {setSelectionArea, selectionArea, workableArea, slider} = useContext(ZoomContext)
+
+  const { workableArea } = useSelector((state) => state.overallStates)
+  const {setSelectionArea, selectionArea, slider} = useContext(ZoomContext)
   
   // const [editModeLimiter, setEditModeLimiter] = useState(false)
+
+  useEffect(()=>{
+    document.querySelector('.zoom').style.transition = '0.3s'
+  }, [])
   
   
   // FUNCTION TO HANDLE ADDING POINTS ON THE BACKGROUND ACCORDING TO THE MOUSE POSITION

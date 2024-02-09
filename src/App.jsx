@@ -8,6 +8,7 @@ import JumboAlert from './compononets/jumboAlert'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import React, {createContext} from "react";
 import Characters from './compononets/Characters'
+import { useSelector } from 'react-redux'
 
 export const ZoomContext = createContext()
 
@@ -24,21 +25,23 @@ function App() {
     const [savePointCounter, setSavePointCounter] = useState(0)
     const [jumboAlert, setJumboAlert] = useState(false)
     
-    const [showPoints, setShowPoints] = useState(false)
+    const [showPoints, setShowPoints] = useState(true)
     const [storyTimeline, setStoryTimeline] = useState(true)
     const [characterMode, setCharacterMode] = useState(false)
 
     const fullscreenChecker = useRef(null)
     const checkinview = useInView(fullscreenChecker)
 
+    const { workableArea } = useSelector((state)=> state.overallStates)
+
   
     useEffect(()=>{
         // INITIAL FETCH FROM SANITY
         sanityClient.fetch(`*[_type == "points"]`).then((data)=> {setPoints(data)});
 
-        if(innerWidth<1024){
-        document.querySelector('.overallParent').addEventListener('scroll', scroll)
-        }
+        // if(innerWidth<1024){
+        // document.querySelector('.overallParent').addEventListener('scroll', scroll)
+        // }
 
         setTimeout(() => {
             setJumboAlert(true)
@@ -79,27 +82,28 @@ function App() {
     }, [])
 
 
+
     // CONTEXT STATES AND FUNCTIONS /////////////////////////////////
-    const [workableArea, setWorkableArea] = useState({width: 1000, height: 1200})
-    const [slider, setSlider] = useState(50)
-    const handleZoom = (value)=>{
+    // const [workableArea, setWorkableArea] = useState({width: 1000, height: 1200})
+    // const [slider, setSlider] = useState(50)
+    // const handleZoom = (value)=>{
         
-        document.querySelector('.zoom').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
-        document.querySelector('.pointsParent').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
-        document.querySelector('.colorHighLow').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
+    //     document.querySelector('.zoom').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
+    //     document.querySelector('.pointsParent').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
+    //     document.querySelector('.colorHighLow').style.transform = `scale3d(${value*2}%, ${value*2}%, 1)`
         
-            let el = document.querySelector('.bgImage')
-            switch(value){
-                case '50': el.style.borderRadius='0px'; break;
-                default: el.style.borderRadius='50px'
-            }
+    //         let el = document.querySelector('.bgImage')
+    //         switch(value){
+    //             case '50': el.style.borderRadius='0px'; break;
+    //             default: el.style.borderRadius='50px'
+    //         }
             
-        }
+    //     }
     const [selectionArea, setSelectionArea] = useState(false)
     const [collapseShiftCorrect, setCollapseShiftCorrect] = useState([0, false])
     const [removeCsc, setRemoveCsc] = useState([0,false])
     const [childCarryTrigger, setChildCarryTrigger] = useState(true)
-    const [ currentCollapseInstigator, setCurrentCollapseInstigator] = useState(workableArea.height)
+    const [currentCollapseInstigator, setCurrentCollapseInstigator] = useState(workableArea.height)
     const [bgOverlay, setBgOverlay] = useState(true)
     // /////////////////////////////////////////////////////////////////
 
@@ -176,19 +180,19 @@ function App() {
 
   return (
     <>
-        <ZoomContext.Provider value={{handleZoom, slider, setSlider, selectionArea, setSelectionArea, workableArea, 
+        <ZoomContext.Provider value={{selectionArea, setSelectionArea, 
             collapseShiftCorrect, setCollapseShiftCorrect, removeCsc, setRemoveCsc, childCarryTrigger, setChildCarryTrigger, 
             currentCollapseInstigator, setCurrentCollapseInstigator, setBgOverlay}}>
         {/* ALERTS */}
         <AnimatePresence>
-        {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} jumboAlert={jumboAlert} setBgOverlay={setBgOverlay} bgOverlay={bgOverlay}
-        setShowPoints={setShowPoints} />}
+        {/* {jumboAlert && <JumboAlert setJumboAlert={setJumboAlert} jumboAlert={jumboAlert} setBgOverlay={setBgOverlay} bgOverlay={bgOverlay}
+        setShowPoints={setShowPoints} />} */}
         </AnimatePresence>
         
         <AnimatePresence>
-        {bgOverlay && (<motion.div exit={{opacity: 0, transition: {delay: 0.5, duration: 0.5}}} initial={{opacity: 0}} animate={{opacity: 0.6}} transition={{duration: 1, delay: 2}} className='bg-black fixed w-screen h-screen z-[99]'>
+        {/* {bgOverlay && (<motion.div exit={{opacity: 0, transition: {delay: 0.5, duration: 0.5}}} initial={{opacity: 0}} animate={{opacity: 0.6}} transition={{duration: 1, delay: 2}} className='bg-black fixed w-screen h-screen z-[99]'>
 
-        </motion.div>)}
+        </motion.div>)} */}
         </AnimatePresence>
         
         
