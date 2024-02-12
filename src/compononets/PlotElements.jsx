@@ -569,11 +569,7 @@ const PlotElements = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, del
                     setTimeout(() => {
                         point.current.style.visibility = 'visible'
                     }, 700);
-                }, 500);
-                    
-                   
-
-                 
+                }, 500);   
             }
         
         

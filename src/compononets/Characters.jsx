@@ -4,8 +4,8 @@ import { useContext } from 'react'
 import Protrait from "./characterProtrait.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
-import maleImage from '../assets/male.png'
-import femaleImage from '../assets/female.png'
+import maleImage from '../assets/portraitImgs/gender/male.png'
+import femaleImage from '../assets/portraitImgs/gender/female.png'
 
 const Characters = () => {
 
