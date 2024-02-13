@@ -104,10 +104,12 @@ const Protrait = () => {
     }
 
     useEffect(()=>{
-        // if(!preview){
-        //     document.querySelector('.header').style.transform = 'translateY(-100%)'
+        // if(preview){
+        //     document.querySelector('default').style.backgroundColor = '#ff74c5'
+        //     document.querySelector('default').style.color = 'white'
         // }
-    }, [])
+        
+    }, [choices])
     
 
     return ( 
@@ -151,7 +153,7 @@ const Protrait = () => {
             style={{aspectRatio: '1/1.065'}} >
 
                 {/* LOADING SCREEN ////////////////////////////////////// */}
-                <div className='w-[100%] h-[100%] rounded-[30px] absolute z-[10] bg-[#555555] justify-center items-center text-white'
+                <div className='w-[100%] h-[100%] rounded-[30px] absolute z-[10] bg-[#151515fa] justify-center items-center text-white'
                 style={{display: loading?'flex':'none'}}>
                     Loading...
                 </div>
@@ -172,16 +174,19 @@ const Protrait = () => {
 
 
             {/* AVAILABLE CHOICES */}
-            <div className='absolute w-[100%] px-[10px] md:w-[450px] flex flex-wrap justify-start lg:left-[50%] top-[85%] lg:top-[50%] translate-y-[0%] lg:translate-y-[-50%]'>
+            <motion.div initial={{y: 10, opacity: 0}} animate={{y: 0, opacity: 1}}
+            className='absolute w-[100%] px-[10px] md:w-[450px] flex flex-wrap justify-start lg:left-[50%] top-[85%] lg:top-[50%] translate-y-[0%] lg:translate-y-[-50%]'>
                 {choices.map((choice, i)=>{
                     return(
                         <div key={i} className={` lv${choice.level} opt${choice.level}-${i} rounded-[20px] m-[5px] w-[70px] h-[40px] flex justify-center items-center bg-white`} 
-                        style={{cursor: 'pointer'}} onClick={()=>{makeSelection(choice.level, choice.img, `opt${choice.level}-${i}`, `lv${choice.level}`)}}>
+                        style={{cursor: 'pointer', backgroundColor: choice.name=='Baby'||choice.name=='Skin 2'||choice.name=='Eyes 1'? '#ff74c5':'white',
+                        color: choice.name=='Baby'||choice.name=='Skin 2'||choice.name=='Eyes 1'? 'white':'black', transition: '0.2s'}} 
+                        onClick={()=>{makeSelection(choice.level, choice.img, `opt${choice.level}-${i}`, `lv${choice.level}`)}}>
                             {choice.name}
                         </div>
                     )
                 })}
-            </div>
+            </motion.div>
 
         </div>)}
         </>
