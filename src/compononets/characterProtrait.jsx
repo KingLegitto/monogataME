@@ -16,9 +16,10 @@ import { useState, useEffect } from 'react';
 
 const Protrait = () => {
     const [preview, setPreview] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [skinSelection, setSkinSelection] = useState(skin2)
-    const [ageBracketSelection, setAgeBracketSelection] = useState(teenBase)
-    const [eyeSelection, setEyeSelection] = useState()
+    const [ageBracketSelection, setAgeBracketSelection] = useState(babyBase)
+    const [eyeSelection, setEyeSelection] = useState(eye1)
 
     const [ageBracketChoices, setAgeBracketChoices] = useState([
         {name: 'Baby', img: babyBase, level: 1},
@@ -43,14 +44,27 @@ const Protrait = () => {
 
     const [choices, setChoices] = useState(ageBracketChoices)
 
-    function makeSelection(level, img){
+    function makeSelection(level, img, selector1, selector2){
+        let options = document.querySelectorAll(`.${selector2}`)
+        console.log(options)
+        options.forEach((opt)=>{
+            if(opt.style.color == 'white'){
+                opt.style.backgroundColor = 'white'
+                opt.style.color = 'black'
+            }
+        })
         switch(level){
             case 1:{
                 if(img == 'next'){
                     setChoices(skinChoices)
                 }
                 else{
+                    if(ageBracketSelection != img){
+                        setLoading(true)
+                    }
                     setAgeBracketSelection(img)
+                    document.querySelector(`.${selector1}`).style.backgroundColor = '#ff74c5'
+                    document.querySelector(`.${selector1}`).style.color = 'white'
                 }
                 break
             }
@@ -61,7 +75,13 @@ const Protrait = () => {
                 else if(img == 'back'){
                     setChoices(ageBracketChoices)
                 }else{
+                    if(skinSelection != img){
+                        setLoading(true)
+                    }
+                    
                     setSkinSelection(img)
+                    document.querySelector(`.${selector1}`).style.backgroundColor = '#ff74c5'
+                    document.querySelector(`.${selector1}`).style.color = 'white'
                 } 
                 break
             }
@@ -70,7 +90,13 @@ const Protrait = () => {
                     setChoices(skinChoices)
                     setEyeSelection(eye1)
                 }else{
+                    if(eyeSelection != img){
+                        setLoading(true)
+                    }
+                    
                     setEyeSelection(img)
+                    document.querySelector(`.${selector1}`).style.backgroundColor = '#ff74c5'
+                    document.querySelector(`.${selector1}`).style.color = 'white'
                 } 
                 break
             }
@@ -122,26 +148,35 @@ const Protrait = () => {
 
             {/* PORTRAIT DISPLAY //////////////////////////////////////////// */}
             <div className='absolute top-[50%] lg:top-[55%] left-[50%] lg:left-[30%] translate-x-[-50%] translate-y-[-50%] w-[90%] md:w-[400px] rounded-[30px] bg-white'
-            style={{aspectRatio: '1/1.065', backgroundImage: `url(${skinSelection})`, backgroundPosition: 'center', backgroundSize: 'contain'}} >
+            style={{aspectRatio: '1/1.065'}} >
 
-                <div className='w-[100%] h-[100%] rounded-[30px] absolute z-[1]'
-                style={{backgroundImage: `url(${ageBracketSelection})`, backgroundPosition: 'center', backgroundSize: 'contain'}} >
-                    
+                {/* LOADING SCREEN ////////////////////////////////////// */}
+                <div className='w-[100%] h-[100%] rounded-[30px] absolute z-[10] bg-[#555555] justify-center items-center text-white'
+                style={{display: loading?'flex':'none'}}>
+                    Loading...
                 </div>
 
-                <div className='w-[100%] h-[100%] rounded-[30px] absolute z-[2]'
-                style={{backgroundImage: `url(${eyeSelection})`, backgroundPosition: 'center', backgroundSize: 'contain'}} >
-                    
-                </div>
+                {/* SKIN LAYER ////////////////////////////////////////// */}
+                <img className='w-[100%] h-[100%] rounded-[30px] absolute z-[1]' src={skinSelection} onLoad={()=>{setLoading(false)}}
+                style={{objectPositionPosition: 'center', objectFit: 'contain'}} />  
+
+                {/* AGE BRACKET LAYER ////////////////////////////////////////////// */}
+                <img className='w-[100%] h-[100%] rounded-[30px] absolute z-[2]' src={ageBracketSelection} onLoad={()=>{setLoading(false)}}
+                style={{objectPositionPosition: 'center', objectFit: 'contain'}} />   
+                
+                {/* EYE LAYER /////////////////////////////////////////////////// */}
+                <img className='w-[100%] h-[100%] rounded-[30px] absolute z-[3]' src={eyeSelection} onLoad={()=>{setLoading(false)}}
+                style={{objectPositionPosition: 'center', objectFit: 'contain'}} />   
+
             </div>
 
 
             {/* AVAILABLE CHOICES */}
             <div className='absolute w-[100%] px-[10px] md:w-[450px] flex flex-wrap justify-start lg:left-[50%] top-[85%] lg:top-[50%] translate-y-[0%] lg:translate-y-[-50%]'>
-                {choices.map((choice)=>{
+                {choices.map((choice, i)=>{
                     return(
-                        <div className='rounded-[20px] m-[5px]  w-[70px] h-[40px] flex justify-center items-center bg-white' 
-                        style={{cursor: 'pointer'}} onClick={()=>{makeSelection(choice.level, choice.img)}}>
+                        <div key={i} className={` lv${choice.level} opt${choice.level}-${i} rounded-[20px] m-[5px] w-[70px] h-[40px] flex justify-center items-center bg-white`} 
+                        style={{cursor: 'pointer'}} onClick={()=>{makeSelection(choice.level, choice.img, `opt${choice.level}-${i}`, `lv${choice.level}`)}}>
                             {choice.name}
                         </div>
                     )
