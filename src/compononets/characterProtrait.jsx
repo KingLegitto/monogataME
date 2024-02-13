@@ -1,6 +1,6 @@
 import maleImage from '../assets/portraitImgs/gender/male.png'
 import femaleImage from '../assets/portraitImgs/gender/female.png'
-import babyBase from '../assets/portraitImgs/body/Baby_base.png'
+import babyBase from '../assets/portraitImgs/body/Baby.png'
 import teenBase from '../assets/portraitImgs/body/Teen_Male.png'
 import eye1 from '../assets/portraitImgs/eye/Eye1.png'
 import eye2 from '../assets/portraitImgs/eye/Eye2.png'
