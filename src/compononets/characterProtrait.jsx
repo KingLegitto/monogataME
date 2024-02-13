@@ -6,9 +6,9 @@ import eye1 from '../assets/portraitImgs/eye/eye1_.png'
 import eye2 from '../assets/portraitImgs/eye/eye2_.png'
 import eye3 from '../assets/portraitImgs/eye/eye3_.png'
 import eye4 from '../assets/portraitImgs/eye/eye4_.png'
-import skin1 from '../assets/portraitImgs/skin/Skin1.png'
-import skin2 from '../assets/portraitImgs/skin/Skin2.png'
-import skin3 from '../assets/portraitImgs/skin/Skin3.png'
+import skin1 from '../assets/portraitImgs/skin/skin1_.png'
+import skin2 from '../assets/portraitImgs/skin/skin2_.png'
+import skin3 from '../assets/portraitImgs/skin/skin3_.png'
 import { motion, AnimatePresence } from "framer-motion";
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
@@ -68,7 +68,7 @@ const Protrait = () => {
             case 3:{
                 if(img == 'back'){
                     setChoices(skinChoices)
-                    setEyeSelection()
+                    setEyeSelection(eye1)
                 }else{
                     setEyeSelection(img)
                 } 
