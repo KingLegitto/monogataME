@@ -1,11 +1,14 @@
 import maleImage from '../assets/portraitImgs/gender/male.png'
 import femaleImage from '../assets/portraitImgs/gender/female.png'
-import babyImg from '../assets/portraitImgs/body/baby.png'
-import teenImg from '../assets/portraitImgs/body/teen.png'
-import eye1 from '../assets/portraitImgs/eye/eye1.png'
-import eye2 from '../assets/portraitImgs/eye/eye2.png'
-import eye3 from '../assets/portraitImgs/eye/eye3.png'
-import eye4 from '../assets/portraitImgs/eye/eye4.png'
+import babyBase from '../assets/portraitImgs/body/Baby.png'
+import teenBase from '../assets/portraitImgs/body/Teen_Male.png'
+import eye1 from '../assets/portraitImgs/eye/Eye1.png'
+import eye2 from '../assets/portraitImgs/eye/Eye2.png'
+import eye3 from '../assets/portraitImgs/eye/Eye3.png'
+import eye4 from '../assets/portraitImgs/eye/Eye4.png'
+import skin1 from '../assets/portraitImgs/skin/skin1.png'
+import skin2 from '../assets/portraitImgs/skin/skin2.png'
+import skin3 from '../assets/portraitImgs/skin/skin3.png'
 import { motion, AnimatePresence } from "framer-motion";
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
@@ -13,21 +16,29 @@ import { useState, useEffect } from 'react';
 
 const Protrait = () => {
     const [preview, setPreview] = useState(false)
-    const [ageBracketSelection, setAgeBracketSelection] = useState()
+    const [skinSelection, setSkinSelection] = useState(skin2)
+    const [ageBracketSelection, setAgeBracketSelection] = useState(teenBase)
     const [eyeSelection, setEyeSelection] = useState()
 
     const [ageBracketChoices, setAgeBracketChoices] = useState([
-        {name: 'Baby', img: babyImg, level: 1},
-        {name: 'Teen', img: teenImg, level: 1},
+        {name: 'Baby', img: babyBase, level: 1},
+        {name: 'Teen', img: teenBase, level: 1},
         {name: 'Next', img: 'next', level: 1}
     ])
-    const [eyeChoices, setEyeChoices] = useState([
+    const [skinChoices, setSkinChoices] = useState([
         {name: 'Go back', img: 'back', level: 2},
-        {name: 'Eyes 1', img: eye1, level: 2},
-        {name: 'Eyes 2', img: eye2, level: 2},
-        {name: 'Eyes 3', img: eye3, level: 2},
-        {name: 'Eyes 4', img: eye4, level: 2},
+        {name: 'Skin 1', img: skin1, level: 2},
+        {name: 'Skin 2', img: skin2, level: 2},
+        {name: 'Skin 3', img: skin3, level: 2},
         {name: 'Next', img: 'next', level: 2},
+    ])
+    const [eyeChoices, setEyeChoices] = useState([
+        {name: 'Go back', img: 'back', level: 3},
+        {name: 'Eyes 1', img: eye1, level: 3},
+        {name: 'Eyes 2', img: eye2, level: 3},
+        {name: 'Eyes 3', img: eye3, level: 3},
+        {name: 'Eyes 4', img: eye4, level: 3},
+        {name: 'Next', img: 'next', level: 3},
     ])
 
     const [choices, setChoices] = useState(ageBracketChoices)
@@ -36,7 +47,7 @@ const Protrait = () => {
         switch(level){
             case 1:{
                 if(img == 'next'){
-                    setChoices(eyeChoices)
+                    setChoices(skinChoices)
                 }
                 else{
                     setAgeBracketSelection(img)
@@ -44,13 +55,23 @@ const Protrait = () => {
                 break
             }
             case 2:{
-                if(img == 'back'){
+                if(img == 'next'){
+                    setChoices(eyeChoices)
+                }
+                else if(img == 'back'){
                     setChoices(ageBracketChoices)
+                }else{
+                    setSkinSelection(img)
+                } 
+                break
+            }
+            case 3:{
+                if(img == 'back'){
+                    setChoices(skinChoices)
                     setEyeSelection()
                 }else{
                     setEyeSelection(img)
-                }
-                
+                } 
                 break
             }
         }
@@ -101,9 +122,14 @@ const Protrait = () => {
 
             {/* PORTRAIT DISPLAY //////////////////////////////////////////// */}
             <div className='absolute top-[50%] lg:top-[55%] left-[50%] lg:left-[30%] translate-x-[-50%] translate-y-[-50%] w-[90%] md:w-[400px] rounded-[30px] bg-white'
-            style={{aspectRatio: '1/1.065', backgroundImage: `url(${ageBracketSelection})`, backgroundPosition: 'center', backgroundSize: 'contain'}} >
+            style={{aspectRatio: '1/1.065', backgroundImage: `url(${skinSelection})`, backgroundPosition: 'center', backgroundSize: 'contain'}} >
 
-                <div className='w-[100%] h-[100%] rounded-[30px]'
+                <div className='w-[100%] h-[100%] rounded-[30px] absolute z-[1]'
+                style={{backgroundImage: `url(${ageBracketSelection})`, backgroundPosition: 'center', backgroundSize: 'contain'}} >
+                    
+                </div>
+
+                <div className='w-[100%] h-[100%] rounded-[30px] absolute z-[2]'
                 style={{backgroundImage: `url(${eyeSelection})`, backgroundPosition: 'center', backgroundSize: 'contain'}} >
                     
                 </div>
