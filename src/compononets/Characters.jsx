@@ -14,6 +14,7 @@ const Characters = () => {
     const {setSelectionArea, selectionArea} = useContext(ZoomContext)
     const [portrait, setPortrait] = useState(false)
     const [bgOverlay, setBgOverlay] = useState(false)
+    const [characterNum, setCharacterNum] = useState(0)
 
     const [characters, setCharacters] = useState([
         {name: 'Madara Uchiha', popularName: '', dob: '24th Dec', age: '', height: '179', weight: '71.3', portrait: maleImage},
@@ -46,12 +47,12 @@ const Characters = () => {
             <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{delay: 0.7}} className="bg-[#0000007a] grid justify-center absolute z-[10] top-0 left-0 right-0 mx-auto pt-[20px] px-[20px]" 
             style={{height: workableArea.height, width: innerWidth<1000? '100vw': workableArea.width,
             gridTemplateRows: 'repeat(auto-fill,150px)', gridTemplateColumns: innerWidth>1000? '50% 50%':'100%', gap: '1rem'}}>
-                {characters.map((item)=>{
+                {characters.map((item, i)=>{
                     return(
-                        <div className="w-[100%] max-w-[480px] h-[100%] bg-[#eeeeeee5] justify-items-center justify-self-center grid grid-cols-2 items-center rounded-[20px]">
-                            <div className="h-[100%] w-[90%] bg-gray-500 justify-self-start rounded-l-[20px]"
-                            style={{backgroundImage: `url(${item.portrait})`, backgroundPosition: 'center top', backgroundSize: '100%'}}
-                            onClick={()=>{setPortrait(!portrait), setBgOverlay(!bgOverlay)}}>
+                        <div key={i} className="w-[100%] max-w-[480px] h-[100%] bg-[#eeeeeee5] justify-items-center justify-self-center grid grid-cols-2 items-center rounded-[20px] border-[2px] border-[#eeeeeee5]">
+                            <div className="h-[100%] w-[90%] bg-gray-500 justify-self-start rounded-l-[20px] "
+                            style={{backgroundImage: `url(${item.portrait})`, backgroundPosition: 'center 40%', backgroundSize: '110%'}}
+                            onClick={()=>{setPortrait(!portrait), setBgOverlay(!bgOverlay), setCharacterNum(i)}}>
                                 
                             </div>
 
@@ -74,7 +75,7 @@ const Characters = () => {
                 })}
             </motion.div>
 
-            {portrait && <Protrait />}
+            {portrait && <Protrait setPortrait={setPortrait} characterNum={characterNum} characters={characters} setBgOverlay={setBgOverlay}/>}
         </>
         
         

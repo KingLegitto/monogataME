@@ -13,8 +13,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
 import { useState, useEffect } from 'react';
+import html2canvas from 'html2canvas';
 
-const Protrait = () => {
+const Protrait = ({setPortrait, characterNum, characters, setBgOverlay}) => {
     const [preview, setPreview] = useState(false)
     const [loading, setLoading] = useState(true)
     const [skinSelection, setSkinSelection] = useState(skin2)
@@ -78,16 +79,35 @@ const Protrait = () => {
                 if(img == 'back'){
                     setChoices(skinChoices)
                     setEyeSelection(eye1)
-                }else{
+                }
+                else if(img == 'next'){
+                    let portrait = document.querySelector('.portraitBox')
+                    html2canvas(portrait).then(function(canvas) {
+                        let characterUrl = canvas.toDataURL()
+                        setImage(characterNum, characterUrl)
+                    });
+                    
+                    
+
+                }
+                else{
                     if(eyeSelection != img){
                         setLoading(true)
                     }
                     
                     setEyeSelection(img)
+
+                    
                 } 
                 break
             }
         }
+    }
+
+    function setImage(num, url){
+        characters[num].portrait = url
+        setPortrait(false)
+        setBgOverlay(false)
     }
 
     useEffect(()=>{
@@ -136,7 +156,7 @@ const Protrait = () => {
 
 
             {/* PORTRAIT DISPLAY //////////////////////////////////////////// */}
-            <div className='absolute top-[50%] lg:top-[55%] left-[50%] lg:left-[30%] translate-x-[-50%] translate-y-[-50%] w-[90%] md:w-[400px] rounded-[30px] bg-white'
+            <div className='absolute portraitBox top-[50%] lg:top-[55%] left-[50%] lg:left-[30%] translate-x-[-50%] translate-y-[-50%] w-[90%] md:w-[400px] rounded-[30px] bg-white'
             style={{aspectRatio: '1/1.065', border: '2px solid white', boxShadow: '0px 0px 9px 0px rgba(255,255,255,0.75)'}} >
 
                 {/* LOADING SCREEN ////////////////////////////////////// */}
