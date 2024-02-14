@@ -21,6 +21,8 @@ const Characters = () => {
         {name: '', popularName: '', dob: '', age: '', height: '', weight: '',},
         {name: '', popularName: '', dob: '', age: '', height: '', weight: '',},
         {name: '', popularName: '', dob: '', age: '', height: '', weight: '',},
+        {name: '', popularName: '', dob: '', age: '', height: '', weight: '',},
+        {name: '', popularName: '', dob: '', age: '', height: '', weight: '',},
     ])
 
     useEffect(()=>{
@@ -42,17 +44,18 @@ const Characters = () => {
 
 
             <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{delay: 0.7}} className="bg-[#0000007a] grid justify-center absolute z-[10] top-0 left-0 right-0 mx-auto pt-[20px] px-[20px]" 
-            style={{height: workableArea.height, width: innerWidth<1000? '100vw': workableArea.width, 
-            gridTemplateRows: 'repeat(auto-fill,200px)', gridTemplateColumns: innerWidth>1000? '50% 50%':'100%', gap: '1rem'}}>
+            style={{height: workableArea.height, width: innerWidth<1000? '100vw': workableArea.width,
+            gridTemplateRows: 'repeat(auto-fill,150px)', gridTemplateColumns: innerWidth>1000? '50% 50%':'100%', gap: '1rem'}}>
                 {characters.map((item)=>{
                     return(
-                        <div className="w-[100%] h-[100%] bg-[#eeeeeee5] justify-items-center grid grid-cols-2 items-center rounded-[20px] p-[10px]">
-                            <div className="h-[75%] lg:h-[80%] rounded-[50%] aspect-square bg-gray-500"
-                            style={{backgroundImage: `url(${item.portrait})`, backgroundPosition: 'center top', backgroundSize: '120%'}}
+                        <div className="w-[100%] max-w-[480px] h-[100%] bg-[#eeeeeee5] justify-items-center justify-self-center grid grid-cols-2 items-center rounded-[20px]">
+                            <div className="h-[100%] w-[90%] bg-gray-500 justify-self-start rounded-l-[20px]"
+                            style={{backgroundImage: `url(${item.portrait})`, backgroundPosition: 'center top', backgroundSize: '100%'}}
                             onClick={()=>{setPortrait(!portrait), setBgOverlay(!bgOverlay)}}>
                                 
                             </div>
-                            <div className=" h-[75%] w-[100%] characterDetails flex-col flex justify-around">
+
+                            <div className=" h-[75%] w-[100%] characterDetails flex-col flex justify-around p-[10px]">
                                 <input type="text"  value={item.name==''? '---------------':item.name}/>
                                 {item.popularName!='' && (<input type="text"  value={item.popularName}/>)}
                                 <span >
