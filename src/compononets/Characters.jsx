@@ -51,7 +51,7 @@ const Characters = () => {
                     return(
                         <div key={i} className="w-[100%] max-w-[480px] h-[100%] bg-[#eeeeeee5] justify-items-center justify-self-center grid grid-cols-2 items-center rounded-[20px] border-[2px] border-[#eeeeeee5]">
                             <div className="h-[100%] w-[90%] bg-gray-500 justify-self-start rounded-l-[20px] "
-                            style={{backgroundImage: `url(${item.portrait})`, backgroundPosition: 'center 40%', backgroundSize: '110%'}}
+                            style={{backgroundImage: `url(${item.portrait})`, backgroundPosition: innerWidth<800?'center 40%':'center 40%', backgroundSize: innerWidth<800?'140%':'110%'}}
                             onClick={()=>{setPortrait(!portrait), setBgOverlay(!bgOverlay), setCharacterNum(i)}}>
                                 
                             </div>
