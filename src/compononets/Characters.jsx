@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import maleImage from '../assets/portraitImgs/gender/male.png'
 import femaleImage from '../assets/portraitImgs/gender/female.png'
+import placeholder from '../assets/portraitImgs/gender/Untitled15_20240215110045.png'
 
 const Characters = () => {
 
@@ -17,8 +18,8 @@ const Characters = () => {
     const [characterNum, setCharacterNum] = useState(0)
 
     const [characters, setCharacters] = useState([
-        {name: 'Madara Uchiha', popularName: '', dob: '24th Dec', age: '', height: '179', weight: '71.3', portrait: maleImage},
-        {name: 'Kurama', popularName: '9 tails fox', dob: '', age: '', height: '', weight: '', portrait: femaleImage},
+        {name: 'Madara Uchiha', popularName: '', dob: '24th Dec', age: '', height: '179', weight: '71.3', portrait: placeholder},
+        {name: 'Kurama', popularName: '9 tails fox', dob: '', age: '', height: '', weight: '', portrait: placeholder},
         {name: '', popularName: '', dob: '', age: '', height: '', weight: '',},
         {name: '', popularName: '', dob: '', age: '', height: '', weight: '',},
         {name: '', popularName: '', dob: '', age: '', height: '', weight: '',},
