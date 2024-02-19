@@ -1,14 +1,20 @@
 import maleImage from '../assets/portraitImgs/gender/male.png'
 import femaleImage from '../assets/portraitImgs/gender/female.png'
-import babyBase from '../assets/portraitImgs/body/baby_.png'
-import teenBase from '../assets/portraitImgs/body/teen_male_.png'
+import babyBaseL from '../assets/portraitImgs/body/babyBaseL.png'
+import babyBaseC from '../assets/portraitImgs/body/babyBaseC.png'
+import babyBaseCH from '../assets/portraitImgs/body/babyBaseH.png'
+import babyBaseSH from '../assets/portraitImgs/body/babyBaseSkinH.png'
+import teenMBaseL from '../assets/portraitImgs/body/teenMBaseL.png'
+import teenMBaseC from '../assets/portraitImgs/body/teenMBaseC.png'
+import teenMBaseCH from '../assets/portraitImgs/body/teenMBaseH.png'
+import teenMBaseSH from '../assets/portraitImgs/body/teenMBaseSkinH.png'
 import eye1 from '../assets/portraitImgs/eye/eye1.png'
 import eye2 from '../assets/portraitImgs/eye/eye2.png'
 import eye3 from '../assets/portraitImgs/eye/eye3.png'
 import eye4 from '../assets/portraitImgs/eye/eye4.png'
 import skin1 from '../assets/portraitImgs/skin/skin1_.png'
 import skin2 from '../assets/portraitImgs/skin/skin2_.png'
-import skin3 from '../assets/portraitImgs/skin/skin3_.png'
+import skin3 from '../assets/portraitImgs/skin/skin3.png'
 import exp from '../assets/portraitImgs/expression/express.png'
 import babyExp from '../assets/portraitImgs/expression/baby_express.png'
 import spikyHairL from '../assets/portraitImgs/hair/spikyL.png'
@@ -27,15 +33,16 @@ const Protrait = ({setPortrait, characterNum, characters, setBgOverlay}) => {
     const [hBox, setHBox] = useState()
     const [wBox, setWBox] = useState()
     const [skinSelection, setSkinSelection] = useState(skin2)
-    const [ageBracketSelection, setAgeBracketSelection] = useState(babyBase)
+    const [ageBracketSelection, setAgeBracketSelection] = useState(babyBaseL)
     const [eyeSelection, setEyeSelection] = useState(eye1)
-    const [expSelection, setExpSelection] = useState(ageBracketSelection==babyBase?babyExp:exp)
+    const [expSelection, setExpSelection] = useState(ageBracketSelection==babyBaseL?babyExp:exp)
     const [hairSelection, setHairSelection] = useState()
+    const [normalize, setNormalize] = useState(false)
 
     // CHOICES ///////////////////////////////////////////////////////////////
     const [ageBracketChoices, setAgeBracketChoices] = useState([
-        {name: 'Baby', img: babyBase, level: 1},
-        {name: 'Teen', img: teenBase, level: 1},
+        {name: 'Baby', img: babyBaseL, level: 1},
+        {name: 'Teen', img: teenMBaseL, level: 1},
         {name: 'Next', img: 'next', level: 1}
     ])
     const [skinChoices, setSkinChoices] = useState([
@@ -55,15 +62,15 @@ const Protrait = ({setPortrait, characterNum, characters, setBgOverlay}) => {
     ])
     const [expressChoices, setExpressChoices] = useState([
         {name: 'Go back', img: 'back', level: 4},
-        {name: 'Expr 1', img: ageBracketSelection==babyBase?babyExp:exp, level: 4},
+        {name: 'Expr 1', img: ageBracketSelection==babyBaseL?babyExp:exp, level: 4},
         {name: 'Next', img: 'next', level: 4},
     ])
     const [hairChoices, setHairChoices] = useState([
         {name: 'Go back', img: 'back', level: 5},
         {name: 'Bald', img: null, level: 5},
         {name: 'Spiky', img: spikyHairL, level: 5},
-        {name: 'FlatT', img: flatishTopL, level: 5},
-        {name: 'Next', img: 'next', level: 5},
+        {name: 'Flatish Top', img: flatishTopL, level: 5},
+        {name: 'Finish', img: 'Finish', level: 5},
     ])
 
     const [choices, setChoices] = useState(ageBracketChoices)
@@ -136,12 +143,9 @@ const Protrait = ({setPortrait, characterNum, characters, setBgOverlay}) => {
                     setChoices(expressChoices)
                 
                 }
-                else if(img == 'next'){
-                    let portrait = document.querySelector('.portraitBox')
-                    html2canvas(portrait).then(function(canvas) {
-                        let characterUrl = canvas.toDataURL()
-                        setImage(characterNum, characterUrl)
-                    });
+                else if(img == 'Finish'){
+                    setNormalize(true)
+                    
                 }
                 else{
                     if(hairSelection != img && img != null){
@@ -159,26 +163,53 @@ const Protrait = ({setPortrait, characterNum, characters, setBgOverlay}) => {
         characters[num].portrait = url
         setPortrait(false)
         setBgOverlay(false)
+        
     }
 
     useEffect(()=>{
-        setExpSelection(ageBracketSelection==babyBase?babyExp:exp)
+        if(normalize && wBox==720){
+            setTimeout(() => {
+                let portrait = document.querySelector('.portraitBox')
+                    html2canvas(portrait).then(function(canvas) {
+                        
+                        let characterUrl = canvas.toDataURL()
+                        setImage(characterNum, characterUrl)
+                    });
+            }, 300);
+        }
+    }, [normalize, wBox])
+
+    useEffect(()=>{
+        setExpSelection(ageBracketSelection==babyBaseL?babyExp:exp)
     }, [ageBracketSelection])
 
     useEffect(()=>{
         if(preview){
-            const img_ = new Image()
-        img_.src = hairSelection==spikyHairL?spikyHairC:
+            const hairImg = new Image()
+
+        hairImg.src = hairSelection==spikyHairL?spikyHairC:
                    hairSelection==flatishTopL?flatishTopC:''
-    
+
+        const clothesImg = new Image()
+        const clothesH = new Image()
+        clothesImg.src = ageBracketSelection==babyBaseL?babyBaseC:
+                        ageBracketSelection==teenMBaseL?teenMBaseC:''
+        clothesH.src = ageBracketSelection==babyBaseL?babyBaseCH:
+                        ageBracketSelection==teenMBaseL?teenMBaseCH:''
+
+        const skinImg = new Image()
+        const skinH = new Image()
+        skinImg.src = skinSelection
+        skinH.src = ageBracketSelection==babyBaseL?babyBaseSH:
+                    ageBracketSelection==teenMBaseL?teenMBaseSH:''
     
         const canvas = document.getElementById('canvas')
-    
         const ctx = canvas.getContext('2d')
         
         ctx.clearRect(0,0,wBox,hBox)
-        img_.onload = ()=>{
-            ctx.drawImage(img_,0,0, 720, 767, -2, -1, wBox, hBox)
+        // ctx.globalCompositeOperation = "lighter"
+        hairImg.onload = ()=>{
+            ctx.drawImage(hairImg,0,0, 720, 767, -2, -1, wBox, hBox)
             setLoading(false)
             // const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
             // const data = imageData.data
@@ -190,8 +221,33 @@ const Protrait = ({setPortrait, characterNum, characters, setBgOverlay}) => {
             // }
             // ctx.putImageData(imageData, 0, 0)
         }
+
+        const canvas2 = document.getElementById('clothesCanvas')
+        const ctxClothes = canvas2.getContext('2d')
+
+        ctxClothes.clearRect(0,0,wBox,hBox)
+        ctxClothes.globalCompositeOperation = "lighter"
+        clothesImg.onload = ()=>{
+            ctxClothes.drawImage(clothesImg,0,0, 720, 767, -2, -3, wBox, hBox)
+            ctxClothes.drawImage(clothesH,0,0, 720, 767, -2, -3, wBox, hBox)
         }
-    }, [hairSelection])
+
+        const canvas3 = document.getElementById('skinCanvas')
+        const ctxSkin = canvas3.getContext('2d')
+
+        ctxSkin.clearRect(0,0,wBox,hBox)
+        ctxSkin.globalCompositeOperation = "lighter"
+        skinImg.onload = ()=>{
+            ctxSkin.drawImage(skinImg,0,0, 720, 767, -2, -3, wBox, hBox)
+            setLoading(false)
+        }
+        skinH.onload = ()=>{
+            ctxSkin.drawImage(skinH,0,0, 720, 767, -2, -2, wBox, hBox)
+            setLoading(false)
+        }
+
+        }
+    }, [hairSelection, ageBracketSelection, skinSelection])
 
     useEffect(()=>{
         if(preview){
@@ -205,25 +261,57 @@ const Protrait = ({setPortrait, characterNum, characters, setBgOverlay}) => {
         
         }
        
-    }, [preview])
+    }, [preview, normalize])
     
     useEffect(()=>{
         if(preview){
-            const img_ = new Image()
-        img_.src = hairSelection==spikyHairL?spikyHairC:
+
+        const hairImg = new Image()
+
+        hairImg.src = hairSelection==spikyHairL?spikyHairC:
                    hairSelection==flatishTopL?flatishTopC:''
+
+        const clothesImg = new Image()
+        const clothesH = new Image()
+        clothesImg.src = ageBracketSelection==babyBaseL?babyBaseC:
+                         ageBracketSelection==teenMBaseL?teenMBaseC:''
+        clothesH.src = ageBracketSelection==babyBaseL?babyBaseCH:
+                         ageBracketSelection==teenMBaseL?teenMBaseCH:''
+
+        const skinImg = new Image()
+        const skinH = new Image()
+        skinImg.src = skinSelection
+        skinH.src = ageBracketSelection==babyBaseL?babyBaseSH:
+                    ageBracketSelection==teenMBaseL?teenMBaseSH:''
     
         const canvas = document.getElementById('canvas')
-    
         const ctx = canvas.getContext('2d')
     
-        img_.onload = ()=>{
-            ctx.drawImage(img_,0,0, 720, 767, 0, 0, wBox, hBox)
-            
+        hairImg.onload = ()=>{
+            ctx.drawImage(hairImg,0,0, 720, 767, -2, -1, wBox, hBox)
         }
+
+        const canvas2 = document.getElementById('clothesCanvas')
+        const ctxClothes = canvas2.getContext('2d')
+
+        ctxClothes.globalCompositeOperation = "lighter"
+        clothesImg.onload = ()=>{
+            ctxClothes.drawImage(clothesImg,0,0, 720, 767, -2, -3, wBox, hBox)
+            ctxClothes.drawImage(clothesH,0,0, 720, 767, -2, -3, wBox, hBox)
+        }
+
+        const canvas3 = document.getElementById('skinCanvas')
+        const ctxSkin = canvas3.getContext('2d')
+
+        ctxSkin.globalCompositeOperation = "lighter"
+        skinImg.onload = ()=>{
+            ctxSkin.drawImage(skinImg,0,0, 720, 767, -2, -3, wBox, hBox)
+            ctxSkin.drawImage(skinH,0,0, 720, 767, -2, -1, wBox, hBox)
         }
         
-    }, [hBox])
+        }
+        
+    }, [wBox])
 
     return ( 
 
@@ -262,38 +350,46 @@ const Protrait = ({setPortrait, characterNum, characters, setBgOverlay}) => {
 
 
             {/* PORTRAIT DISPLAY //////////////////////////////////////////// */}
-            <div className='absolute portraitBox top-[50%] lg:top-[55%] left-[50%] lg:left-[30%] translate-x-[-50%] translate-y-[-50%] w-[90%] md:w-[400px] rounded-[30px] bg-white'
-            style={{aspectRatio: '1/1.065', border: '2px solid white', boxShadow: '0px 0px 9px 0px rgba(255,255,255,0.75)'}}>
+            <div className={`absolute portraitBox top-[50%] lg:top-[55%] left-[50%] lg:left-[30%] translate-x-[-50%] translate-y-[-50%] ${normalize?' rounded-[0px] w-[720px]':'rounded-[30px] w-[90%] md:w-[400px]'}  bg-white`}
+            style={{aspectRatio: '1/1.065', border: '2px solid white', boxShadow: '0px 0px 9px 0px rgba(255,255,255,0.75)', filter: normalize?'opacity(0)':'opacity(1)'}}>
 
                 {/* LOADING SCREEN ////////////////////////////////////// */}
-                <div className='w-[100%] h-[100%] rounded-[30px] absolute z-[10] bg-[#151515fa] justify-center items-center text-white'
+                <div className='w-[100%] h-[100%] rounded-[32px] absolute z-[10] bg-[#151515fa] justify-center items-center text-white'
                 style={{display: loading?'flex':'none'}}>
                     Loading...
                 </div>
 
                 {/* SKIN LAYER ////////////////////////////////////////// */}
-                <img className='w-[100%] h-[100%] rounded-[30px] absolute z-[1]' src={skinSelection} onLoad={()=>{setLoading(false)}}
-                style={{objectPositionPosition: 'center', objectFit: 'contain'}} />  
+                <canvas width={wBox-5} height={hBox-5} id='skinCanvas' className={`absolute z-[1] ${normalize?'rounded-[0px]':'rounded-[32px]'}`}>
+
+                </canvas>
 
                 {/* AGE BRACKET LAYER ////////////////////////////////////////////// */}
-                <img className='w-[100%] h-[100%] rounded-[30px] absolute z-[2]' src={ageBracketSelection} onLoad={()=>{setLoading(false)}}
+                <img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[3]`} src={ageBracketSelection} onLoad={()=>{setLoading(false)}}
                 style={{objectPositionPosition: 'center', objectFit: 'contain'}} />   
                 
+                <canvas width={wBox} height={hBox} id='clothesCanvas' className='absolute z-[2] rounded-[32px]'>
+
+                </canvas>
+
                 {/* EYE LAYER /////////////////////////////////////////////////// */}
-                <img className='w-[100%] h-[100%] rounded-[30px] absolute z-[3]' src={eyeSelection} onLoad={()=>{setLoading(false)}}
+                <img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[4]`} src={eyeSelection} onLoad={()=>{setLoading(false)}}
                 style={{objectPositionPosition: 'center', objectFit: 'contain'}} />
                 
                 {/* EXPRESSION LAYER /////////////////////////////////////// */}
-                <img className='w-[100%] h-[100%] rounded-[30px] absolute z-[4]' src={expSelection} onLoad={()=>{setLoading(false)}}
+                <img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[5]`} src={expSelection} onLoad={()=>{setLoading(false)}}
                 style={{objectPositionPosition: 'center', objectFit: 'contain'}} />
 
 
                 {/* HAIR LAYER ///////////////////////////////////////////// */}
-                <canvas width={wBox} height={hBox} id='canvas' className='absolute z-[5]'>
+                <canvas width={wBox} height={hBox} id='canvas' className={`absolute z-[6] ${normalize?'rounded-[0px]':'rounded-[32px]'}`}>
 
                 </canvas>
-                {hairSelection && (<img className='w-[100%] h-[100%] rounded-[30px] absolute z-[6]' src={hairSelection} onLoad={()=>{setLoading(false)}}
+                {hairSelection && (<img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[7]`} src={hairSelection} onLoad={()=>{setLoading(false)}}
                 style={{objectPositionPosition: 'center', objectFit: 'contain'}} />)}
+
+                
+                
 
             </div>
 
@@ -302,10 +398,10 @@ const Protrait = ({setPortrait, characterNum, characters, setBgOverlay}) => {
             <div className='absolute w-[100%] px-[10px] md:w-[450px] flex flex-wrap justify-start lg:left-[50%] top-[85%] lg:top-[50%] translate-y-[0%] lg:translate-y-[-50%]'>
                 {choices.map((choice, i)=>{
                     return(
-                        <motion.div key={`${choice.name}${choice.level}`} initial={{y: 20, opacity: 0}} animate={{y: 0, opacity: 1, transition:{delay: i*0.1}}}
-                        className={`rounded-[20px] m-[5px] w-[70px] h-[40px] flex justify-center items-center bg-white`} 
+                        <motion.div whileTap={{scale: 0.9}} key={`${choice.name}${choice.level}`} initial={{y: 20, opacity: 0}} animate={{y: 0, opacity: 1, transition:{delay: i*0.1}}}
+                        className={`rounded-[20px] w-[70px] max-w-[70px] px-[10px] m-[5px] h-[40px] flex justify-center items-center bg-white ${choice.name.length>10?'textOverflowAnim':''} `} 
                         style={{cursor: 'pointer', backgroundColor: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection? '#ff74c5':'white',
-                        color: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection? 'white':'black', transition: '0.2s'}} 
+                        color: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection? 'white':'black', transition: '0.2s', overflow:'scroll', whiteSpace:'nowrap', textOverflow: 'ellipsis'}} 
                         onClick={()=>{makeSelection(choice.level, choice.img)}}>
                             {choice.name}
                         </motion.div>
