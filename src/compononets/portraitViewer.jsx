@@ -36,7 +36,7 @@ const Viewer = ({viewer, setViewer, targetImg, setBgOverlay, setPortrait, nameTo
                 
             </div> */}
             <div className='absolute h-auto w-auto bottom-0 right-0'>
-                <a href={targetImg} download={nameToSend} className="viewOptions ">
+                <a href={targetImg} download={nameToSend} className="viewOptions rounded-tl-[30px] border-b-[1px] border-[#0000003c]">
                     <Download />
                 </a>
                 <button className="viewOptions" onClick={()=>{setViewer(false), setPortrait(true)}}>

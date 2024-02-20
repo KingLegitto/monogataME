@@ -54,7 +54,7 @@ const Characters = () => {
                         <div key={i} className="w-[100%] max-w-[480px] h-[100%] bg-[#eeeeeee5] justify-items-center justify-self-center grid grid-cols-2 items-center rounded-[20px] border-[2px] border-[transparent] overflow-hidden">
                             <div className="h-[100%] w-[90%] bg-gray-500 justify-self-start rounded-l-[20px] "
                             style={{backgroundImage: `url(${item.portrait==''?placeholder:item.portrait})`, backgroundPosition: innerWidth<800?'center 40%':'center 40%', backgroundSize: innerWidth<800?'140%':'110%',
-                            boxShadow: '3px 0px 10px 2px rgba(0,0,0,0.7)'}}
+                            boxShadow: '3px 0px 0px 3px rgba(0,0,0,0.7)'}}
                             onClick={()=>{ setTargetImg(item.portrait==''?placeholder:item.portrait),setViewer(true), setBgOverlay(!bgOverlay), setCharacterNum(i), setNameToSend(item.name==''? 'unnamed_character':item.name)}}>
                                 
                             </div>
