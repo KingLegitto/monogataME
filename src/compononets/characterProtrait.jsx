@@ -271,7 +271,7 @@ const Protrait = ({setPortrait, characterNum, characters, setBgOverlay}) => {
         }
         skinH.onload = ()=>{
             ctxSkin.drawImage(skinH,0,0, 720, 767, -2, -2, wBox, hBox)
-            setLoading(false)
+            // setLoading(false)
         }
 
         }
@@ -335,11 +335,16 @@ const Protrait = ({setPortrait, characterNum, characters, setBgOverlay}) => {
 
         ctxSkin.clearRect(0,0,wBox,hBox)
         ctxSkin.globalCompositeOperation = "lighter"
+        skinH.onload = ()=>{
+            ctxSkin.drawImage(skinH,0,0, 720, 767, -2, -2, wBox, hBox)
+            // setLoading(false)
+        }
         skinImg.onload = ()=>{
             ctxSkin.drawImage(skinImg,0,0, 720, 767, -2, -3, wBox, hBox)
             ctxSkin.drawImage(skinH,0,0, 720, 767, -2, -1, wBox, hBox)
             setAllClear(normalize?true:false)
         }
+        
         
         }
         
