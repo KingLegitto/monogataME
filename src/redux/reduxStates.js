@@ -3,6 +3,12 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   workableArea: {width: 1000, height: 1200},
   slider: 50,
+  characters: [
+    {name: 'Madara Uchiha', popularName: '', dob: '24 Dec', age: '', height: '179', weight: '71.3', portrait: ''},
+    {name: 'Kurama', popularName: 'Nine tails fox', dob: '', age: '', height: '', weight: '', portrait: ''},
+    {name: 'Saitama', popularName: '', dob: '', age: '', height: '', weight: '', portrait: ''},
+    
+]
 }
 
 export const reduxSlice = createSlice({
@@ -21,11 +27,20 @@ export const reduxSlice = createSlice({
                 case '50': el.style.borderRadius='0px'; break;
                 default: el.style.borderRadius='50px'
             }
+    },
+
+    updateCharacters: (state, action) => {
+      state.characters.push(action.payload)
+    },
+
+    placeImage: (state, action) => {
+      // characters[num].portrait = url
+      state.characters[action.payload[0]].portrait = action.payload[1]
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updateSlider, handleZoom } = reduxSlice.actions
+export const { updateSlider, handleZoom, updateCharacters, placeImage } = reduxSlice.actions
 
 export default reduxSlice.reducer

@@ -5,7 +5,7 @@ import { MenuRounded } from "@mui/icons-material"
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
 import { useSelector, useDispatch } from "react-redux"
-import { handleZoom } from "../redux/reduxStates.js"
+import { handleZoom, updateCharacters } from "../redux/reduxStates.js"
 
 const Commands = ({setTracking, track, setMidPoint, setPoints, savePoints, characterMode, setCharacterMode,
 storyTimeline, setStoryTimeline}) => {
@@ -15,7 +15,7 @@ storyTimeline, setStoryTimeline}) => {
     const [aside, setAside] = useState(true)
     const [updater, setUpdater] = useState(true)
 
-    const { workableArea, slider } = useSelector((state) => state.overallStates)
+    const { workableArea, slider, characters } = useSelector((state) => state.overallStates)
     const dispatch = useDispatch()
 
     const {setSelectionArea} = useContext(ZoomContext)
@@ -134,7 +134,7 @@ storyTimeline, setStoryTimeline}) => {
                     Characters
                 </motion.button>
                     {characterMode && (<motion.button whileTap={{scale: 0.8}} style={{background: '#000000bb'}} className=" lg:hover:scale-[1.05] text-white"
-                    onClick={()=>{hideSideMenu()}}>
+                    onClick={()=>{hideSideMenu(),  dispatch(updateCharacters({name: '', popularName: '', dob: '', age: '', height: '', weight: '', portrait: ''}))}}>
                         Add new character
                     </motion.button>)}
 

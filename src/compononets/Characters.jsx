@@ -3,7 +3,7 @@ import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
 import Protrait from "./characterProtrait.jsx";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import maleImage from '../assets/portraitImgs/gender/male.png'
 import femaleImage from '../assets/portraitImgs/gender/female.png'
 import placeholder from '../assets/portraitImgs/placeholder.png'
@@ -11,9 +11,9 @@ import Viewer from "./portraitViewer.jsx";
 
 const Characters = () => {
 
-    const { workableArea } = useSelector((state) => state.overallStates)
+    const { workableArea, characters } = useSelector((state) => state.overallStates)
+    const dispatch = useDispatch()
 
-    const {setSelectionArea, selectionArea} = useContext(ZoomContext)
     const [portrait, setPortrait] = useState(false)
     const [bgOverlay, setBgOverlay] = useState(false)
     const [characterNum, setCharacterNum] = useState(0)
@@ -21,12 +21,12 @@ const Characters = () => {
     const [nameToSend, setNameToSend] = useState()
     const [targetImg, setTargetImg] = useState('')
 
-    const [characters, setCharacters] = useState([
-        {name: 'Madara Uchiha', popularName: '', dob: '24th Dec', age: '', height: '179', weight: '71.3', portrait: ''},
-        {name: 'Kurama', popularName: '9 tails fox', dob: '', age: '', height: '', weight: '', portrait: ''},
-        {name: '', popularName: '', dob: '', age: '', height: '', weight: '', portrait: ''},
+    // const [characters, setCharacters] = useState([
+    //     {name: 'Madara Uchiha', popularName: '', dob: '24th Dec', age: '', height: '179', weight: '71.3', portrait: ''},
+    //     {name: 'Kurama', popularName: '9 tails fox', dob: '', age: '', height: '', weight: '', portrait: ''},
+    //     {name: '', popularName: '', dob: '', age: '', height: '', weight: '', portrait: ''},
         
-    ])
+    // ])
 
     useEffect(()=>{
         if(portrait){
@@ -78,7 +78,7 @@ const Characters = () => {
                 })}
             </motion.div>
 
-            {portrait && <Protrait setPortrait={setPortrait} characterNum={characterNum} characters={characters} setBgOverlay={setBgOverlay}/>}
+            {portrait && <Protrait setPortrait={setPortrait} characterNum={characterNum} setBgOverlay={setBgOverlay}/>}
 
             <AnimatePresence>
                 {viewer && <Viewer viewer={viewer} targetImg={targetImg} setViewer={setViewer} setBgOverlay={setBgOverlay} setPortrait={setPortrait} nameToSend={nameToSend}/>}
