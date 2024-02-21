@@ -29,7 +29,8 @@ import flatishTopL from '../assets/portraitImgs/hair/flatishTopL.png'
 import flatishTopC from '../assets/portraitImgs/hair/flatishTopC.png'
 import longBangsL from '../assets/portraitImgs/hair/longWithBangsL.png'
 import longBangsC from '../assets/portraitImgs/hair/longWithBangsC.png'
-import longBangsH from '../assets/portraitImgs/hair/longWithBangsH.png'
+import afroFL from '../assets/portraitImgs/hair/afroFemaleL.png'
+import afroFC from '../assets/portraitImgs/hair/afroFemaleC.png'
 import { motion, AnimatePresence } from "framer-motion";
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
@@ -105,7 +106,8 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         {name: 'Go back', img: 'back', level: 5},
         {name: 'Bald', img: null, level: 5},
         {name: 'Spiky', img: spikyHairL, level: 5},
-        {name: 'Long/Bangs', img: longBangsL, level: 5, check: 'notForBaby'},
+        {name: 'Long(Bangs)', img: longBangsL, level: 5, check: 'notForBaby'},
+        {name: 'Afro', img: afroFL, level: 5, check: 'notForBaby'},
         {name: 'Finish', img: 'Finish', level: 5},
     ])
 
@@ -124,8 +126,15 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                 if(option.check){
                     switch(option.check){
                         case 'notForBaby':
-                            let refresh = choices.filter((item)=>(item.img!=longBangsL))
-                            setChoices(refresh)
+                            if(ageBracketSelection==babyBaseL){
+                                let refresh = choices.filter((item)=>(item.img!=option.img))
+                                setChoices(refresh)
+                            }break;
+                        case 'notForMale':
+                            if(gender=='male'){
+                                let refresh = choices.filter((item)=>(item.img!=option.img))
+                                setChoices(refresh)
+                            }break;
                     }
                 }
             })
@@ -170,7 +179,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                 }
                 else if(img == 'back'){
                     setChoices(skinChoices)
-                    setEyeSelection(eye1)
+                    // setEyeSelection(eye1)
                 }else{
                     if(eyeSelection != img){
                         setLoading(true)
@@ -247,7 +256,8 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
 
         hairImg.src = hairSelection==spikyHairL?spikyHairC:
                    hairSelection==flatishTopL?flatishTopC:
-                   hairSelection==longBangsL?longBangsC:''
+                   hairSelection==longBangsL?longBangsC:
+                   hairSelection==afroFL?afroFC:''
 
         const clothesImg = new Image()
         const clothesH = new Image()
@@ -332,7 +342,8 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
 
         hairImg.src = hairSelection==spikyHairL?spikyHairC:
                    hairSelection==flatishTopL?flatishTopC:
-                   hairSelection==longBangsL?longBangsC:''
+                   hairSelection==longBangsL?longBangsC:
+                   hairSelection==afroFL?afroFC:''
 
         const clothesImg = new Image()
         const clothesH = new Image()

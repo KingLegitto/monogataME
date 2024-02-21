@@ -8,6 +8,8 @@ import maleImage from '../assets/portraitImgs/gender/male.png'
 import femaleImage from '../assets/portraitImgs/gender/female.png'
 import placeholder from '../assets/portraitImgs/placeholder.png'
 import Viewer from "./portraitViewer.jsx";
+import { AddRounded } from "@mui/icons-material";
+import { updateCharacters } from "../redux/reduxStates.js";
 
 const Characters = () => {
 
@@ -51,7 +53,7 @@ const Characters = () => {
             gridTemplateRows: 'repeat(auto-fill,150px)', gridTemplateColumns: innerWidth>1000? '50% 50%':'100%', gap: '1rem'}}>
                 {characters.map((item, i)=>{
                     return(
-                        <div key={i} className="w-[100%] max-w-[480px] h-[100%] bg-[#eeeeeee5] justify-items-center justify-self-center grid grid-cols-2 items-center rounded-[20px] border-[2px] border-[transparent] overflow-hidden">
+                        <motion.div key={i} initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 1}} className="w-[100%] max-w-[480px] h-[100%] bg-[#eeeeeee5] justify-items-center justify-self-center grid grid-cols-2 items-center rounded-[20px] border-[2px] border-[transparent] overflow-hidden">
                             <div className="h-[100%] w-[90%] bg-gray-500 justify-self-start rounded-l-[20px] "
                             style={{backgroundImage: `url(${item.portrait==''?placeholder:item.portrait})`, backgroundPosition: innerWidth<800?'center 40%':'center 40%', backgroundSize: innerWidth<800?'140%':'110%',
                             boxShadow: '3px 0px 0px 3px rgba(0,0,0,0.7)'}}
@@ -73,9 +75,13 @@ const Characters = () => {
                                 </span>
                                 
                             </div>
-                        </div>
+                        </motion.div>
                     ) 
                 })}
+                <motion.div whileTap={{scale: 0.9}} className="w-[100%] max-w-[480px] h-[100%] bg-[#00000063] flex justify-center  justify-self-center items-center rounded-[20px] border-[2px] border-[transparent] overflow-hidden"
+                onClick={()=>{dispatch(updateCharacters({name: '', popularName: '', dob: '', age: '', height: '', weight: '', portrait: ''}))}}>
+                    <AddRounded style={{transform: 'scale(2)', color: 'white'}}/>
+                </motion.div>
             </motion.div>
 
             {portrait && <Protrait setPortrait={setPortrait} characterNum={characterNum} setBgOverlay={setBgOverlay}/>}
