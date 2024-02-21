@@ -8,7 +8,7 @@ import teenMBaseL from '../assets/portraitImgs/body/teenMBaseL.png'
 import teenMBaseC from '../assets/portraitImgs/body/teenMBaseC.png'
 import teenMBaseCH from '../assets/portraitImgs/body/teenMBaseH.png'
 import teenMBaseSH from '../assets/portraitImgs/body/teenMBaseSkinH.png'
-import adultFBaseL from '../assets/portraitImgs/body/adultFBaseL_.png'
+import adultFBaseL from '../assets/portraitImgs/body/adultFBaseL.png'
 import adultFBaseC from '../assets/portraitImgs/body/adultFBaseC.png'
 import adultFBaseCH from '../assets/portraitImgs/body/adultFBaseH.png'
 import eye1 from '../assets/portraitImgs/eye/eye1.png'
@@ -20,10 +20,16 @@ import skin2 from '../assets/portraitImgs/skin/skin2_.png'
 import skin3 from '../assets/portraitImgs/skin/skin3.png'
 import exp from '../assets/portraitImgs/expression/express.png'
 import babyExp from '../assets/portraitImgs/expression/baby_express.png'
+import confidentExp from '../assets/portraitImgs/expression/confident.png'
+import grinExp from '../assets/portraitImgs/expression/grin.png'
+import indiffExp from '../assets/portraitImgs/expression/indifferent.png'
 import spikyHairL from '../assets/portraitImgs/hair/spikyL.png'
 import spikyHairC from '../assets/portraitImgs/hair/spikyC.png'
 import flatishTopL from '../assets/portraitImgs/hair/flatishTopL.png'
 import flatishTopC from '../assets/portraitImgs/hair/flatishTopC.png'
+import longBangsL from '../assets/portraitImgs/hair/longWithBangsL.png'
+import longBangsC from '../assets/portraitImgs/hair/longWithBangsC.png'
+import longBangsH from '../assets/portraitImgs/hair/longWithBangsH.png'
 import { motion, AnimatePresence } from "framer-motion";
 import { ZoomContext } from '../App.jsx'
 import { useContext } from 'react'
@@ -69,16 +75,23 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     ])
     const [eyeChoices, setEyeChoices] = useState([
         {name: 'Go back', img: 'back', level: 3},
-        {name: 'Normal', img: eye1, level: 3},
-        {name: 'Eyes 2', img: eye2, level: 3},
+        {name: 'Basic', img: eye1, level: 3},
+        {name: 'Basic ♀️', img: eye2, level: 3},
         {name: 'Closed', img: eye3, level: 3},
         {name: 'Half closed', img: eye4, level: 3},
         {name: 'Next', img: 'next', level: 3},
     ])
     const [expressChoices, setExpressChoices] = useState([
         {name: 'Go back', img: 'back', level: 4},
-        {name: 'Smile', img: babyExp, level: 4, check: 'babyExpCrit'},
-        {name: 'Smile', img: exp, level: 4, check: 'expCrit'},
+        {name: 'Smile', img: exp, level: 4},
+        {name: 'Grin', img: grinExp, level: 4},
+        {name: 'Confident', img: confidentExp, level: 4},
+        {name: 'Indifferent', img: indiffExp, level: 4},
+        {name: 'Next', img: 'next', level: 4},
+    ])
+    const [expressChoicesBaby, setExpressChoicesBaby] = useState([
+        {name: 'Go back', img: 'back', level: 4},
+        {name: 'Smile', img: babyExp, level: 4},
         {name: 'Next', img: 'next', level: 4},
     ])
     const [hairChoices, setHairChoices] = useState([
@@ -88,12 +101,20 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         {name: 'Flatish Top', img: flatishTopL, level: 5},
         {name: 'Finish', img: 'Finish', level: 5},
     ])
+    const [hairChoicesF, setHairChoicesF] = useState([
+        {name: 'Go back', img: 'back', level: 5},
+        {name: 'Bald', img: null, level: 5},
+        {name: 'Spiky', img: spikyHairL, level: 5},
+        {name: 'Long/Bangs', img: longBangsL, level: 5, check: 'notForBaby'},
+        {name: 'Finish', img: 'Finish', level: 5},
+    ])
 
     const [choices, setChoices] = useState(gender=='male'?ageBracketChoices:ageBracketChoicesF)
 
     useEffect(()=>{
         if(gender=='male'){
             setChoices(ageBracketChoices)
+            setEyeSelection(eye1)
         }
     }, [gender])
     // LOGIC TO REMOVE AVAILABLE CHOICES THAT SHOULD NOT BE AVAILABLE
@@ -102,19 +123,9 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
             choices.forEach((option)=>{
                 if(option.check){
                     switch(option.check){
-                        case 'babyExpCrit':
-                                if(ageBracketSelection!=babyBaseL){
-                                    // alert('test')
-                                    let refreshChoices = choices.filter((item)=>(item.img!=babyExp))
-                                    setChoices(refreshChoices)
-                                }
-                            break;
-                        case 'expCrit':
-                            if(ageBracketSelection!=teenMBaseL){
-                                let refreshChoices = choices.filter((item)=>(item.img!=exp))
-                                setChoices(refreshChoices)
-                            }
-                        break;
+                        case 'notForBaby':
+                            let refresh = choices.filter((item)=>(item.img!=longBangsL))
+                            setChoices(refresh)
                     }
                 }
             })
@@ -155,7 +166,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
             }
             case 3:{
                 if(img == 'next'){
-                    setChoices(expressChoices)
+                    setChoices(ageBracketSelection==babyBaseL?expressChoicesBaby:expressChoices)
                 }
                 else if(img == 'back'){
                     setChoices(skinChoices)
@@ -171,7 +182,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
             }
             case 4:{
                 if(img == 'next'){
-                    setChoices(hairChoices)
+                    setChoices(gender=='male'?hairChoices:hairChoicesF)
                 }
                 else if(img == 'back'){
                     setChoices(eyeChoices)
@@ -186,7 +197,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
             }
             case 5:{
                 if(img == 'back'){
-                    setChoices(expressChoices)
+                    setChoices(ageBracketSelection==babyBaseL?expressChoicesBaby:expressChoices)
                 
                 }
                 else if(img == 'Finish'){
@@ -235,7 +246,8 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
             const hairImg = new Image()
 
         hairImg.src = hairSelection==spikyHairL?spikyHairC:
-                   hairSelection==flatishTopL?flatishTopC:''
+                   hairSelection==flatishTopL?flatishTopC:
+                   hairSelection==longBangsL?longBangsC:''
 
         const clothesImg = new Image()
         const clothesH = new Image()
@@ -319,7 +331,8 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         const hairImg = new Image()
 
         hairImg.src = hairSelection==spikyHairL?spikyHairC:
-                   hairSelection==flatishTopL?flatishTopC:''
+                   hairSelection==flatishTopL?flatishTopC:
+                   hairSelection==longBangsL?longBangsC:''
 
         const clothesImg = new Image()
         const clothesH = new Image()
