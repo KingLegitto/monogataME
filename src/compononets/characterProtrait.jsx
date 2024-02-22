@@ -1,43 +1,14 @@
-import maleImage from '../assets/portraitImgs/gender/male.png'
-import femaleImage from '../assets/portraitImgs/gender/female.png'
-import babyBaseL from '../assets/portraitImgs/body/babyBaseL.png'
-import babyBaseC from '../assets/portraitImgs/body/babyBaseC.png'
-import babyBaseCH from '../assets/portraitImgs/body/babyBaseH.png'
-import babyBaseSH from '../assets/portraitImgs/body/babyBaseSkinH.png'
-import teenMBaseL from '../assets/portraitImgs/body/teenMBaseL.png'
-import teenMBaseC from '../assets/portraitImgs/body/teenMBaseC.png'
-import teenMBaseCH from '../assets/portraitImgs/body/teenMBaseH.png'
-import teenMBaseSH from '../assets/portraitImgs/body/teenMBaseSkinH.png'
-import adultFBaseL from '../assets/portraitImgs/body/adultFBaseL.png'
-import adultFBaseC from '../assets/portraitImgs/body/adultFBaseC.png'
-import adultFBaseCH from '../assets/portraitImgs/body/adultFBaseH.png'
-import eye1 from '../assets/portraitImgs/eye/eye1.png'
-import eye2 from '../assets/portraitImgs/eye/eye2.png'
-import eye3 from '../assets/portraitImgs/eye/eye3.png'
-import eye4 from '../assets/portraitImgs/eye/eye4.png'
-import skin1 from '../assets/portraitImgs/skin/skin1_.png'
-import skin2 from '../assets/portraitImgs/skin/skin2_.png'
-import skin3 from '../assets/portraitImgs/skin/skin3.png'
-import exp from '../assets/portraitImgs/expression/express.png'
-import babyExp from '../assets/portraitImgs/expression/baby_express.png'
-import confidentExp from '../assets/portraitImgs/expression/confident.png'
-import grinExp from '../assets/portraitImgs/expression/grin.png'
-import indiffExp from '../assets/portraitImgs/expression/indifferent.png'
-import spikyHairL from '../assets/portraitImgs/hair/spikyL.png'
-import spikyHairC from '../assets/portraitImgs/hair/spikyC.png'
-import flatishTopL from '../assets/portraitImgs/hair/flatishTopL.png'
-import flatishTopC from '../assets/portraitImgs/hair/flatishTopC.png'
-import longBangsL from '../assets/portraitImgs/hair/longWithBangsL.png'
-import longBangsC from '../assets/portraitImgs/hair/longWithBangsC.png'
-import afroFL from '../assets/portraitImgs/hair/afroFemaleL.png'
-import afroFC from '../assets/portraitImgs/hair/afroFemaleC.png'
 import { motion, AnimatePresence } from "framer-motion";
-import { ZoomContext } from '../App.jsx'
-import { useContext } from 'react'
 import { useState, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 import { useSelector, useDispatch } from "react-redux";
 import { placeImage } from '../redux/reduxStates.js';
+import {
+    maleImage, femaleImage, babyBase, babyBaseSH, teenMBase, teenMBaseSH, adultFBase,
+    eye1, eye2, eye3, eye4, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp,
+    indiffExp, spikyHairL, spikyHairC, flatishTopL, flatishTopC, longBangsL, longBangsC,
+    afroFL, afroFC
+} from './portraitImports.js'
 
 const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     const { characters } = useSelector((state) => state.overallStates)
@@ -49,22 +20,22 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     const [hBox, setHBox] = useState()
     const [wBox, setWBox] = useState()
     const [skinSelection, setSkinSelection] = useState(skin2)
-    const [ageBracketSelection, setAgeBracketSelection] = useState(babyBaseL)
+    const [ageBracketSelection, setAgeBracketSelection] = useState(babyBase)
     const [eyeSelection, setEyeSelection] = useState(gender=='male'?eye1:eye2)
-    const [expSelection, setExpSelection] = useState(ageBracketSelection==babyBaseL?babyExp:exp)
+    const [expSelection, setExpSelection] = useState(ageBracketSelection==babyBase?babyExp:exp)
     const [hairSelection, setHairSelection] = useState()
     const [normalize, setNormalize] = useState(false)
     const [allClear, setAllClear] = useState(false)
 
     // CHOICES ///////////////////////////////////////////////////////////////
     const [ageBracketChoices, setAgeBracketChoices] = useState([
-        {name: 'Baby', img: babyBaseL, level: 1},
-        {name: 'Teen', img: teenMBaseL, level: 1},
+        {name: 'Baby', img: babyBase, level: 1},
+        {name: 'Teen', img: teenMBase, level: 1},
         {name: 'Next', img: 'next', level: 1},
     ])
     const [ageBracketChoicesF, setAgeBracketChoicesF] = useState([
-        {name: 'Baby', img: babyBaseL, level: 1},
-        {name: 'Adult', img: adultFBaseL, level: 1},
+        {name: 'Baby', img: babyBase, level: 1},
+        {name: 'Adult', img: adultFBase, level: 1},
         {name: 'Next', img: 'next', level: 1}
     ])
     const [skinChoices, setSkinChoices] = useState([
@@ -126,7 +97,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                 if(option.check){
                     switch(option.check){
                         case 'notForBaby':
-                            if(ageBracketSelection==babyBaseL){
+                            if(ageBracketSelection==babyBase){
                                 let refresh = choices.filter((item)=>(item.img!=option.img))
                                 setChoices(refresh)
                             }break;
@@ -175,7 +146,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
             }
             case 3:{
                 if(img == 'next'){
-                    setChoices(ageBracketSelection==babyBaseL?expressChoicesBaby:expressChoices)
+                    setChoices(ageBracketSelection==babyBase?expressChoicesBaby:expressChoices)
                 }
                 else if(img == 'back'){
                     setChoices(skinChoices)
@@ -206,7 +177,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
             }
             case 5:{
                 if(img == 'back'){
-                    setChoices(ageBracketSelection==babyBaseL?expressChoicesBaby:expressChoices)
+                    setChoices(ageBracketSelection==babyBase?expressChoicesBaby:expressChoices)
                 
                 }
                 else if(img == 'Finish'){
@@ -247,7 +218,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     }, [allClear])
 
     useEffect(()=>{
-        setExpSelection(ageBracketSelection==babyBaseL?babyExp:exp)
+        setExpSelection(ageBracketSelection==babyBase?babyExp:exp)
     }, [ageBracketSelection])
 
     useEffect(()=>{
@@ -259,20 +230,11 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                    hairSelection==longBangsL?longBangsC:
                    hairSelection==afroFL?afroFC:''
 
-        const clothesImg = new Image()
-        const clothesH = new Image()
-        clothesImg.src = ageBracketSelection==babyBaseL?babyBaseC:
-                        ageBracketSelection==teenMBaseL?teenMBaseC:
-                        ageBracketSelection==adultFBaseL?adultFBaseC:''
-        clothesH.src = ageBracketSelection==babyBaseL?babyBaseCH:
-                        ageBracketSelection==teenMBaseL?teenMBaseCH:
-                        ageBracketSelection==adultFBaseL?adultFBaseCH:''
-
         const skinImg = new Image()
         const skinH = new Image()
         skinImg.src = skinSelection
-        skinH.src = ageBracketSelection==babyBaseL?babyBaseSH:
-                    ageBracketSelection==teenMBaseL||ageBracketSelection==adultFBaseL?teenMBaseSH:''
+        skinH.src = ageBracketSelection==babyBase?babyBaseSH:
+                    ageBracketSelection==teenMBase||ageBracketSelection==adultFBase?teenMBaseSH:''
     
         const canvas = document.getElementById('canvas')
         const ctx = canvas.getContext('2d')
@@ -282,26 +244,15 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         hairImg.onload = ()=>{
             ctx.drawImage(hairImg,0,0, 720, 767, -2, -1, wBox, hBox)
             // setLoading(false)
-            // const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-            // const data = imageData.data
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+            const data = imageData.data
     
-            // for (let i = 0; i < data.length; i += 4){
-            //     data[i] = data[i]==0?0:101;
-            //     data[i+1] = data[i+1]==0?0:255;
-            //     data[i+2] = data[i+2]==0?0:204;
-            // }
-            // ctx.putImageData(imageData, 0, 0)
-        }
-
-        const canvas2 = document.getElementById('clothesCanvas')
-        const ctxClothes = canvas2.getContext('2d')
-
-        ctxClothes.clearRect(0,0,wBox,hBox)
-        ctxClothes.globalCompositeOperation = "lighter"
-        clothesImg.onload = ()=>{
-            ctxClothes.drawImage(clothesImg,0,0, 720, 767, -2, -3, wBox, hBox)
-            ctxClothes.drawImage(clothesH,0,0, 720, 767, -2, -3, wBox, hBox)
-            // setLoading(false)
+            for (let i = 0; i < data.length; i += 4){
+                data[i] = 191;
+                data[i+1] = 191;
+                data[i+2] = 191;
+            }
+            ctx.putImageData(imageData, 0, 0)
         }
 
         const canvas3 = document.getElementById('skinCanvas')
@@ -345,20 +296,11 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                    hairSelection==longBangsL?longBangsC:
                    hairSelection==afroFL?afroFC:''
 
-        const clothesImg = new Image()
-        const clothesH = new Image()
-        clothesImg.src = ageBracketSelection==babyBaseL?babyBaseC:
-                        ageBracketSelection==teenMBaseL?teenMBaseC:
-                        ageBracketSelection==adultFBaseL?adultFBaseC:''
-        clothesH.src = ageBracketSelection==babyBaseL?babyBaseCH:
-                        ageBracketSelection==teenMBaseL?teenMBaseCH:
-                        ageBracketSelection==adultFBaseL?adultFBaseCH:''
-
         const skinImg = new Image()
         const skinH = new Image()
         skinImg.src = skinSelection
-        skinH.src = ageBracketSelection==babyBaseL?babyBaseSH:
-                    ageBracketSelection==teenMBaseL||ageBracketSelection==adultFBaseL?teenMBaseSH:''
+        skinH.src = ageBracketSelection==babyBase?babyBaseSH:
+                    ageBracketSelection==teenMBase||ageBracketSelection==adultFBase?teenMBaseSH:''
     
         const canvas = document.getElementById('canvas')
         const ctx = canvas.getContext('2d')
@@ -366,16 +308,6 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         ctx.clearRect(0,0,wBox,hBox)
         hairImg.onload = ()=>{
             ctx.drawImage(hairImg,0,0, 720, 767, -2, -1, wBox, hBox)
-        }
-
-        const canvas2 = document.getElementById('clothesCanvas')
-        const ctxClothes = canvas2.getContext('2d')
-
-        ctxClothes.clearRect(0,0,wBox,hBox)
-        ctxClothes.globalCompositeOperation = "lighter"
-        clothesImg.onload = ()=>{
-            ctxClothes.drawImage(clothesImg,0,0, 720, 767, -2, -3, wBox, hBox)
-            ctxClothes.drawImage(clothesH,0,0, 720, 767, -2, -3, wBox, hBox)
         }
 
         const canvas3 = document.getElementById('skinCanvas')
@@ -458,9 +390,6 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                 <img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[3]`} src={ageBracketSelection}
                 style={{objectPositionPosition: 'center', objectFit: 'contain'}} />   
                 
-                <canvas width={wBox} height={hBox} id='clothesCanvas' className='absolute z-[2] rounded-[32px]'>
-
-                </canvas>
 
                 {/* EYE LAYER /////////////////////////////////////////////////// */}
                 <img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[4]`} src={eyeSelection} onLoad={()=>{setLoading(false)}}
