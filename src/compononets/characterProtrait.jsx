@@ -244,15 +244,15 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         hairImg.onload = ()=>{
             ctx.drawImage(hairImg,0,0, 720, 767, -2, -1, wBox, hBox)
             // setLoading(false)
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-            const data = imageData.data
+            // const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+            // const data = imageData.data
     
-            for (let i = 0; i < data.length; i += 4){
-                data[i] = 191;
-                data[i+1] = 191;
-                data[i+2] = 191;
-            }
-            ctx.putImageData(imageData, 0, 0)
+            // for (let i = 0; i < data.length; i += 4){
+            //     data[i] = 191;
+            //     data[i+1] = 191;
+            //     data[i+2] = 191;
+            // }
+            // ctx.putImageData(imageData, 0, 0)
         }
 
         const canvas3 = document.getElementById('skinCanvas')
