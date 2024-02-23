@@ -445,13 +445,14 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
 
 
             {/* AVAILABLE CHOICES */}
-            <div className='absolute w-[100%] px-[10px] md:w-[450px] flex flex-wrap justify-start lg:left-[50%] top-[85%] lg:top-[50%] translate-y-[0%] lg:translate-y-[-50%]'>
+            <div className=' absolute w-[100%] m-auto px-[10px] md:w-[450px] flex flex-wrap lg:left-[50%] top-[82%] lg:top-[50%] translate-y-[0%] lg:translate-y-[-50%] max-h-[110px] overflow-scroll'>
                 {choices.map((choice, i)=>{
                     return(
-                        <motion.div whileTap={{scale: 0.9}} key={`${choice.name}${choice.level}`} initial={{y: 20, opacity: 0}} animate={{y: 0, opacity: normalize?0:1, transition:{delay: i*0.1, opacity:{duration: 0.5, delay: i*0.1}}}}
+                        <motion.div whileTap={{scale: 0.9}} key={`${choice.name}${choice.level}`} initial={{y: 20, opacity: 0}} animate={{y: 0, opacity: normalize?0:1, transition:{delay: i*0.1, opacity:{duration: 0.5, delay: normalize?0:i*0.1}}}}
                         className={`rounded-[20px] w-[70px] max-w-[70px] px-[10px] m-[5px] h-[40px] flex justify-center items-center bg-white ${choice.name.length>8?'textOverflowAnim':''} `} 
                         style={{cursor: 'pointer', backgroundColor: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection||choice.img==hairColorSelection? '#ff74c5':'white',
-                        color: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection||choice.img==hairColorSelection? 'white':'black', transition: '0.2s', whiteSpace:'nowrap', overflow: 'hidden'}} 
+                        color: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection||choice.img==hairColorSelection? 'white':'black', transition: '0.2s', whiteSpace:'nowrap', overflow: 'hidden',
+                        animationDelay: `${i/3}s`}}
                         onClick={()=>{makeSelection(choice.level, choice.img)}}>
                             {choice.name}
                         </motion.div>

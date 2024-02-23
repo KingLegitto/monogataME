@@ -186,6 +186,7 @@ aside button{
 .textOverflowAnim{
     animation: slideView 4s linear infinite;
     padding-left: 20px;
+    padding-right: 0px;
 }
 
 @keyframes slideView {
