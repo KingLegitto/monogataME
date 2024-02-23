@@ -5,8 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { placeImage } from '../redux/reduxStates.js';
 import {
     maleImage, femaleImage, babyBase, babyBaseSH, teenMBase, teenMBaseSH, adultFBase,
-    eye1, eye2, eye3, eye4, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp,
-    indiffExp, spikyHairL, spikyHairC, flatishTopL, flatishTopC, longBangsL, longBangsC,
+    eye1, eye2, eye3, eye4, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp, determinedExp,
+    indiffExp, seriousExp, spikyHairL, spikyHairC, flatishTopL, flatishTopC, longBangsL, longBangsC,
     afroFL, afroFC
 } from './portraitImports.js'
 
@@ -24,6 +24,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     const [eyeSelection, setEyeSelection] = useState(gender=='male'?eye1:eye2)
     const [expSelection, setExpSelection] = useState(ageBracketSelection==babyBase?babyExp:exp)
     const [hairSelection, setHairSelection] = useState()
+    const [hairColorSelection, setHairColorSelection] = useState([19,37,45])
     const [normalize, setNormalize] = useState(false)
     const [allClear, setAllClear] = useState(false)
 
@@ -57,7 +58,9 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         {name: 'Go back', img: 'back', level: 4},
         {name: 'Smile', img: exp, level: 4},
         {name: 'Grin', img: grinExp, level: 4},
+        {name: 'Determined', img: determinedExp, level: 4},
         {name: 'Confident', img: confidentExp, level: 4},
+        {name: 'Serious', img: seriousExp, level: 4},
         {name: 'Indifferent', img: indiffExp, level: 4},
         {name: 'Next', img: 'next', level: 4},
     ])
@@ -71,7 +74,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         {name: 'Bald', img: null, level: 5},
         {name: 'Spiky', img: spikyHairL, level: 5},
         {name: 'Flatish Top', img: flatishTopL, level: 5},
-        {name: 'Finish', img: 'Finish', level: 5},
+        {name: 'Next', img: 'next', level: 5},
     ])
     const [hairChoicesF, setHairChoicesF] = useState([
         {name: 'Go back', img: 'back', level: 5},
@@ -79,6 +82,18 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         {name: 'Spiky', img: spikyHairL, level: 5},
         {name: 'Long(Bangs)', img: longBangsL, level: 5, check: 'notForBaby'},
         {name: 'Afro', img: afroFL, level: 5, check: 'notForBaby'},
+        {name: 'Next', img: 'next', level: 5},
+    ])
+    const [hairColors, setHairColors] = useState([
+        {name: 'Go back', img: 'backToHair', level: 5},
+        {name: 'Dark blue', img: [19,37,45], level: 5},
+        {name: 'Black', img: [25,25,25], level: 5},
+        {name: 'White', img: [229,243,255], level: 5},
+        {name: 'Blonde', img: [255,232,140], level: 5 },
+        {name: 'Green', img: [175,255,155], level: 5 },
+        {name: 'Pale red', img: [204,110,113], level: 5 },
+        {name: 'Blue', img: [110,177,204], level: 5 },
+        {name: 'Brown', img: [102,69,51], level: 5},
         {name: 'Finish', img: 'Finish', level: 5},
     ])
 
@@ -180,16 +195,23 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                     setChoices(ageBracketSelection==babyBase?expressChoicesBaby:expressChoices)
                 
                 }
+                else if(img == 'backToHair'){
+                    setChoices(gender=='male'?hairChoices:hairChoicesF)
+                
+                }
+                else if(img == 'next'){
+                    setChoices(hairColors)
+                }
                 else if(img == 'Finish'){
                     setNormalize(true)
                     
                 }
                 else{
-                    if(hairSelection != img && img != null){
+                    if(hairSelection != img && img != null && choices != hairColors){
                         setLoading(true)
                     }
                     
-                    setHairSelection(img)  
+                    choices==hairColors?setHairColorSelection(img):setHairSelection(img)  
                 } 
                 break
             }
@@ -244,15 +266,15 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         hairImg.onload = ()=>{
             ctx.drawImage(hairImg,0,0, 720, 767, -2, -1, wBox, hBox)
             // setLoading(false)
-            // const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-            // const data = imageData.data
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+            const data = imageData.data
     
-            // for (let i = 0; i < data.length; i += 4){
-            //     data[i] = 191;
-            //     data[i+1] = 191;
-            //     data[i+2] = 191;
-            // }
-            // ctx.putImageData(imageData, 0, 0)
+            for (let i = 0; i < data.length; i += 4){
+                data[i] = hairColorSelection[0];
+                data[i+1] = hairColorSelection[1];
+                data[i+2] = hairColorSelection[2];
+            }
+            ctx.putImageData(imageData, 0, 0)
         }
 
         const canvas3 = document.getElementById('skinCanvas')
@@ -270,7 +292,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         }
 
         }
-    }, [hairSelection, ageBracketSelection, skinSelection])
+    }, [hairSelection, ageBracketSelection, skinSelection, hairColorSelection])
 
     useEffect(()=>{
         if(preview){
@@ -308,6 +330,15 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         ctx.clearRect(0,0,wBox,hBox)
         hairImg.onload = ()=>{
             ctx.drawImage(hairImg,0,0, 720, 767, -2, -1, wBox, hBox)
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+            const data = imageData.data
+    
+            for (let i = 0; i < data.length; i += 4){
+                data[i] = hairColorSelection[0];
+                data[i+1] = hairColorSelection[1];
+                data[i+2] = hairColorSelection[2];
+            }
+            ctx.putImageData(imageData, 0, 0)
         }
 
         const canvas3 = document.getElementById('skinCanvas')
@@ -419,8 +450,8 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                     return(
                         <motion.div whileTap={{scale: 0.9}} key={`${choice.name}${choice.level}`} initial={{y: 20, opacity: 0}} animate={{y: 0, opacity: normalize?0:1, transition:{delay: i*0.1, opacity:{duration: 0.5, delay: i*0.1}}}}
                         className={`rounded-[20px] w-[70px] max-w-[70px] px-[10px] m-[5px] h-[40px] flex justify-center items-center bg-white ${choice.name.length>8?'textOverflowAnim':''} `} 
-                        style={{cursor: 'pointer', backgroundColor: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection? '#ff74c5':'white',
-                        color: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection? 'white':'black', transition: '0.2s', whiteSpace:'nowrap', overflow: 'hidden'}} 
+                        style={{cursor: 'pointer', backgroundColor: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection||choice.img==hairColorSelection? '#ff74c5':'white',
+                        color: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection||choice.img==hairColorSelection? 'white':'black', transition: '0.2s', whiteSpace:'nowrap', overflow: 'hidden'}} 
                         onClick={()=>{makeSelection(choice.level, choice.img)}}>
                             {choice.name}
                         </motion.div>
