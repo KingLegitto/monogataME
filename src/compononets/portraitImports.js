@@ -4,7 +4,8 @@ import babyBase from '../assets/portraitImgs/body/babyBase.png'
 import babyBaseSH from '../assets/portraitImgs/body/babyBaseSkinH.png'
 import teenMBase from '../assets/portraitImgs/body/teenMBase.png'
 import teenMBaseSH from '../assets/portraitImgs/body/teenMBaseSkinH.png'
-import adultFBase from '../assets/portraitImgs/body/adultFBase.png'
+import adultFBase from '../assets/portraitImgs/body/adultFBase_.png'
+import adultFBaseC from '../assets/portraitImgs/body/adultFBaseC.png'
 import eye1 from '../assets/portraitImgs/eye/eye1.png'
 import eye2 from '../assets/portraitImgs/eye/eye2.png'
 import eye3 from '../assets/portraitImgs/eye/eye3.png'
@@ -29,7 +30,7 @@ import afroFL from '../assets/portraitImgs/hair/afroFL.png'
 import afroFC from '../assets/portraitImgs/hair/afroFC.png'
  
 export {
-    maleImage, femaleImage, babyBase, babyBaseSH, teenMBase, teenMBaseSH, adultFBase,
+    maleImage, femaleImage, babyBase, babyBaseSH, teenMBase, teenMBaseSH, adultFBase, adultFBaseC,
     eye1, eye2, eye3, eye4, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp, determinedExp,
     indiffExp, seriousExp, spikyHairL, spikyHairC, flatishTopL, flatishTopC, longBangsL, longBangsC,
     afroFL, afroFC
