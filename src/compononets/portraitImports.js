@@ -30,10 +30,17 @@ import longBangsL from '../assets/portraitImgs/hair/longBangs.png'
 import longBangsC from '../assets/portraitImgs/hair/longBangsC.png'
 import afroL from '../assets/portraitImgs/hair/afro.png'
 import afroC from '../assets/portraitImgs/hair/afroC.png'
+import circleGlasses from '../assets/portraitImgs/accessories/circleGlasses.png'
+import earrings1 from '../assets/portraitImgs/accessories/earrings1.png'
+import earrings2 from '../assets/portraitImgs/accessories/earrings2.png'
+import policeShades from '../assets/portraitImgs/accessories/policeShades.png'
+import readingGlasses from '../assets/portraitImgs/accessories/readingGlasses.png'
+
+
  
 export {
     maleImage, femaleImage, babyBase, babyBaseC, babyBaseSH, teenMBase, teenMBaseC, teenMBaseSH, adultFBase, adultFBaseC,
     eye1, eye2, eye3, eye4, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp, determinedExp,
     indiffExp, seriousExp, spikyHairL, spikyHairC, flatishTopL, flatishTopC, longBangsL, longBangsC,
-    afroL, afroC
+    afroL, afroC, circleGlasses, earrings1, earrings2, policeShades, readingGlasses
 };

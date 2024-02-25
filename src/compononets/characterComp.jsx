@@ -62,7 +62,7 @@ const CharacterComp = ({setBgOverlay, setViewer, setNameToSend, setTargetImg, se
                 <input type="text"  value={`${characters[keyId].weight==''?'---':characters[keyId].weight} kg`}/>
             </span>
 
-            {editMode && (<div className=" absolute top-[-20px] right-0 w-[auto] p-[10px] bg-red-500 text-[white] rounded-[5px] flex justify-center items-center" onClick={()=>{dispatch(deleteCharacters(characters[keyId].name)), window.removeEventListener('click', closeEditModeChar)}}>
+            {editMode && (<div className=" absolute top-[-20px] right-0 w-[auto] h-[35px] p-[10px] bg-red-500 text-[white] rounded-[5px] flex justify-center items-center" onClick={()=>{dispatch(deleteCharacters(characters[keyId].name)), window.removeEventListener('click', closeEditModeChar)}}>
                 < Delete />
             </div>)}
             

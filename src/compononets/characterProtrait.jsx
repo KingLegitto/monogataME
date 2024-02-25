@@ -7,7 +7,7 @@ import {
     maleImage, femaleImage, babyBase, babyBaseC, babyBaseSH, teenMBase, teenMBaseC, teenMBaseSH, adultFBase, adultFBaseC,
     eye1, eye2, eye3, eye4, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp, determinedExp,
     indiffExp, seriousExp, spikyHairL, spikyHairC, flatishTopL, flatishTopC, longBangsL, longBangsC,
-    afroL, afroC
+    afroL, afroC, circleGlasses, earrings1, earrings2, policeShades, readingGlasses
 } from './portraitImports.js'
 
 const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
@@ -29,6 +29,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     const [clothesNewC, setClothesNewC] = useState([255,101,163])
     const [hairCurrentC, setHairCurrentC] = useState([19,37,45])
     const [hairNewC, setHairNewC] = useState([19,37,45])
+    const [accessorySelection, setAccessorySelection] = useState()
     const [normalize, setNormalize] = useState(false)
     const [allClear, setAllClear] = useState(false)
 
@@ -78,7 +79,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         {name: 'Purple', img: [255,101,163], level: 4.5},
         {name: 'Black', img: [19,37,45], level: 4.5},
         {name: 'Red', img: [204,59,59], level: 4.5},
-        {name: 'White', img: [191,191,191], level: 4.5},
+        {name: 'White', img: [230,230,230], level: 4.5},
         {name: 'Next', img: 'next', level: 4.5},
     ])
     const [hairChoices, setHairChoices] = useState([
@@ -107,7 +108,16 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         {name: 'Pink', img: [255,101,163], level: 5 },
         {name: 'Blue', img: [110,177,204], level: 5 },
         {name: 'Brown', img: [114,77,57], level: 5},
-        {name: 'Finish', img: 'Finish', level: 5},
+        {name: 'Next', img: 'next', level: 5},
+    ])
+    const [accessories, setAccessories] = useState([
+        {name: 'Go back', img: 'back', level: 6},
+        {name: 'Glasses', img: readingGlasses, level: 6},
+        {name: 'Circle Glasses', img: circleGlasses, level: 6},
+        {name: 'Shades 1', img: policeShades, level: 6},
+        {name: 'Earring(S)', img: earrings1, level: 6},
+        {name: 'Earrings(B)', img: earrings2, level: 6},
+        {name: 'Finish', img: 'Finish', level: 6},
     ])
 
     const [choices, setChoices] = useState(gender=='male'?ageBracketChoices:ageBracketChoicesF)
@@ -227,12 +237,9 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                 
                 }
                 else if(img == 'next'){
-                    setChoices(hairColors)
+                    setChoices(choices==hairColors?accessories:hairColors)
                 }
-                else if(img == 'Finish'){
-                    setNormalize(true)
-                    
-                }
+                
                 else{
                     if(hairSelection != img && img != null && choices != hairColors){
                         setLoading(true)
@@ -240,6 +247,24 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                     
                     choices==hairColors?setHairCurrentC(hairNewC):setHairSelection(img)
                     choices==hairColors?setHairNewC(img):''
+                } 
+                break
+            }
+            case 6:{
+                if(img == 'back'){
+                    setChoices(hairColors)
+                
+                }
+                else if(img == 'Finish'){
+                    setNormalize(true)
+                    
+                }
+                else{
+                    if(accessorySelection != img){
+                        setLoading(true)
+                    }
+                    
+                    setAccessorySelection(img)
                 } 
                 break
             }
@@ -513,8 +538,9 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                 {hairSelection[0] && (<img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[7]`} src={hairSelection[0]}
                 style={{objectPositionPosition: 'center', objectFit: 'contain'}} />)}
 
-                
-                
+                {/* ACCESSORIES LAYER ////////////////////////////////////////// */}
+                <img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[8]`} src={accessorySelection} onLoad={()=>{setLoading(false)}}
+                style={{objectPositionPosition: 'center', objectFit: 'contain'}} />
 
             </div>
 
