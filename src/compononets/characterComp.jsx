@@ -42,7 +42,7 @@ const CharacterComp = ({setBgOverlay, setViewer, setNameToSend, setTargetImg, se
         <div className="h-[100%] w-[90%] bg-gray-500 justify-self-start rounded-l-[20px] "
         style={{backgroundImage: `url(${characters[keyId].portrait==''?placeholder:characters[keyId].portrait})`, backgroundPosition: innerWidth<800?'center 40%':'center 40%', backgroundSize: innerWidth<800?'140%':'110%',
         boxShadow: '3px 0px 0px 3px rgba(0,0,0,0.7)'}}
-        onClick={()=>{ setTargetImg(characters[keyId].portrait==''?placeholder:characters[keyId].portrait),setViewer(true), setBgOverlay(true), setCharacterNum(i), setNameToSend(characters[keyId].name==''? 'unnamed_character':characters[keyId].name)}}>
+        onClick={()=>{ setTargetImg(characters[keyId].portrait==''?placeholder:characters[keyId].portrait),setViewer(true), setBgOverlay(true), setCharacterNum(keyId), setNameToSend(characters[keyId].name==''? 'unnamed_character':characters[keyId].name)}}>
             
         </div>
 

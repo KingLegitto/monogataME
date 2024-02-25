@@ -77,12 +77,13 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         {name: 'Go back', img: 'back', level: 4.5},
         {name: 'Purple', img: [255,101,163], level: 4.5},
         {name: 'Black', img: [19,37,45], level: 4.5},
-        {name: 'Red', img: [201,20,20], level: 4.5},
+        {name: 'Red', img: [204,59,59], level: 4.5},
+        {name: 'White', img: [191,191,191], level: 4.5},
         {name: 'Next', img: 'next', level: 4.5},
     ])
     const [hairChoices, setHairChoices] = useState([
         {name: 'Go back', img: 'back', level: 5},
-        {name: 'Bald', img: null, level: 5},
+        {name: 'Bald', img: [null,null], level: 5},
         {name: 'Spiky', img: [spikyHairL,spikyHairC], level: 5},
         {name: 'Afro', img: [afroL, afroC], level: 5, check: 'notForBaby'},
         {name: 'Flatish Top', img: [flatishTopL,flatishTopC], level: 5},
@@ -90,7 +91,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     ])
     const [hairChoicesF, setHairChoicesF] = useState([
         {name: 'Go back', img: 'back', level: 5},
-        {name: 'Bald', img: null, level: 5},
+        {name: 'Bald', img: [null, null], level: 5},
         {name: 'Spiky', img: [spikyHairL,spikyHairC], level: 5},
         {name: 'Long(Bangs)', img: [longBangsL,longBangsC], level: 5, check: 'notForBaby'},
         {name: 'Afro', img: [afroL, afroC], level: 5, check: 'notForBaby'},
@@ -99,7 +100,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     const [hairColors, setHairColors] = useState([
         {name: 'Go back', img: 'backToHair', level: 5},
         {name: 'Black', img: [19,37,45], level: 5},
-        {name: 'White', img: [240,240,240], level: 5},
+        {name: 'White', img: [191,191,191], level: 5},
         {name: 'Blonde', img: [255,232,140], level: 5 },
         {name: 'Green', img: [175,255,155], level: 5 },
         {name: 'Red', img: [204,40, 40], level: 5 },
@@ -140,7 +141,6 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     }, [choices])
 
     function makeSelection(level, img){
-        
         
         switch(level){
             case 1:{
@@ -510,7 +510,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                 <canvas width={wBox} height={hBox} id='canvas' className={`absolute z-[6] ${normalize?'rounded-[0px]':'rounded-[32px]'}`}>
 
                 </canvas>
-                {hairSelection && (<img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[7]`} src={hairSelection[0]}
+                {hairSelection[0] && (<img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[7]`} src={hairSelection[0]}
                 style={{objectPositionPosition: 'center', objectFit: 'contain'}} />)}
 
                 
