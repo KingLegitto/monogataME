@@ -29,8 +29,17 @@ export const reduxSlice = createSlice({
             }
     },
 
-    updateCharacters: (state, action) => {
+    addCharacters: (state, action) => {
       state.characters.push(action.payload)
+    },
+
+    updateCharacters: (state, action) => {
+      // state.characters.push(action.payload)
+    },
+
+    deleteCharacters: (state, action) => {
+
+      state.characters = state.characters.filter((item)=>(item.name != action.payload))
     },
 
     placeImage: (state, action) => {
@@ -41,6 +50,6 @@ export const reduxSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { updateSlider, handleZoom, updateCharacters, placeImage } = reduxSlice.actions
+export const { updateSlider, handleZoom, updateCharacters, addCharacters, deleteCharacters, placeImage } = reduxSlice.actions
 
 export default reduxSlice.reducer
