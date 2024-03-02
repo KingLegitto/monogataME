@@ -12,6 +12,7 @@ import eye1 from '../assets/portraitImgs/eye/eye1.png'
 import eye2 from '../assets/portraitImgs/eye/eye2.png'
 import eye3 from '../assets/portraitImgs/eye/eye3.png'
 import eye4 from '../assets/portraitImgs/eye/eye4.png'
+import dullEyes from '../assets/portraitImgs/eye/dullEyes.png'
 import skin1 from '../assets/portraitImgs/skin/skin1.png'
 import skin2 from '../assets/portraitImgs/skin/skin2.png'
 import skin3 from '../assets/portraitImgs/skin/skin3_.png'
@@ -22,6 +23,7 @@ import determinedExp from '../assets/portraitImgs/expression/determined.png'
 import seriousExp from '../assets/portraitImgs/expression/serious.png'
 import grinExp from '../assets/portraitImgs/expression/grin.png'
 import indiffExp from '../assets/portraitImgs/expression/indifferent.png'
+import annoyed from '../assets/portraitImgs/expression/annoyed.png'
 import spikyHairL from '../assets/portraitImgs/hair/spiky.png'
 import spikyHairC from '../assets/portraitImgs/hair/spikyC.png'
 import flatishTopL from '../assets/portraitImgs/hair/flatishTop.png'
@@ -30,17 +32,17 @@ import longBangsL from '../assets/portraitImgs/hair/longBangs.png'
 import longBangsC from '../assets/portraitImgs/hair/longBangsC.png'
 import afroL from '../assets/portraitImgs/hair/afro.png'
 import afroC from '../assets/portraitImgs/hair/afroC.png'
-import circleGlasses from '../assets/portraitImgs/accessories/circleGlasses.png'
+import circleGlasses from '../assets/portraitImgs/accessories/circularGlasses.png'
 import earrings1 from '../assets/portraitImgs/accessories/earrings1.png'
 import earrings2 from '../assets/portraitImgs/accessories/earrings2.png'
-import policeShades from '../assets/portraitImgs/accessories/policeShades.png'
-import readingGlasses from '../assets/portraitImgs/accessories/readingGlasses.png'
+import policeShades from '../assets/portraitImgs/accessories/policeShades_.png'
+import geekyGlasses from '../assets/portraitImgs/accessories/geekyGlasses.png'
 
 
  
 export {
     maleImage, femaleImage, babyBase, babyBaseC, babyBaseSH, teenMBase, teenMBaseC, teenMBaseSH, adultFBase, adultFBaseC,
-    eye1, eye2, eye3, eye4, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp, determinedExp,
-    indiffExp, seriousExp, spikyHairL, spikyHairC, flatishTopL, flatishTopC, longBangsL, longBangsC,
-    afroL, afroC, circleGlasses, earrings1, earrings2, policeShades, readingGlasses
+    eye1, eye2, eye3, eye4, dullEyes, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp, determinedExp,
+    indiffExp, seriousExp, annoyed, spikyHairL, spikyHairC, flatishTopL, flatishTopC, longBangsL, longBangsC,
+    afroL, afroC, circleGlasses, earrings1, earrings2, policeShades, geekyGlasses
 };

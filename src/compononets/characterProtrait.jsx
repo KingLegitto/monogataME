@@ -5,9 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { placeImage } from '../redux/reduxStates.js';
 import {
     maleImage, femaleImage, babyBase, babyBaseC, babyBaseSH, teenMBase, teenMBaseC, teenMBaseSH, adultFBase, adultFBaseC,
-    eye1, eye2, eye3, eye4, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp, determinedExp,
-    indiffExp, seriousExp, spikyHairL, spikyHairC, flatishTopL, flatishTopC, longBangsL, longBangsC,
-    afroL, afroC, circleGlasses, earrings1, earrings2, policeShades, readingGlasses
+    eye1, eye2, eye3, eye4, dullEyes, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp, determinedExp,
+    indiffExp, seriousExp, annoyed, spikyHairL, spikyHairC, flatishTopL, flatishTopC, longBangsL, longBangsC,
+    afroL, afroC, circleGlasses, earrings1, earrings2, policeShades, geekyGlasses
 } from './portraitImports.js'
 
 const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
@@ -57,6 +57,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         {name: 'Basic ♀️', img: eye2, level: 3},
         {name: 'Closed', img: eye3, level: 3},
         {name: 'Half closed', img: eye4, level: 3},
+        {name: 'Dull', img: dullEyes, level: 3},
         {name: 'Next', img: 'next', level: 3},
     ])
     const [expressChoices, setExpressChoices] = useState([
@@ -67,6 +68,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         // {name: 'Confident', img: confidentExp, level: 4},
         // {name: 'Serious', img: seriousExp, level: 4},
         {name: 'Indifferent', img: indiffExp, level: 4},
+        {name: 'Annoyed', img: annoyed, level: 4},
         {name: 'Next', img: 'next', level: 4},
     ])
     const [expressChoicesBaby, setExpressChoicesBaby] = useState([
@@ -112,9 +114,10 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     ])
     const [accessories, setAccessories] = useState([
         {name: 'Go back', img: 'back', level: 6},
-        {name: 'Glasses', img: readingGlasses, level: 6},
+        {name: 'None', img: null, level: 6},
+        {name: 'Geeky Glasses', img: geekyGlasses, level: 6},
         {name: 'Circle Glasses', img: circleGlasses, level: 6},
-        {name: 'Shades 1', img: policeShades, level: 6},
+        {name: 'Police Shades', img: policeShades, level: 6},
         {name: 'Earring(S)', img: earrings1, level: 6},
         {name: 'Earrings(B)', img: earrings2, level: 6},
         {name: 'Finish', img: 'Finish', level: 6},
@@ -260,7 +263,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                     
                 }
                 else{
-                    if(accessorySelection != img){
+                    if(accessorySelection != img && img != null){
                         setLoading(true)
                     }
                     
@@ -539,8 +542,8 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                 style={{objectPositionPosition: 'center', objectFit: 'contain'}} />)}
 
                 {/* ACCESSORIES LAYER ////////////////////////////////////////// */}
-                <img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[8]`} src={accessorySelection} onLoad={()=>{setLoading(false)}}
-                style={{objectPositionPosition: 'center', objectFit: 'contain'}} />
+                { accessorySelection && (<img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[8]`} src={accessorySelection} onLoad={()=>{setLoading(false)}}
+                style={{objectPositionPosition: 'center', objectFit: 'contain'}} />)}
 
             </div>
 
