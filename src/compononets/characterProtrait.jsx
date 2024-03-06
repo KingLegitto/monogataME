@@ -21,7 +21,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     const [wBox, setWBox] = useState()
     const [skinSelection, setSkinSelection] = useState(skin2)
     const [ageBracketSelection, setAgeBracketSelection] = useState([babyBase,babyBaseC])
-    const [eyeSelection, setEyeSelection] = useState(gender=='male'?eye1:eye2)
+    const [eyeSelection, setEyeSelection] = useState(eye1)
     const [expSelection, setExpSelection] = useState(ageBracketSelection==babyBase?babyExp:exp)
     const [hairSelection, setHairSelection] = useState([])
     // const [hairColorSelection, setHairColorSelection] = useState([19,37,45])
@@ -127,6 +127,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     useEffect(()=>{
         if(preview){
             setChoices(gender=='male'?ageBracketChoices:ageBracketChoicesF)
+            setEyeSelection(gender=='male'?eye1:eye2)
         }
     }, [gender])
 
@@ -196,7 +197,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                     setChoices(skinChoices)
                 }
                 else{
-                    if(ageBracketSelection[0] != img){
+                    if(ageBracketSelection != img){
                         setLoading(true)
                     }
                     setAgeBracketSelection(img)
@@ -339,18 +340,11 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
             const hairImg = new Image()
 
         hairImg.src = hairSelection[1]
-
-        const clothes = new Image()
-        clothes.src = ageBracketSelection[1]
-
-        const skinImg = new Image()
-        const skinH = new Image()
-        skinImg.src = skinSelection
-        skinH.src = ageBracketSelection[0]==babyBase?babyBaseSH:
-                    ageBracketSelection[0]==teenMBase||ageBracketSelection[0]==adultFBase?teenMBaseSH:''
-
-        const accessImg = new Image()
-        accessImg.src = accessorySelection
+        
+        if(hairSelection[1]==null){
+            setLoading(false)
+        }
+        
     
         const canvas = document.getElementById('canvas')
         const ctx = canvas.getContext('2d')
@@ -359,7 +353,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         // ctx.globalCompositeOperation = "lighter"
         hairImg.onload = ()=>{
             ctx.drawImage(hairImg,0,0, 720, 767, -2, -1, wBox, hBox)
-            // setLoading(false)
+            setLoading(false)
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
             const data = imageData.data
     
@@ -369,62 +363,88 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                 data[i+2] = data[i+2]!=hairCurrentC[2]?hairNewC[2] + blueHair(data[i+2]):hairNewC[2];
             }
             ctx.putImageData(imageData, 0, 0)
+        } 
+
+        
+
         }
+    }, [preview, hairSelection, hairNewC, wBox])
 
-        const canvas2 = document.getElementById('clothesCanvas')
-        const ctxClothes = canvas2.getContext('2d')
+    useEffect(()=>{
+        if(preview){
+            const clothes = new Image()
+            clothes.src = ageBracketSelection[1]
 
-        ctxClothes.clearRect(0,0,wBox,hBox)
-        clothes.onload = ()=>{
-            ctxClothes.drawImage(clothes,0,0, 720, 767, -2, -3, wBox, hBox)
-            // setLoading(false)
-            const imageData = ctxClothes.getImageData(0, 0, canvas.width, canvas.height)
-            const data = imageData.data
-    
-            for (let i = 0; i < data.length; i += 4){
-                data[i] = data[i]!=clothesCurrentC[0]?clothesNewC[0] + redClothes(data[i]):clothesNewC[0];
-                data[i+1] = data[i+1]!=clothesCurrentC[1]?clothesNewC[1] + greenClothes(data[i+1]):clothesNewC[1];
-                data[i+2] = data[i+2]!=clothesCurrentC[2]?clothesNewC[2] + blueClothes(data[i+2]):clothesNewC[2];
+            const canvas2 = document.getElementById('clothesCanvas')
+            const ctxClothes = canvas2.getContext('2d')
+
+            ctxClothes.clearRect(0,0,wBox,hBox)
+            clothes.onload = ()=>{
+                ctxClothes.drawImage(clothes,0,0, 720, 767, -2, -3, wBox, hBox)
+                setLoading(false)
+                const imageData = ctxClothes.getImageData(0, 0, canvas.width, canvas.height)
+                const data = imageData.data
+        
+                for (let i = 0; i < data.length; i += 4){
+                    data[i] = data[i]!=clothesCurrentC[0]?clothesNewC[0] + redClothes(data[i]):clothesNewC[0];
+                    data[i+1] = data[i+1]!=clothesCurrentC[1]?clothesNewC[1] + greenClothes(data[i+1]):clothesNewC[1];
+                    data[i+2] = data[i+2]!=clothesCurrentC[2]?clothesNewC[2] + blueClothes(data[i+2]):clothesNewC[2];
+                }
+                ctxClothes.putImageData(imageData, 0, 0)
             }
-            ctxClothes.putImageData(imageData, 0, 0)
         }
+    }, [preview, wBox, ageBracketSelection, clothesNewC])
 
-        const canvas3 = document.getElementById('skinCanvas')
-        const ctxSkin = canvas3.getContext('2d')
+    useEffect(()=>{
+        if(preview){
+            const skinImg = new Image()
+            const skinH = new Image()
+            skinImg.src = skinSelection
+            skinH.src = ageBracketSelection[0]==babyBase?babyBaseSH:
+                        ageBracketSelection[0]==teenMBase||ageBracketSelection[0]==adultFBase?teenMBaseSH:''
 
-        ctxSkin.clearRect(0,0,wBox,hBox)
-        ctxSkin.globalCompositeOperation = "lighter"
-        skinImg.onload = ()=>{
-            ctxSkin.drawImage(skinImg,0,0, 720, 767, -2, -3, wBox, hBox)
-            setLoading(false)
-            setAllClear(normalize?true:false)
-        }
-        skinH.onload = ()=>{
-            ctxSkin.drawImage(skinH,0,0, 720, 767, -2, -2, wBox, hBox)
-            // setLoading(false)
-        }
-
-        const canvas4 = document.getElementById('accessCanvas')
-        const ctxAccess = canvas4.getContext('2d')
-
-        ctxAccess.clearRect(0,0,wBox,hBox)
-        accessImg.onload = ()=>{
-            ctxAccess.drawImage(accessImg,0,0, 720, 767, -2, -3, wBox, hBox)
-            setLoading(false)
-            
-            // const imageData = ctxAccess.getImageData(0, 0, canvas.width, canvas.height)
-            // const data = imageData.data
+            const canvas3 = document.getElementById('skinCanvas')
+            const ctxSkin = canvas3.getContext('2d')
     
-            // for (let i = 0; i < data.length; i += 4){
-            //     data[i] = data[i]!=clothesCurrentC[0]?clothesNewC[0] + redClothes(data[i]):clothesNewC[0];
-            //     data[i+1] = data[i+1]!=clothesCurrentC[1]?clothesNewC[1] + greenClothes(data[i+1]):clothesNewC[1];
-            //     data[i+2] = data[i+2]!=clothesCurrentC[2]?clothesNewC[2] + blueClothes(data[i+2]):clothesNewC[2];
-            // }
-            // ctxAccess.putImageData(imageData, 0, 0)
+            ctxSkin.clearRect(0,0,wBox,hBox)
+            ctxSkin.globalCompositeOperation = "lighter"
+            skinImg.onload = ()=>{
+                ctxSkin.drawImage(skinImg,0,0, 720, 767, -2, -3, wBox, hBox)
+                setLoading(false)
+                setAllClear(normalize?true:false)
+            }
+            skinH.onload = ()=>{
+                ctxSkin.drawImage(skinH,0,0, 720, 767, -2, -2, wBox, hBox)
+                // setLoading(false)
+            }
         }
+    }, [preview, wBox, skinSelection, ageBracketSelection])
+    
+    useEffect(()=>{
+        if(preview){
+            const accessImg = new Image()
+            accessImg.src = accessorySelection
 
+            const canvas4 = document.getElementById('accessCanvas')
+            const ctxAccess = canvas4.getContext('2d')
+
+            ctxAccess.clearRect(0,0,wBox,hBox)
+            accessImg.onload = ()=>{
+                ctxAccess.drawImage(accessImg,0,0, 720, 767, -2, -3, wBox, hBox)
+                setLoading(false)
+                
+                // const imageData = ctxAccess.getImageData(0, 0, canvas.width, canvas.height)
+                // const data = imageData.data
+        
+                // for (let i = 0; i < data.length; i += 4){
+                //     data[i] = data[i]!=clothesCurrentC[0]?clothesNewC[0] + redClothes(data[i]):clothesNewC[0];
+                //     data[i+1] = data[i+1]!=clothesCurrentC[1]?clothesNewC[1] + greenClothes(data[i+1]):clothesNewC[1];
+                //     data[i+2] = data[i+2]!=clothesCurrentC[2]?clothesNewC[2] + blueClothes(data[i+2]):clothesNewC[2];
+                // }
+                // ctxAccess.putImageData(imageData, 0, 0)
+            }
         }
-    }, [preview, hairSelection, ageBracketSelection, skinSelection, hairNewC, wBox, clothesNewC, accessorySelection])
+    }, [preview, wBox, accessorySelection])
 
     function redClothes(val){
         let diff = val - 255
@@ -495,7 +515,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         </div>)}
 
         {/* PORTRAIT PARENT ///////////////////////////////////// */}
-        {preview && (<div className='w-[100%] fixed z-[12] bottom-[50%] translate-y-[50%] h-[85dvh] lg:h-[100vh]
+        {preview && (<div className='w-[100%] fixed z-[12] bottom-[47%] lg:bottom-[50%] translate-y-[50%] h-[85dvh] lg:h-[100vh]
         grid grid-cols-1 lg:grid-cols-2'>
 
 
@@ -576,11 +596,12 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
 
 
             {/* AVAILABLE CHOICES //////////////////////////////////////////////////////*/}
-            <div className=' w-[100%] md:w-[450px] px-[10px] flex flex-wrap h-[80px] lg:h-[100px] overflow-scroll order-2 lg:order-[0]'>
+            <div className=' w-[100%] md:w-[450px] px-[10px] flex flex-wrap gap-[10px] lg:gap-[20px] lg:grid h-[80px] lg:h-[200px] overflow-scroll order-2 lg:order-[0] border-b-[1px] border-[white]' style={{
+            gridTemplateRows: '40px', gridTemplateColumns: 'repeat(5, minmax(0, 70px))'}}>
                 {choices.map((choice, i)=>{
                     return(
                         <motion.div whileTap={{scale: 0.9}} key={`${choice.name}${choice.level}`} initial={{y: 20, opacity: 0}} animate={{y: 0, opacity: normalize?0:1, transition:{delay: i*0.1, opacity:{duration: 0.5, delay: normalize?0:i*0.1}}}}
-                        className={`rounded-[20px] w-[70px] max-w-[70px] px-[10px] m-[5px] h-[40px] flex justify-center items-center bg-white ${choice.name.length>8?'textOverflowAnim':''} `} 
+                        className={`rounded-[20px] w-[70px] max-w-[70px] px-[10px] h-[40px] flex justify-center items-center bg-white ${choice.name.length>8?'textOverflowAnim':''} `} 
                         style={{cursor: 'pointer', backgroundColor: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection||choice.img==hairNewC? '#ff74c5':'white',
                         color: choice.img==ageBracketSelection||choice.img==skinSelection||choice.img==eyeSelection||choice.img==expSelection||choice.img==hairSelection||choice.img==hairNewC? 'white':'black', transition: '0.2s', whiteSpace:'nowrap', overflow: 'hidden',
                         animationDelay: `${i/3}s`}}
