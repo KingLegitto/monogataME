@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 
 import PlotElements from './PlotElements.jsx'
-import { ZoomContext } from '../App.jsx'
+import { ZoomContext } from '../App.tsx'
 import { useContext } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSelector } from 'react-redux'

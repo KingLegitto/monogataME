@@ -1,7 +1,7 @@
 import { ArrowDropDownRounded, KeyboardDoubleArrowLeftRounded, KeyboardDoubleArrowRightRounded, RemoveRounded } from '@mui/icons-material';
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { ZoomContext } from '../App.jsx'
+import { ZoomContext } from '../App.tsx'
 import { useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { handleZoom } from '../redux/reduxStates.js';

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { sanityClient } from '../../client'
 import { motion } from "framer-motion"
 import { MenuRounded } from "@mui/icons-material"
-import { ZoomContext } from '../App.jsx'
+import { ZoomContext } from '../App.tsx'
 import { useContext } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import { handleZoom, updateCharacters } from "../redux/reduxStates.js"

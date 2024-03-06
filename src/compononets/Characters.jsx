@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ZoomContext } from '../App.jsx'
+import { ZoomContext } from '../App.tsx'
 import { useContext } from 'react'
 import Protrait from "./characterProtrait.jsx";
 import { motion, AnimatePresence } from "framer-motion";

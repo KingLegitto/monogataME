@@ -15,7 +15,7 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
     const dispatch = useDispatch()
 
     const [preview, setPreview] = useState(false)
-    const [gender, setGender] = useState()
+    const [gender, setGender] = useState('')
     const [loading, setLoading] = useState(true)
     const [hBox, setHBox] = useState()
     const [wBox, setWBox] = useState()
@@ -123,14 +123,49 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         {name: 'Finish', img: 'Finish', level: 6},
     ])
 
-    const [choices, setChoices] = useState(gender=='male'?ageBracketChoices:ageBracketChoicesF)
-
+    const [choices, setChoices] = useState(ageBracketChoices)
     useEffect(()=>{
-        if(gender=='male'){
-            setChoices(ageBracketChoices)
-            setEyeSelection(eye1)
+        if(preview){
+            setChoices(gender=='male'?ageBracketChoices:ageBracketChoicesF)
         }
     }, [gender])
+
+    const [levels, setLevels] = useState([
+        {name: 'Gender'}, 
+        {name: 'Body'}, 
+        {name: 'Skin'}, 
+        {name: 'Eyes'}, 
+        {name: 'Expressions'},
+        {name: 'Hair'}, 
+        {name: 'Accessories'}
+    ])
+
+    function changeLevel(name){
+        switch(name){
+            case 'Gender':
+                setAgeBracketSelection([babyBase,babyBaseC]), setSkinSelection(skin2), setEyeSelection(eye1), setHairSelection([,]), setAccessorySelection()
+                ,setPreview(false)
+                break;
+            case 'Body':
+                setChoices(gender=='male'?ageBracketChoices:ageBracketChoicesF)
+                break;
+            case 'Skin':
+                setChoices(skinChoices)
+                break;
+            case 'Eyes':
+                setChoices(eyeChoices)
+                break;
+            case 'Expressions':
+                setChoices(ageBracketSelection[0]==babyBase?expressChoicesBaby:expressChoices)
+                break;
+            case 'Hair':
+                setChoices(gender=='male'?hairChoices:hairChoicesF)
+                break;
+            case 'Accessories':
+                setChoices(accessories)
+        }
+    }
+    
     // LOGIC TO REMOVE AVAILABLE CHOICES THAT SHOULD NOT BE AVAILABLE
     useEffect(()=>{
         if(preview){
@@ -313,6 +348,9 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         skinImg.src = skinSelection
         skinH.src = ageBracketSelection[0]==babyBase?babyBaseSH:
                     ageBracketSelection[0]==teenMBase||ageBracketSelection[0]==adultFBase?teenMBaseSH:''
+
+        const accessImg = new Image()
+        accessImg.src = accessorySelection
     
         const canvas = document.getElementById('canvas')
         const ctx = canvas.getContext('2d')
@@ -366,8 +404,27 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
             // setLoading(false)
         }
 
+        const canvas4 = document.getElementById('accessCanvas')
+        const ctxAccess = canvas4.getContext('2d')
+
+        ctxAccess.clearRect(0,0,wBox,hBox)
+        accessImg.onload = ()=>{
+            ctxAccess.drawImage(accessImg,0,0, 720, 767, -2, -3, wBox, hBox)
+            setLoading(false)
+            
+            // const imageData = ctxAccess.getImageData(0, 0, canvas.width, canvas.height)
+            // const data = imageData.data
+    
+            // for (let i = 0; i < data.length; i += 4){
+            //     data[i] = data[i]!=clothesCurrentC[0]?clothesNewC[0] + redClothes(data[i]):clothesNewC[0];
+            //     data[i+1] = data[i+1]!=clothesCurrentC[1]?clothesNewC[1] + greenClothes(data[i+1]):clothesNewC[1];
+            //     data[i+2] = data[i+2]!=clothesCurrentC[2]?clothesNewC[2] + blueClothes(data[i+2]):clothesNewC[2];
+            // }
+            // ctxAccess.putImageData(imageData, 0, 0)
         }
-    }, [hairSelection, ageBracketSelection, skinSelection, hairNewC, wBox, clothesNewC])
+
+        }
+    }, [preview, hairSelection, ageBracketSelection, skinSelection, hairNewC, wBox, clothesNewC, accessorySelection])
 
     function redClothes(val){
         let diff = val - 255
@@ -407,84 +464,27 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         
         }
        
-    }, [preview, normalize])
-    
-    useEffect(()=>{
-        if(preview){
-
-        // const hairImg = new Image()
-
-        // hairImg.src = hairSelection==spikyHairL?spikyHairC:
-        //            hairSelection==flatishTopL?flatishTopC:
-        //            hairSelection==longBangsL?longBangsC:
-        //            hairSelection==afroFL?afroFC:''
-
-        // const skinImg = new Image()
-        // const skinH = new Image()
-        // skinImg.src = skinSelection
-        // skinH.src = ageBracketSelection==babyBase?babyBaseSH:
-        //             ageBracketSelection==teenMBase||ageBracketSelection==adultFBase?teenMBaseSH:''
-    
-        // const canvas = document.getElementById('canvas')
-        // const ctx = canvas.getContext('2d')
-    
-        // ctx.clearRect(0,0,wBox,hBox)
-        // hairImg.onload = ()=>{
-        //     ctx.drawImage(hairImg,0,0, 720, 767, -2, -1, wBox, hBox)
-        //     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-        //     const data = imageData.data
-    
-        //     for (let i = 0; i < data.length; i += 4){
-        //         data[i] = hairColorSelection[0];
-        //         data[i+1] = hairColorSelection[1];
-        //         data[i+2] = hairColorSelection[2];
-        //     }
-        //     ctx.putImageData(imageData, 0, 0)
-        // }
-
-        // const canvas3 = document.getElementById('skinCanvas')
-        // const ctxSkin = canvas3.getContext('2d')
-
-        // ctxSkin.clearRect(0,0,wBox,hBox)
-        // ctxSkin.globalCompositeOperation = "lighter"
-       
-        // skinImg.onload = ()=>{
-        //     ctxSkin.clearRect(0,0,wBox,hBox)
-        //     ctxSkin.drawImage(skinImg,0,0, 720, 767, -2, -3, wBox, hBox)
-        //     ctxSkin.drawImage(skinH,0,0, 720, 767, -2, -1, wBox, hBox)
-        //     setAllClear(normalize?true:false)
-        // }
-        // skinH.onload = ()=>{
-        //     ctxSkin.clearRect(0,0,wBox,hBox)
-        //     ctxSkin.drawImage(skinImg,0,0, 720, 767, -2, -3, wBox, hBox)
-        //     ctxSkin.drawImage(skinH,0,0, 720, 767, -2, -1, wBox, hBox)
-        //     setAllClear(normalize?true:false)
-        //     // setLoading(false)
-        // }
-        
-        
-        }
-        
-    }, [wBox])
+    }, [preview, normalize, hairSelection, ageBracketSelection, skinSelection, 
+    accessorySelection, eyeSelection, expSelection])
 
     return ( 
 
         <>
         {/* GENDER ///////////////////////////////// */}
         {!preview && (<div className="h-auto w-[100%] lg:w-[50%] fixed z-[12] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] lg:translate-y-[-45%] flex justify-around">
-            <div className='w-[40%] lg:w-auto h-auto flex flex-wrap justify-end'>
+            <div className='w-[40%] lg:w-auto h-auto flex flex-wrap justify-end' onClick={()=>{setGender('male'), setPreview(true)}}>
                 
                 <motion.img initial={{opacity: 0, x: '-50%'}} animate={{opacity: 1, x: 0, transition:{delay: 0.7, duration: 0.7}}} whileTap={{scale: 0.8}} src={maleImage} 
-                className='w-[100%] lg:max-w-[180px] rounded-[30px]' alt="" onClick={()=>{setGender('male'), setPreview(true)}}/>
+                className='w-[100%] lg:max-w-[180px] rounded-[30px]' alt=""/>
 
                 <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{delay: 1.5}} className='w-[100%] lg:max-w-[180px] Lora font-bold text-white mt-[10px] text-center'
                 style={{fontSize: 'clamp(16px, 7vw,25px)'}}>Male</motion.div>
 
             </div>
-            <div className='w-[40%] lg:w-auto h-auto flex flex-wrap justify-start'>
+            <div className='w-[40%] lg:w-auto h-auto flex flex-wrap justify-start' onClick={()=>{setGender('female'), setPreview(true)}}>
                 
                 <motion.img initial={{opacity: 0, x: '50%'}} animate={{opacity: 1, x: 0, transition:{delay: 0.7, duration: 0.7}}} whileTap={{scale: 0.8}} src={femaleImage} 
-                className='w-[100%] lg:max-w-[180px] rounded-[30px]' alt="" onClick={()=>{setGender('female'), setPreview(true)}}/>
+                className='w-[100%] lg:max-w-[180px] rounded-[30px]' alt=""/>
 
                 <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{delay: 1.5}} className='w-[100%] lg:max-w-[180px] Lora font-bold text-white mt-[10px] text-center'
                 style={{fontSize: 'clamp(16px, 7vw,25px)'}}>Female</motion.div>
@@ -495,19 +495,16 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
         </div>)}
 
         {/* PORTRAIT PARENT ///////////////////////////////////// */}
-        {preview && (<div className='w-[100%] fixed z-[12] bottom-[5%] lg:top-[50%]  lg:translate-y-[-50%] h-[92dvh] lg:h-[100vh]'>
-
-            {/* LEVEL ////////////////////////////////////////////////////// */}
-            <div>
-
-            </div>
+        {preview && (<div className='w-[100%] fixed z-[12] bottom-[50%] translate-y-[50%] h-[85dvh] lg:h-[100vh]
+        grid grid-cols-1 lg:grid-cols-2'>
 
 
             {/* PORTRAIT DISPLAY //////////////////////////////////////////// */}
-            <div className={`absolute portraitBox top-[50%] lg:top-[55%] left-[50%] lg:left-[30%] max-w-[720px] translate-x-[-50%] translate-y-[-50%] ${normalize?' rounded-[0px] w-[100vw]':'rounded-[30px] w-[90%] md:w-[400px]'}  bg-white`}
+            <div className={` portraitBox max-w-[720px] ${normalize?' rounded-[0px] w-[100vw]':'rounded-[30px] w-[90%] md:w-[400px]'}  bg-white 
+            row-span-2 self-center justify-self-center order-1 lg:order-[0] `}
             style={{aspectRatio: '1/1.065', border: '2px solid white', boxShadow: '0px 0px 9px 0px rgba(255,255,255,0.75)', filter: normalize?'opacity(0)':'opacity(1)'}}>
 
-                {/* LOADING SCREEN ////////////////////////////////////// */}
+                {/* LOADING OVERLAY ////////////////////////////////////// */}
                 <div className='w-[100%] h-[100%] rounded-[32px] absolute z-[10] bg-[#151515fa] justify-center items-center text-white'
                 style={{display: loading?'flex':'none'}}>
                     Loading...
@@ -542,14 +539,44 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                 style={{objectPositionPosition: 'center', objectFit: 'contain'}} />)}
 
                 {/* ACCESSORIES LAYER ////////////////////////////////////////// */}
-                { accessorySelection && (<img className={`w-[100%] h-[100%] ${normalize?'rounded-[0px]':'rounded-[32px]'} absolute z-[8]`} src={accessorySelection} onLoad={()=>{setLoading(false)}}
-                style={{objectPositionPosition: 'center', objectFit: 'contain'}} />)}
+                <canvas width={wBox} height={hBox} id='accessCanvas' className={`absolute z-[8] ${normalize?'rounded-[0px]':'rounded-[32px]'}`}>
+
+                </canvas>
 
             </div>
 
+            {/* LEVELS ////////////////////////////////////////////////////// */}
+            <div className="w-[100%] md:w-[450px] h-[auto] flex overflow-scroll self-end lg:self-center px-[10px] ">
+                {levels.map((level, i)=>{
+                    return(
+                        <motion.div whileTap={{scale: 0.9}} key={`${level.name}`} initial={{y: 20, opacity: 0}} animate={{y: 0, opacity: normalize?0:1, transition:{delay: i*0.1, opacity:{duration: 0.5, delay: normalize?0:i*0.1}}}}
+                        className={`rounded-[20px] w-[70px] max-w-[70px] px-[10px] m-[5px] h-[40px] flex justify-center flex-shrink-0 items-center bg-white ${level.name.length>8?'textOverflowAnim':''} `} 
+                        style={{cursor: 'pointer', transition: '0.2s', whiteSpace:'nowrap', overflow: 'hidden',
+                        backgroundColor: 
+                        (
+                            level.name=='Eyes' && choices==eyeChoices)||(level.name=='Body' && (choices==ageBracketChoicesF||choices==ageBracketChoices)
+                            ||(level.name=='Skin' && choices==skinChoices)||(level.name=='Expressions' && (choices==expressChoices||choices==expressChoicesBaby))
+                            ||(level.name=='Hair' && (choices==hairChoices||choices==hairChoicesF))||(level.name=='Accessories' && choices==accessories)
+                        )
+                        ?'#ff74c5':'white',
+                        color: 
+                        (
+                            level.name=='Eyes' && choices==eyeChoices)||(level.name=='Body' && (choices==ageBracketChoicesF||choices==ageBracketChoices)
+                            ||(level.name=='Skin' && choices==skinChoices)||(level.name=='Expressions' && (choices==expressChoices||choices==expressChoicesBaby))
+                            ||(level.name=='Hair' && (choices==hairChoices||choices==hairChoicesF))||(level.name=='Accessories' && choices==accessories)
+                        )
+                        ?'white':'black',
+                        animationDelay: `${i/3}s`}}
+                        onClick={()=>{changeLevel(level.name)}}>
+                            {level.name}
+                        </motion.div>
+                    )
+                })}
+            </div>
 
-            {/* AVAILABLE CHOICES */}
-            <div className=' absolute w-[100%] m-auto px-[10px] md:w-[450px] flex flex-wrap lg:left-[50%] top-[82%] lg:top-[50%] translate-y-[0%] lg:translate-y-[-50%] max-h-[110px] overflow-scroll'>
+
+            {/* AVAILABLE CHOICES //////////////////////////////////////////////////////*/}
+            <div className=' w-[100%] md:w-[450px] px-[10px] flex flex-wrap h-[80px] lg:h-[100px] overflow-scroll order-2 lg:order-[0]'>
                 {choices.map((choice, i)=>{
                     return(
                         <motion.div whileTap={{scale: 0.9}} key={`${choice.name}${choice.level}`} initial={{y: 20, opacity: 0}} animate={{y: 0, opacity: normalize?0:1, transition:{delay: i*0.1, opacity:{duration: 0.5, delay: normalize?0:i*0.1}}}}
@@ -563,6 +590,8 @@ const Protrait = ({setPortrait, characterNum, setBgOverlay}) => {
                     )
                 })}
             </div>
+
+            
 
         </div>)}
         </>
