@@ -3,11 +3,14 @@ import femaleImage from '../assets/portraitImgs/gender/female.png'
 import babyBase from '../assets/portraitImgs/body/babyBase_.png'
 import babyBaseC from '../assets/portraitImgs/body/babyBaseC.png'
 import babyBaseSH from '../assets/portraitImgs/body/babyBaseSkinH.png'
-import teenMBase from '../assets/portraitImgs/body/teenMBase_.png'
+import teenMBase from '../assets/portraitImgs/body/teenMBase.png'
 import teenMBaseC from '../assets/portraitImgs/body/teenMBaseC.png'
 import teenMBaseSH from '../assets/portraitImgs/body/teenMBaseSkinH.png'
-import adultFBase from '../assets/portraitImgs/body/adultFBase_.png'
+import teenFBase from '../assets/portraitImgs/body/teenFBase.png'
+import teenFBaseC from '../assets/portraitImgs/body/teenFBaseC.png'
+import adultFBase from '../assets/portraitImgs/body/adultFBase.png'
 import adultFBaseC from '../assets/portraitImgs/body/adultFBaseC_.png'
+import seniorFBase from '../assets/portraitImgs/body/seniorFBase.png'
 import eye1 from '../assets/portraitImgs/eye/eye1.png'
 import eye2 from '../assets/portraitImgs/eye/eye2.png'
 import eye3 from '../assets/portraitImgs/eye/eye3.png'
@@ -41,8 +44,8 @@ import geekyGlasses from '../assets/portraitImgs/accessories/geekyGlasses.png'
 
  
 export {
-    maleImage, femaleImage, babyBase, babyBaseC, babyBaseSH, teenMBase, teenMBaseC, teenMBaseSH, adultFBase, adultFBaseC,
-    eye1, eye2, eye3, eye4, dullEyes, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp, determinedExp,
+    maleImage, femaleImage, babyBase, babyBaseC, babyBaseSH, teenMBase, teenMBaseC, teenMBaseSH, teenFBase, teenFBaseC, adultFBase, adultFBaseC,
+    seniorFBase, eye1, eye2, eye3, eye4, dullEyes, skin1, skin2, skin3, exp, babyExp, confidentExp, grinExp, determinedExp,
     indiffExp, seriousExp, annoyed, spikyHairL, spikyHairC, flatishTopL, flatishTopC, longBangsL, longBangsC,
     afroL, afroC, circleGlasses, earrings1, earrings2, policeShades, geekyGlasses
 };
