@@ -4,12 +4,13 @@ import bgTexture from './assets/hardboard2.jpg'
 import Commands from './compononets/Commands'
 import StoryTimeline from './compononets/StoryTimeline'
 import { sanityClient } from '../client'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, Children } from 'react'
 import JumboAlert from './compononets/jumboAlert'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import React, {createContext} from "react";
 import Characters from './compononets/Characters'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setSectionTracker, setPlotTracker, emptyTrackers, updateTracker } from './redux/reduxStates.js'
 
 export const ZoomContext = createContext<any>(null)
 
@@ -20,8 +21,8 @@ function App() {
     const [mouseY, setmouseY] = useState<number>()
     const [midPoint, setMidPoint] = useState(false)
     const [updater, setUpdater] = useState(true)
-    const [points, setPoints] = useState([])
-    const [entryCounter, setCounter] = useState(0)
+    const [points, setPoints] = useState<any>([])
+    const [entryCounter, setCounter] = useState(1)
     const [newPoints, setNewPoints] = useState([])
     const [savePointCounter, setSavePointCounter] = useState(0)
     const [jumboAlert, setJumboAlert] = useState(false)
@@ -33,21 +34,38 @@ function App() {
     const fullscreenChecker = useRef(null)
     const checkinview = useInView(fullscreenChecker)
 
-    const { workableArea } = useSelector((state: any)=> state.overallStates)
-
+    const { workableArea, sectionTracker, plotTracker } = useSelector((state: any)=> state.overallStates)
+    const dispatch = useDispatch()
   
     useEffect(()=>{
         // INITIAL FETCH FROM SANITY
-        sanityClient.fetch(`*[_type == "points"]`).then((data)=> {setPoints(data)});
+        async function fetchPoints(){
+            let data = await sanityClient.fetch(`*[_type == "points"]`)
+            setPoints(data)
+        }
+        fetchPoints()
+        
 
-        // if(innerWidth<1024){
-        // document.querySelector('.overallParent').addEventListener('scroll', scroll)
-        // }
-
-        setTimeout(() => {
-            setJumboAlert(true)
-        }, 3000);
+        
+        // setTimeout(() => {
+        //     setJumboAlert(true)
+        // }, 3000);
     }, [])
+
+    useEffect(()=>{
+        dispatch(emptyTrackers())
+
+        let entries = points.filter((member: any)=>(member.type == 'section'))
+        entries.forEach((entry: any) => {
+          dispatch(setSectionTracker({id: entry._id, yPos: entry.y}))
+        });
+        
+        entries = points.filter((member: any)=>(member.type == 'plot'))
+        entries.forEach((entry: any)=> {
+          dispatch(setPlotTracker({id: entry._id, xPos: entry.x, yPos: entry.y, isChild: false}))
+        })
+        
+    }, [points])
 
     const handleScreenResize = useCallback(()=>{
         
@@ -105,7 +123,8 @@ function App() {
         }
     }, [])
 
-    function updatePoint(keyID: number, bg: string){
+    function updatePoint(keyID: any, bg: string, child: string, childCarryStart: number, carriedPlotPos: number){
+        let returnBasket : any
         if(bg != undefined){
         points.forEach((entry: any)=>{if(entry._id == keyID){entry.bg = bg}});
         setUpdater(!updater);
@@ -115,6 +134,32 @@ function App() {
         setUpdater(!updater)
         }
 
+        if(child){
+            points.forEach((entry: any)=>{if(entry._id == keyID){
+                entry.children = [...child]
+            }});
+            console.log(points)
+        }
+
+        if(childCarryStart != undefined){
+            points.forEach((entry: any)=>{if(entry._id == keyID){
+                entry.childCarryStart = childCarryStart
+            }});
+        }
+
+        if(carriedPlotPos != undefined){
+            points.forEach((entry: any)=>{if(entry._id == keyID){
+                entry.y = entry.y + carriedPlotPos
+            }});
+            sectionTracker.forEach((entry: any)=>{if(entry.id == keyID){
+                dispatch(updateTracker({type: 'section', keyID: keyID, newYPos: entry.yPos + carriedPlotPos}))
+            }});
+            plotTracker.forEach((entry: any)=>{if(entry.id == keyID){
+                dispatch(updateTracker({type: 'plot', keyID: keyID, newYPos: entry.yPos + carriedPlotPos}))
+                returnBasket = (entry.yPos + carriedPlotPos)
+            }});
+        }
+        return returnBasket
     }
 
     function deletePoint(keyID: number){
