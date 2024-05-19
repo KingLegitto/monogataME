@@ -51,7 +51,7 @@ const StoryTimeline = ({
       document.querySelector(".bg").style.cursor = "default";
 
       points.push({
-        _id: entryCounter,
+        _id: entryCounter.toString(),
         x: midPoint ? midPoint : mouseX,
         y: mouseY,
         pointTitle: "[ Empty... ]",
@@ -63,9 +63,9 @@ const StoryTimeline = ({
 
       dispatch(
         midPoint
-          ? setSectionTracker({ id: entryCounter, yPos: mouseY })
+          ? setSectionTracker({ id: entryCounter.toString(), yPos: mouseY })
           : setPlotTracker({
-              id: entryCounter,
+              id: entryCounter.toString(),
               xPos: mouseX,
               yPos: mouseY,
               isChild: false,

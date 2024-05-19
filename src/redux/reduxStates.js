@@ -73,25 +73,29 @@ export const reduxSlice = createSlice({
     },
 
     updateTracker: (state, action) => {
-      action.payload.type == "section"
-        ? state.sectionTracker.forEach((item) => {
-            if (action.payload.keyID == item.id) {
-              item.yPos = action.payload.newYPos!=undefined
+      let newSectionsData = state.sectionTracker.map((item) => {
+            if (action.payload.type == 'section' && action.payload.keyID == item.id) {
+              return {...item, yPos: action.payload.newYPos!=undefined
                 ? action.payload.newYPos
-                : item.yPos;
-             
+                : item.yPos}
             }
+            return item
           })
-        : state.plotTracker.forEach((item) => {
-            if (action.payload.keyID == item.id) {
-              item.isChild = action.payload.childState!=undefined
+
+        let newPlotsData = state.plotTracker.map((item) => {
+            if (action.payload.type == 'plot' && action.payload.keyID == item.id) {
+              return {...item, isChild: action.payload.childState!=undefined
                 ? action.payload.childState
-                : item.isChild;
-              item.yPos = action.payload.newYPos
-              ? action.payload.newYPos
-              : item.yPos;
+                : item.isChild, 
+                yPos: action.payload.newYPos
+                ? action.payload.newYPos
+                : item.yPos}
             }
+            return item
           });
+
+          state.sectionTracker = newSectionsData
+          state.plotTracker = newPlotsData
     },
 
     emptyTrackers: (state) => {
@@ -106,7 +110,6 @@ export const reduxSlice = createSlice({
       else{
         state.hiddenPoints.push(...action.payload)
       }
-      console.log(state.hiddenPoints)
       state.hideTrigger = !state.hideTrigger
     },
 
@@ -115,7 +118,6 @@ export const reduxSlice = createSlice({
 
       let newArr = state.hiddenPoints.filter((item)=>(item != action.payload))
       state.hiddenPoints = newArr
-      console.log(state.hiddenPoints)
       state.hideTrigger = !state.hideTrigger
     },
 

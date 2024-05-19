@@ -37,8 +37,8 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
     }
 
     useEffect(()=>{
-        let limitL = point.current.offsetLeft
-        let limitR = document.querySelector('.bgImage').offsetWidth - (point.current.offsetWidth + point.current.offsetLeft)
+        let limitL = point.current.offsetLeft - 200
+        let limitR = (document.querySelector('.bgImage').offsetWidth - 200) - (point.current.offsetWidth + point.current.offsetLeft)
         let limitT = point.current.offsetTop
         let limitB = document.querySelector('.bgImage').offsetHeight - (point.current.offsetTop + 100)
 
@@ -51,8 +51,8 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
 
     useEffect(()=>{
         setTimeout(() => {
-            let limitL = point.current.offsetLeft
-        let limitR = document.querySelector('.bgImage').offsetWidth - (point.current.offsetWidth + point.current.offsetLeft)
+        let limitL = point.current.offsetLeft - 200
+        let limitR = (document.querySelector('.bgImage').offsetWidth - 200) - (point.current.offsetWidth + point.current.offsetLeft)
         let limitT = point.current.offsetTop
         let limitB = document.querySelector('.bgImage').offsetHeight - (point.current.offsetTop + 100)
 
@@ -164,7 +164,6 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
         if(Math.abs(distanceX) >= 100 && type == 'plot'){
             let n = Math.floor(distanceX/100)
             let c = n*100
-            // console.log(`x: ${distanceX}, c: ${c}, n: ${n}`)
             if(Math.abs(distanceX%100) == 0){
                 setGridEnforcementX(gridEnforcementX + c)
             }
@@ -217,19 +216,15 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
     useEffect(()=>{
         
         if(gridEnforcementX < boundaryL*-1){
-            // console.log('leftBound')
             setGridEnforcementX(-boundaryL)
         }
         if(gridEnforcementX > boundaryR){
-            // console.log('RightBound')
             setGridEnforcementX(boundaryR)
         }
         if(gridEnforcementY < boundaryT*-1){
-            // console.log('TopBound')
             setGridEnforcementY(-boundaryT)
         }
         if(gridEnforcementY > boundaryB){
-            // console.log('BottomBound')
 
             // TO ENSURE THE CHILDREN STAY WITH THE COLLAPSED SECTION POINT
             sectionChildren(boundaryB - gridEnforcementY)
@@ -249,6 +244,7 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
       let currentX = Math.round(x + gridEnforcementX)
       let currentY = Math.round(y + gridEnforcementY)
       let upperLimit = currentY
+      let pointsBelowTrigger = []
         
         // CLICKING TO COLLAPSE
         if(!viewDetails){
@@ -260,35 +256,40 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
             }
 
         })
-        let lowerLimit = Math.min(...targetSections)
+        let lowerLimit = Math.min(...targetSections) // Find closest section
         if(lowerLimit == Infinity){
-            lowerLimit = workableArea.height
+            lowerLimit = workableArea.height // If no sections below, then lower limit is the height of the workable area
         }
 
         // MOVE POINTS BELOW UP TO FILL GAP
         sectionTracker.forEach((item)=>{
             if(item.yPos > currentY){
-                updatePoint(item.id, undefined, undefined, undefined, upperLimit - lowerLimit + 100)
+                pointsBelowTrigger.push(item.id)
                 dispatch(updateTracker({type: 'section', keyID: item.id, newYPos: item.yPos + upperLimit - lowerLimit + 100}))
             }
 
         })
       
         var wait = new Promise((resolve, reject)=>{
-            let targets = []
+            let pointsWithinRange = []
             plotTracker.forEach((item, i, arr)=>{
                 if(item.yPos > lowerLimit && !item.isChild){
-                    updatePoint(item.id, undefined, undefined, undefined, upperLimit - lowerLimit + 100)
+                    pointsBelowTrigger.push(item.id)
                     dispatch(updateTracker({type: 'plot', keyID: item.id, newYPos: item.yPos + upperLimit - lowerLimit + 100}))
                 }
                 if(item.yPos > upperLimit && item.yPos < lowerLimit && !item.isChild){
-                    targets.push(item.id)
+                    pointsWithinRange.push(item.id)
                     dispatch(updateTracker({type: 'plot', keyID: item.id, childState: true}))
                 }
                 if(i === arr.length -1){
-                    dispatch(updateHiddenPoints(targets))
-                    updatePoint(keyID,undefined,targets, currentY)
-                  //   console.log(plotTracker)
+                    dispatch(updateHiddenPoints(pointsWithinRange))
+                    updatePoint({
+                        id: keyID,
+                        children: pointsWithinRange,
+                        carryStart: currentY,
+                        subjectToMove: pointsBelowTrigger,
+                        collapseDisplacement: upperLimit - lowerLimit + 100
+                    })
                     resolve()
                 }
             })
@@ -298,64 +299,97 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
 
         // CLICKING TO EXPAND (UNCOLLAPSE)
       if(viewDetails){
+
         let targetPoints = []
         let belowTargetsArea = []
         let targetChildren = []
+        let childPoints = []
+        let returnData
         
         // UNHIDE LOGIC
          points.forEach((point)=>{
             
             if(keyID == point._id){
-               point.children.forEach((child)=>{
-                  let childrenNewPos = updatePoint(child, undefined, undefined, undefined, currentY - point.childCarryStart)
+               point.children.forEach((child, i, arr)=>{
+                childPoints.push(child)
                   dispatch(removeFromHiddenPoints(child))
-                  dispatch(updateTracker({type: 'plot', keyID: child, childState: false}))
-                //   alert(childrenNewPos)
+                if(i === arr.length - 1){
+                    returnData = updatePoint({
+                        id: childPoints,
+                        parentID: keyID,
+                        carryDisplacement: currentY - point.childCarryStart
+                    })
+                    targetChildren = [...returnData.newPositions]
+                }
                   plotTracker.forEach((item)=>{
-                    if(child == item.id)targetChildren.push(childrenNewPos)
+                    if(item.id == child){
+                        dispatch(updateTracker({type: 'plot', keyID: child, newYPos: item.yPos + currentY - point.childCarryStart}))
+                    }
                   })
                })
             }
          })
 
          let furthestChildBottom = Math.max(...targetChildren) + 100
-        //  alert(`FCB: ${furthestChildBottom}, FC: ${Math.max(...targetChildren)}`)
 
          sectionTracker.forEach((item)=>{
             if(item.yPos > currentY && item.yPos < furthestChildBottom){
                 targetPoints.push(item.yPos)
             }
-            else if(item.yPos > furthestChildBottom){
+            else if(item.yPos >= furthestChildBottom){
                 belowTargetsArea.push(item.yPos)
             }
-
         })
 
         plotTracker.forEach((item)=>{
             if(item.yPos > currentY && item.yPos < furthestChildBottom && !item.isChild){
                 targetPoints.push(item.yPos)
             }
-            else if(item.yPos > furthestChildBottom && !item.isChild){
+            else if(item.yPos >= furthestChildBottom && !item.isChild){
                 belowTargetsArea.push(item.yPos)
             }
         })
 
         let closestPointInRange = Math.min(...targetPoints)
-        closestPointInRange = closestPointInRange==Infinity?null:closestPointInRange
-
+        
+        if(closestPointInRange==Infinity){
+            closestPointInRange = null
+        }
+        
         let firstPointBelowArea = Math.min(...belowTargetsArea)
-
-         sectionTracker.forEach((item)=>{
+       
+        let basket = []
+        let value = closestPointInRange? furthestChildBottom - closestPointInRange:furthestChildBottom - firstPointBelowArea
+        console.log(`fcb: ${furthestChildBottom}, cpir: ${closestPointInRange}`)
+        console.log(targetChildren)
+        sectionTracker.forEach((item, i, arr)=>{
+            
             if(item.yPos > currentY){
-                updatePoint(item.id, undefined, undefined, undefined, closestPointInRange? furthestChildBottom - closestPointInRange:furthestChildBottom - firstPointBelowArea)
-                // dispatch(updateTracker({type: 'section', keyID: item.id, newYPos: closestPointInRange? item.yPos + furthestChildBottom - closestPointInRange : item.yPos + furthestChildBottom - item.yPos}))
+                basket.push(item.id)
+                dispatch(updateTracker({type: 'section', keyID: item.id, newYPos: item.yPos + value}))
+            }
+            
+        })
+
+        plotTracker.forEach((item, i, arr)=>{
+            if(item.yPos > currentY && !item.isChild){
+                basket.push(item.id)
+                dispatch(updateTracker({type: 'plot', keyID: item.id, newYPos: item.yPos + value}))                
+            }
+            if(i === arr.length - 1){
+                updatePoint({
+                    id: basket, 
+                    arr: returnData.newArr,
+                    uncollapseDisplacement: value
+                })
             }
         })
 
-        plotTracker.forEach((item)=>{
-            if(item.yPos > currentY && !item.isChild){
-                updatePoint(item.id, undefined, undefined, undefined, closestPointInRange? furthestChildBottom - closestPointInRange:furthestChildBottom - firstPointBelowArea)
-                // dispatch(updateTracker({type: 'plot', keyID: item.id, newYPos: closestPointInRange? item.yPos + furthestChildBottom - closestPointInRange : item.yPos + furthestChildBottom - item.yPos}))
+        points.forEach((point)=>{
+            if(keyID == point._id){
+                point.children.forEach((child)=>{
+                    dispatch(updateTracker({type: 'plot', keyID: child, childState: false}))
+                })
             }
         })
       }
@@ -377,23 +411,19 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
     return ( 
         <motion.div ref={point} initial={{opacity: 0}} animate={{opacity: 1, transition:{duration: 0.2, opacity:{duration: 0.2, delay: 0.3}}, x: type=='section'?'-50%': gridEnforcementX, y: gridEnforcementY}} drag={type=='section'?'y':true} dragListener={dragctrl?true:false} 
         whileDrag={{scale: 1.1}}  dragMomentum={false} onDragStart={()=>{setCheck(!check)}} onDragEnd={(e, info)=>{
-            snapToGrid(info.offset.x, info.offset.y);
-            if(type=='section'){
-
-            }            
-        }}
+            snapToGrid(info.offset.x, info.offset.y);          
+        }} 
         dragTransition={{ bounceStiffness: 1000, bounceDamping: 20 }}
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
         onTap={(event)=>{dblclickCheck()}}
       
         className={`${type=='section'?'sectionPoint': 'plotPoint'}  ${viewDetails? type=='section'? 'collapsed': '' :'' } point w-[auto] min-w-[100px] flex 
-        flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px] px-[10px] duration-[0.7s]`}
+        flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px] px-[10px] duration-[0.7s] transition-[top]`}
 
         style={{ top: y, left: x, display: isHidden? 'none': 'flex', backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
         width:type=='section'?viewDetails?'500px':'auto': !dragctrl?'200px':'auto', maxWidth: type=='section'?viewDetails?'500px':'300px':'200px',minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl || viewDetails? '40': '5',
         boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: !dragctrl&&type=='plot'? '40px': type=='plot'&& !viewDetails? '0px': '15px',
-        border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black', borderRadius: type=='plot'?'20px':viewDetails? '20px':'30px',
-        transitionProperty: 'top'}}>
+        border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black', borderRadius: type=='plot'?'20px':viewDetails? '20px':'30px'}}>
 
             {/* BADGE  ///////////////////////////////////////////////////////////// */}
             {type=='plot' && (<div className='w-[20px] h-[20px] bg-black absolute top-0 left-0
@@ -452,19 +482,19 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
             {!dragctrl && type=='plot' && (
             
                 <motion.div variants={colorsCont} initial={'hidden'} animate={'visible'} className='colorCont w-[150px] h-[20px] absolute bottom-[15px] flex justify-evenly mt-[10px]'>
-                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#1bffbb]' onClick={()=>{updatePoint(keyID, '#1bffbbe5'); }}>
+                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#1bffbb]' onClick={()=>{updatePoint({id: keyID, bg: '#1bffbbe5'}); }}>
 
                     </motion.span>
-                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className=' bg-[#ff3e5f]' onClick={()=>{updatePoint(keyID, '#ff3e5fe5'); }}>
+                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className=' bg-[#ff3e5f]' onClick={()=>{updatePoint({id: keyID, bg: '#ff3e5fe5'}); }}>
                         
                     </motion.span>
-                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#ffe42b]' onClick={()=>{updatePoint(keyID, '#ffe42be5'); }}>
+                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#ffe42b]' onClick={()=>{updatePoint({id: keyID, bg: '#ffe42be5'}); }}>
                         
                     </motion.span>
-                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#000000]' onClick={()=>{updatePoint(keyID, '#000000bb'); }}>
+                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#000000]' onClick={()=>{updatePoint({id: keyID, bg: '#000000bb'}); }}>
                         
                     </motion.span>
-                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#eeeeee]' onClick={()=>{updatePoint(keyID, '#eeeeeee5'); }}>
+                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#eeeeee]' onClick={()=>{updatePoint({id: keyID, bg: '#eeeeeee5'}); }}>
                         
                     </motion.span>
                 </motion.div>
