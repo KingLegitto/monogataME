@@ -139,10 +139,8 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
     // TO PREVENT THE 'AUTO SCROLL TO POINTS' FROM OVERSHOOTING PAST THE BOUNDARIES
     
     function snapToGrid(distanceX, distanceY){
-        
         // GRID SOLUTION FOR X
         if(Math.abs(distanceX) < 100 && type == 'plot'){
-
             if(Math.abs(distanceX) < 50){
                 if(distanceX < 0){
     
@@ -159,7 +157,6 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
                     setGridEnforcementX(gridEnforcementX + 100)
                 }
             }
-
         }
         if(Math.abs(distanceX) >= 100 && type == 'plot'){
             let n = Math.floor(distanceX/100)
@@ -172,13 +169,10 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
             }else{
                 setGridEnforcementX(gridEnforcementX + c + (c<0?0:100))
             }
-            
-            
         }
         
         // GRID SOLUTION FOR Y
         if(Math.abs(distanceY) < 100){
-
             if(Math.abs(distanceY) < 50){
                 if(distanceY < 0){
     
@@ -195,7 +189,6 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
                     setGridEnforcementY(gridEnforcementY + 100)
                 }
             }
-
         }
         if(Math.abs(distanceY) >= 100){
             let n = Math.floor(distanceY/100)
@@ -208,8 +201,7 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
             }else{
                 setGridEnforcementY(gridEnforcementY + c + (c<0?0:100))
             }
-        }
-        
+        } 
     }
 
     // TO PREVENT THE GRID FROM SNAPPING TO POINTS BEYOND THE BOUNDARIES
@@ -396,7 +388,6 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
    }
 
     useEffect(()=>{
-        
         let test = hiddenPoints.find((id)=>(keyID==id))
 
         if(test){
@@ -404,7 +395,6 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
         }else{
             setIsHidden(false)
         }
-
     }, [hideTrigger, hiddenPoints])
 
 
@@ -415,14 +405,14 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
         }} 
         dragTransition={{ bounceStiffness: 1000, bounceDamping: 20 }}
         dragConstraints={{left: boundaryL*-1, right: boundaryR, top: boundaryT*-1, bottom: boundaryB}} 
-        onTap={(event)=>{dblclickCheck()}}
+        onTap={()=>{dblclickCheck()}}
       
-        className={`${type=='section'?'sectionPoint': 'plotPoint'}  ${viewDetails? type=='section'? 'collapsed': '' :'' } point w-[auto] min-w-[100px] flex 
-        flex-col items-center h-[auto] min-h-[100px] absolute rounded-[20px] py-[10px] px-[10px] duration-[0.7s] transition-[top]`}
+        className={`${type=='section'?'sectionPoint': 'plotPoint'}  ${viewDetails? 'btnClicked': ''} ${dragctrl? '':'editMode'}
+        point flex flex-col items-center justify-center absolute rounded-[20px]`}
 
         style={{ top: y, left: x, display: isHidden? 'none': 'flex', backgroundColor: bgColor, color: bgColor=='#000000bb' || bgColor=='#ff3e5fe5'?'white':'black',
-        width:type=='section'?viewDetails?'500px':'auto': !dragctrl?'200px':'auto', maxWidth: type=='section'?viewDetails?'500px':'300px':'200px',minHeight: type=='section'?'auto':'70px', zIndex: type=='section'?'35': !dragctrl || viewDetails? '40': '5',
-        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)', paddingBottom: !dragctrl&&type=='plot'? '40px': type=='plot'&& !viewDetails? '0px': '15px',
+        zIndex: type=='section'?'35': !dragctrl || viewDetails? '40': '5',
+        boxShadow: type=='plot'? !dragctrl?'0px 10px 33px -7px rgba(0,0,0,1)':'0px 10px 33px -7px rgba(0,0,0,0.75)': '0px 0px 10px -5px rgba(0,0,0,0.75)',
         border: dragctrl? '1px solid transparent': bgColor=='#000000bb'? '1px solid white': '1px solid black', borderRadius: type=='plot'?'20px':viewDetails? '20px':'30px'}}>
 
             {/* BADGE  ///////////////////////////////////////////////////////////// */}
@@ -434,16 +424,15 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
 
             {/* POINT TITLE  //////////////////////////////////////////////////////////// */}
             <div ref={textbox} contentEditable suppressContentEditableWarning={true} spellCheck={false}
-            className={`w-[auto] ${viewDetails? type=='plot'? 'Rubik':'':''} ${type=='section'? 'px-[10px]': ''} max-w-[100%] rounded-[10px] focus:outline-none selection:bg-[#fd79ee]`}
-            style={{textAlign: 'center', pointerEvents: dragctrl?'none':'all', fontWeight: viewDetails? type=='plot'? 'bold': 'normal': 'normal'}}>
+            className={`w-full ${viewDetails? type=='plot'? 'Rubik':'':''} ${type=='section'? 'px-[10px]': ''} rounded-[10px] focus:outline-none selection:bg-[#fd79ee]`}
+            style={{pointerEvents: dragctrl?'none':'all', fontWeight: viewDetails? type=='plot'? 'bold': 'normal': 'normal'}}>
                 {pointTitle}
             </div>
 
             {/* POINT DETAILS //////////////////////////////////////////////////////// */}
-            
             {type=='plot' && (<motion.div animate={{y: viewDetails?0:-30}} contentEditable suppressContentEditableWarning={true} spellCheck={false}
             className='w-[100%] overflow-hidden h-0 px-[8px] text-center rounded-[20px] py-[10px] focus:outline-none hyphens-auto selection:bg-[#fd79ee]'
-            style={{pointerEvents: dragctrl?'none':'all' , height: viewDetails? 'auto': '0px', opacity: viewDetails? 1:0, 
+            style={{pointerEvents: dragctrl?'none':'all' , height: viewDetails? 'auto': '0px', display: viewDetails? 'block':'none', 
             background: bgColor=='#eeeeeee5'||bgColor=='#1bffbbe5'?'#00000032': bgColor=='#ffe42be5'?'#ffffff82':'#ffffff32',
             letterSpacing: '-0.5px'}}>
                 {pointDetails}
@@ -459,7 +448,6 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
                 <KeyboardDoubleArrowRightRounded style={{transform: 'scale(2)', color: '#000000bb', opacity: 0.5}}/>
             </span>)}
 
-
             {/* COLLAPSE BUTTON */}
             <motion.span initial={{y: '-52%'}} animate={{y:'-52%'}} whileTap={{scale: 1.2}} className='absolute top-[100%] w-[50px] rounded-[20px] flex justify-center border-[1px] border-[#ffffffa9]'
             style={{background:type=='section'? '#2c2c2c': bgColor=='#000000bb'? '#000000':bgColor=='#1bffbbe5'?'#1bffbb':bgColor=='#ff3e5fe5'? '#ff3e5f':bgColor=='#ffe42be5'? '#ffe42b': '#eeeeee', boxShadow: '0px 0px 5px 5px rgba(0,0,0,0.11)'}}
@@ -467,8 +455,6 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
                 <ArrowDropDownRounded style={{transform: 'scale(1.5)', rotate: viewDetails? '180deg': '0deg'}}/>
             </motion.span>
             
-
-
             {/* DELETE BUTTON  ///////////////////////////////////////////////////////////// */}
             {!dragctrl && (<div onClick={()=>{deletePoint(keyID); }}
             className='w-[22px] h-[22px] rounded-[50%] absolute top-0 left-[100%] hover:scale-[1.2] duration-[0.1s]
@@ -478,29 +464,21 @@ const Points = ({keyID, y, x, pointTitle, pointDetails, bgColor, type, deletePoi
             </div>)}
 
             {/* COLOUR CHANGE  /////////////////////////////////////////////////////// */}
-            
             {!dragctrl && type=='plot' && (
             
                 <motion.div variants={colorsCont} initial={'hidden'} animate={'visible'} className='colorCont w-[150px] h-[20px] absolute bottom-[15px] flex justify-evenly mt-[10px]'>
-                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#1bffbb]' onClick={()=>{updatePoint({id: keyID, bg: '#1bffbbe5'}); }}>
+                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#1bffbb]' onClick={()=>{updatePoint({id: keyID, bg: '#1bffbbe5'}); }} />
 
-                    </motion.span>
-                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className=' bg-[#ff3e5f]' onClick={()=>{updatePoint({id: keyID, bg: '#ff3e5fe5'}); }}>
+                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className=' bg-[#ff3e5f]' onClick={()=>{updatePoint({id: keyID, bg: '#ff3e5fe5'}); }} />
                         
-                    </motion.span>
-                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#ffe42b]' onClick={()=>{updatePoint({id: keyID, bg: '#ffe42be5'}); }}>
+                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#ffe42b]' onClick={()=>{updatePoint({id: keyID, bg: '#ffe42be5'}); }} />
                         
-                    </motion.span>
-                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#000000]' onClick={()=>{updatePoint({id: keyID, bg: '#000000bb'}); }}>
+                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#000000]' onClick={()=>{updatePoint({id: keyID, bg: '#000000bb'}); }} />
                         
-                    </motion.span>
-                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#eeeeee]' onClick={()=>{updatePoint({id: keyID, bg: '#eeeeeee5'}); }}>
+                    <motion.span variants={colorsAnimate} whileHover={{scale: 1.2}} className='bg-[#eeeeee]' onClick={()=>{updatePoint({id: keyID, bg: '#eeeeeee5'}); }} />
                         
-                    </motion.span>
                 </motion.div>
             )}
-            
-
         </motion.div>
      );
 }
