@@ -33,7 +33,7 @@ html {
     width: 20px;
     display: inline-block;
     border-radius: 20%;
-    border: 1px solid rgb(40, 40, 40);
+    border: 1px solid rgb(190, 190, 190);
     transition: 0.1s;
     flex-shrink: 0;
     cursor: pointer;
@@ -210,8 +210,11 @@ aside button{
     height: 50px;
     padding: 10px;
     text-align: center;
-    transition: width 0.2s;
-    transition: top 0.5s 0.1s;
+    transition: width 0.2s, top 0.7s;
+    &:is(.editMode){
+        height: 100px;
+        padding-bottom: 40px;
+    }
     &:is(.btnClicked){
         width: 500px;
     }
@@ -223,11 +226,7 @@ aside button{
     min-height: 60px;
     padding: 10px 10px 15px 10px;
     text-align: center;
-    transition: top 0.5s 0.1s;
-    &:is(.editMode){
-        height: 100px;
-        padding-bottom: 40px;
-    }
+    transition: top 0.7s, background-color 0.7s, color 0.5s;  
     &:is(.btnClicked){
         height: auto;
     }

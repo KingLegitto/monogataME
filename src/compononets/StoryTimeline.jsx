@@ -11,14 +11,12 @@ import {
   setPlotTracker,
   emptyTrackers,
 } from "../redux/reduxStates.js";
+import { generateID } from "../HelperFunctions/HelpersForPoints.ts";
 
 const StoryTimeline = ({
   points,
   setPoints,
   mouseTracking,
-  entryCounter,
-  setCounter,
-  newPoints,
   setTracking,
   setMidPoint,
   track,
@@ -29,6 +27,7 @@ const StoryTimeline = ({
   mouseY,
   showPoints,
 }) => {
+  
   const plotDragConstraints = useRef(null);
   const dispatch = useDispatch();
 
@@ -43,15 +42,13 @@ const StoryTimeline = ({
 
   // FUNCTION TO HANDLE ADDING POINTS ON THE BACKGROUND ACCORDING TO THE MOUSE POSITION
   const handleBgClick = () => {
+    const newID = generateID('points')
     if (mouseTracking == true) {
-      // alert('hello')
-
       setSelectionArea(false);
-      setCounter(entryCounter + 1);
       document.querySelector(".bg").style.cursor = "default";
 
       points.push({
-        _id: entryCounter.toString(),
+        _id: newID,
         x: midPoint ? midPoint : mouseX,
         y: mouseY,
         pointTitle: "[ Empty... ]",
@@ -63,24 +60,14 @@ const StoryTimeline = ({
 
       dispatch(
         midPoint
-          ? setSectionTracker({ id: entryCounter.toString(), yPos: mouseY })
+          ? setSectionTracker({ id: newID, yPos: mouseY})
           : setPlotTracker({
-              id: entryCounter.toString(),
+              id: newID,
               xPos: mouseX,
               yPos: mouseY,
               isChild: false,
             })
       );
-
-      newPoints.push({
-        _type: "plotPoints",
-        x: midPoint ? midPoint : mouseX,
-        y: mouseY,
-        pointTitle: "[ Empty... ]",
-        pointDetails: "-----",
-        bg: midPoint ? "#000000bb" : "#eeeeeee5",
-        type: midPoint ? "section" : "plot",
-      });
 
       document.querySelector(".bg").removeEventListener("click", track);
       setTracking(false);

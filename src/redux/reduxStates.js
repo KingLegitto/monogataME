@@ -1,7 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { sanityClient } from '../../client'
 
 const initialState = {
   workableArea: { width: 1000, height: 1200 },
+  userData: null,
+  projectData: null,
   slider: 50,
   sectionTracker: [],
   plotTracker: [],
@@ -64,6 +67,30 @@ export const reduxSlice = createSlice({
       }
     },
 
+    setUserData: (state, action) => {
+      state.userData = action.payload
+    },
+
+    setProjectData: (state, action) => {
+   
+        Object.keys(action.payload).map((item,i,arr)=>{
+          if(item == 'all'){
+            state.projectData = action.payload[item]
+          }
+          else{
+          state.projectData[item] = action.payload[item]
+          if(i == (arr.length - 1)){
+           sanityClient.patch(state.userData._id).set({project1: JSON.stringify(state.projectData)}).commit()
+            .then(response => alert('Save success'))
+            .catch(error => alert(error.message))
+          }
+          }
+          
+        })
+
+   
+    },
+
     setSectionTracker: (state, action) => {
       state.sectionTracker.push(action.payload);
     },
@@ -86,10 +113,11 @@ export const reduxSlice = createSlice({
             if (action.payload.type == 'plot' && action.payload.keyID == item.id) {
               return {...item, isChild: action.payload.childState!=undefined
                 ? action.payload.childState
-                : item.isChild, 
+                : item.isChild,
                 yPos: action.payload.newYPos
                 ? action.payload.newYPos
-                : item.yPos}
+                : item.yPos,
+                xPos: action.payload.newXPos? action.payload.newXPos : item.xPos}
             }
             return item
           });
@@ -114,8 +142,6 @@ export const reduxSlice = createSlice({
     },
 
     removeFromHiddenPoints: (state, action) => {
-      
-
       let newArr = state.hiddenPoints.filter((item)=>(item != action.payload))
       state.hiddenPoints = newArr
       state.hideTrigger = !state.hideTrigger
@@ -146,6 +172,8 @@ export const reduxSlice = createSlice({
 export const {
   updateSlider,
   handleZoom,
+  setUserData,
+  setProjectData,
   setSectionTracker,
   setPlotTracker,
   updateTracker,

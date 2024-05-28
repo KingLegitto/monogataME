@@ -10,10 +10,9 @@ import { AnimatePresence, motion, useInView } from 'framer-motion'
 import React, {createContext} from "react";
 import Characters from './compononets/Characters'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSectionTracker, setPlotTracker, emptyTrackers, updateTracker } from './redux/reduxStates.js'
+import { setSectionTracker, setPlotTracker, emptyTrackers, setUserData, setProjectData } from './redux/reduxStates.js'
 
 export const ZoomContext = createContext<any>(null)
-
 
 function App() {
     const [mouseTracking, setTracking] = useState(false)
@@ -21,34 +20,22 @@ function App() {
     const [mouseY, setmouseY] = useState<number>()
     const [midPoint, setMidPoint] = useState(false)
     const [updater, setUpdater] = useState(true)
-    const [points, setPoints] = useState<any>([{
-        _id: 'placeholder',
-        x: 100,
-        y: 100,
-        pointTitle: "[ Empty... ]",
-        pointDetails: "-----",
-        bg: "#000000bb",
-        type: "plot",}])
-    const [entryCounter, setCounter] = useState(1)
-    const [newPoints, setNewPoints] = useState([])
-    const [savePointCounter, setSavePointCounter] = useState(0)
-    const [jumboAlert, setJumboAlert] = useState(false)
-    
+    const [points, setPoints] = useState<any>(null)
     const [showPoints, setShowPoints] = useState(true)
     const [storyTimeline, setStoryTimeline] = useState(true)
     const [characterMode, setCharacterMode] = useState(false)
 
-    const fullscreenChecker = useRef(null)
-    const checkinview = useInView(fullscreenChecker)
-
-    const { workableArea, sectionTracker, plotTracker } = useSelector((state: any)=> state.overallStates)
+    const client = useSelector((state: any)=> state.overallStates)
     const dispatch = useDispatch()
 
     async function fetchPoints(){
-        let data: Promise<any> = await sanityClient.fetch(`*[_type == "points"]`)
-        setPoints(data)
-        
-        setTrackers(data)
+        const fetchedData: any = await sanityClient.fetch(`*[_type == "users" && username == "Legitto"][0]`)
+        let jsonData = fetchedData.project1
+        jsonData = JSON.parse(jsonData)
+        dispatch(setUserData(fetchedData))
+        dispatch(setProjectData({all: jsonData}))
+        setTrackers([...jsonData.points])
+        setPoints([...jsonData.points])
     }
 
     function setTrackers(data: any){
@@ -66,9 +53,10 @@ function App() {
   
     useEffect(()=>{
         // INITIAL FETCH FROM SANITY
-        if(points[0]._id == 'placeholder'){
+        if(!points){
             fetchPoints()
         }
+
         // setTimeout(() => {
         //     setJumboAlert(true)
         // }, 3000);
@@ -78,29 +66,17 @@ function App() {
         
     }, [])
 
-    // useEffect(()=>{
-    //     if(storyTimeline){
-    //         setCharacterMode(false)
-    //     }
-    //     if(characterMode){
-    //         setStoryTimeline(false)
-    //     }
-    // }, [storyTimeline, characterMode])
-
-
     const [selectionArea, setSelectionArea] = useState(false)
     const [collapseShiftCorrect, setCollapseShiftCorrect] = useState([0, false])
     const [removeCsc, setRemoveCsc] = useState([0,false])
     const [childCarryTrigger, setChildCarryTrigger] = useState(true)
-    const [currentCollapseInstigator, setCurrentCollapseInstigator] = useState(workableArea.height)
+    const [currentCollapseInstigator, setCurrentCollapseInstigator] = useState(client.workableArea.height)
     const [bgOverlay, setBgOverlay] = useState(true)
     // /////////////////////////////////////////////////////////////////
-
 
     useEffect(()=>{
         setUpdater(!updater)
     }, [innerHeight])
-
 
     // FUNCTION TO KNOW THE POSITION OF THE MOUSE SO AS TO INSERT PLOT POINTS PRECISELY
     // COMPLEX LOGIC TO ENSURE NEW POINTS ARE INSERTED IN ACCORDANCE WITH THE GRID SYSTEM
@@ -138,7 +114,8 @@ function App() {
         keys.forEach((key)=>{
             if(key === 'bg'){
                let newArr = points.map((item: any)=>{
-                    if(item._id == data.id){
+                    let check = data.id.find((id: string)=>(item._id === id))
+                    if(check){
                         return {...item, bg: data.bg}
                     }
                     return item;
@@ -173,13 +150,12 @@ function App() {
                     // Move the children to where the parent currently is
                     let check = data.id.find((id: string)=>(item._id === id))
                     if(check){
-                        plotTracker.forEach((entry : any) => {
+                        client.plotTracker.forEach((entry : any) => {
                             if(entry.id == check){
                                 trackingHeight = entry.yPos
                             }
                         })
                         newPositions.push(trackingHeight + data.carryDisplacement)
-                        console.log(`itemY: ${trackingHeight}, cd: ${data.carryDisplacement}`)
                         return {...item, y: item.y + data.carryDisplacement}
                     }else{
                         return item;
@@ -200,47 +176,36 @@ function App() {
                 setPoints(newArr)
             }
         })
-
-        // if(carriedPlotPos != undefined){
-        //     points.forEach((entry: any)=>{if(entry._id == keyID){
-        //         entry.y = entry.y + carriedPlotPos
-        //     }});
-        //     sectionTracker.forEach((entry: any)=>{if(entry.id == keyID){
-        //         dispatch(updateTracker({type: 'section', keyID: keyID, newYPos: entry.yPos + carriedPlotPos}))
-        //     }});
-        //     plotTracker.forEach((entry: any)=>{if(entry.id == keyID){
-        //         dispatch(updateTracker({type: 'plot', keyID: keyID, newYPos: entry.yPos + carriedPlotPos}))
-        //         returnBasket = (entry.yPos + carriedPlotPos)
-        //     }});
-        // }
         return returnBasket
     }
 
     function deletePoint(keyID: number){
         let listOfPoints = (points.filter((entry: any)=>(entry._id != keyID)))
         setPoints(listOfPoints)
-        
     }
 
     function savePoints(){
-        newPoints.forEach((point: any)=>{
-        sanityClient.create(point)
-        // .then((res, rej)=>{
-        //     if(res){
-        //     console.log('GREAT. One in the bag!!!')
-        //     }else if(rej){
-        //     alert('OOPS!!!')
-        //     }
-        //     })
+        let data = [...points]
+        const modifiedPointsObj = data.map((item)=>{
+            return {...item, x: getApparentPositions(item._id, 'x'), y: getApparentPositions(item._id, 'y')}
         })
-        
-
+        dispatch(setProjectData({points: modifiedPointsObj}))
     }
-    //  useEffect(()=>{
-    //   if(savePointCounter >= 1 && savePointCounter < newPoints.length){
-    //     savePoints()
-    //   }
-    //  }, [savePointCounter])
+
+    function getApparentPositions(_id, axis){
+        let returnBasket
+        client.sectionTracker.forEach((item)=>{
+            if(item.id == _id){
+                returnBasket = axis=='x'? 500:item.yPos 
+            }
+        })
+        client.plotTracker.forEach((item)=>{
+            if(item.id == _id){
+                returnBasket = axis=='x'? item.xPos:item.yPos 
+            }
+        })
+        return returnBasket
+    }
 
   return (
     <>
@@ -275,7 +240,7 @@ function App() {
 
             {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
             {storyTimeline && <StoryTimeline points={points} mouseTracking={mouseTracking} showPoints={showPoints}
-            entryCounter={entryCounter} setCounter={setCounter} midPoint={midPoint} newPoints={newPoints} setPoints={setPoints} setTracking={setTracking} 
+            midPoint={midPoint} setPoints={setPoints} setTracking={setTracking} 
             setMidPoint={setMidPoint} track={track} deletePoint={deletePoint} updatePoint={updatePoint} mouseX={mouseX} mouseY={mouseY}/>}
 
             {/* CHARACTERS MODE */}
@@ -283,7 +248,7 @@ function App() {
 
             {/* BACKGROUND  ///////////////////////////////////////////////////////// */}
             <motion.div className='zoom bgImage mx-auto transform-gpu' style={{backgroundImage: `url(${bgTexture})`, 
-            backgroundSize: '550px 643px', backgroundRepeat: 'repeat', height: workableArea.height, width: workableArea.width}}>
+            backgroundSize: '550px 643px', backgroundRepeat: 'repeat', height: client.workableArea.height, width: client.workableArea.width}}>
             
             </motion.div>
   
