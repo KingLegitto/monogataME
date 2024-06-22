@@ -85,10 +85,7 @@ export const reduxSlice = createSlice({
             .catch(error => alert(error.message))
           }
           }
-          
         })
-
-   
     },
 
     setSectionTracker: (state, action) => {

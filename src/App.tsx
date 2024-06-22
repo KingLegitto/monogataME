@@ -11,6 +11,8 @@ import React, {createContext} from "react";
 import Characters from './compononets/Characters'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSectionTracker, setPlotTracker, emptyTrackers, setUserData, setProjectData } from './redux/reduxStates.js'
+import Lottie from 'lottie-react'
+import testAnimation from './assets/animations/bodyMovinTest.json'
 
 export const ZoomContext = createContext<any>(null)
 
@@ -237,6 +239,10 @@ function App() {
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 0.8}} style={{height: innerHeight-5}}
         className='overallParent duration-[0.5s] w-[100vw] lg:h-[100vh] overflow-scroll fixed z-[1] top-[50px] lg:top-[70px]  left-0 bg-inherit'
         >
+            <div className='w-[200px] h-[100px] absolute' >
+            {/* <Lottie animationData={testAnimation} loop/> */}
+
+            </div>
 
             {/* STORYTIMELINE MODE  //////////////////////////////////////////////////// */}
             {storyTimeline && <StoryTimeline points={points} mouseTracking={mouseTracking} showPoints={showPoints}
